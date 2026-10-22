@@ -1,0 +1,587 @@
+{
+  "retail-banking": {
+    "Customers": [
+      {
+        "customer_id": "C001",
+        "name": "Priya Sharma",
+        "email": "priya.sharma@example.com",
+        "phone": "+1-555-0101",
+        "segment": "Premium"
+      },
+      {
+        "customer_id": "C002",
+        "name": "James Wilson",
+        "email": "james.wilson@example.com",
+        "phone": "+1-555-0102",
+        "segment": "Standard"
+      },
+      {
+        "customer_id": "C003",
+        "name": "Maria Garcia",
+        "email": "maria.garcia@example.com",
+        "phone": "+1-555-0103",
+        "segment": "Premium"
+      },
+      {
+        "customer_id": "C004",
+        "name": "Robert Chen",
+        "email": "robert.chen@example.com",
+        "phone": "+1-555-0104",
+        "segment": "Standard"
+      },
+      {
+        "customer_id": "C005",
+        "name": "Aisha Patel",
+        "email": "aisha.patel@example.com",
+        "phone": "+1-555-0105",
+        "segment": "Gold"
+      },
+      {
+        "customer_id": "C006",
+        "name": "David Kim",
+        "email": "david.kim@example.com",
+        "phone": "+1-555-0106",
+        "segment": "Standard"
+      },
+      {
+        "customer_id": "C007",
+        "name": "Sarah Johnson",
+        "email": "sarah.johnson@example.com",
+        "phone": "+1-555-0107",
+        "segment": "New"
+      },
+      {
+        "customer_id": "C008",
+        "name": "Michael Brown",
+        "email": "michael.brown@example.com",
+        "phone": "+1-555-0108",
+        "segment": "Premium"
+      }
+    ],
+    "Accounts": [
+      {
+        "account_id": "SA-1001",
+        "customer_id": "C001",
+        "type": "Savings",
+        "status": "Active",
+        "opened_date": "2020-03-15"
+      },
+      {
+        "account_id": "CA-1001",
+        "customer_id": "C001",
+        "type": "Checking",
+        "status": "Active",
+        "opened_date": "2020-03-15"
+      },
+      {
+        "account_id": "SA-2001",
+        "customer_id": "C002",
+        "type": "Savings",
+        "status": "Active",
+        "opened_date": "2021-07-22"
+      },
+      {
+        "account_id": "CA-2001",
+        "customer_id": "C002",
+        "type": "Checking",
+        "status": "Active",
+        "opened_date": "2021-07-22"
+      },
+      {
+        "account_id": "SA-3001",
+        "customer_id": "C003",
+        "type": "Savings",
+        "status": "Active",
+        "opened_date": "2019-11-01"
+      },
+      {
+        "account_id": "CA-3001",
+        "customer_id": "C003",
+        "type": "Checking",
+        "status": "Active",
+        "opened_date": "2019-11-01"
+      },
+      {
+        "account_id": "SA-4001",
+        "customer_id": "C004",
+        "type": "Savings",
+        "status": "Active",
+        "opened_date": "2022-01-10"
+      },
+      {
+        "account_id": "SA-5001",
+        "customer_id": "C005",
+        "type": "Savings",
+        "status": "Active",
+        "opened_date": "2018-05-20"
+      },
+      {
+        "account_id": "CA-5001",
+        "customer_id": "C005",
+        "type": "Checking",
+        "status": "Active",
+        "opened_date": "2018-05-20"
+      },
+      {
+        "account_id": "FD-5001",
+        "customer_id": "C005",
+        "type": "FixedDeposit",
+        "status": "Active",
+        "opened_date": "2019-01-15"
+      },
+      {
+        "account_id": "SA-6001",
+        "customer_id": "C006",
+        "type": "Savings",
+        "status": "Active",
+        "opened_date": "2023-03-05"
+      },
+      {
+        "account_id": "SA-7001",
+        "customer_id": "C007",
+        "type": "Savings",
+        "status": "Active",
+        "opened_date": "2025-12-01"
+      },
+      {
+        "account_id": "SA-8001",
+        "customer_id": "C008",
+        "type": "Savings",
+        "status": "Active",
+        "opened_date": "2017-09-10"
+      },
+      {
+        "account_id": "CA-8001",
+        "customer_id": "C008",
+        "type": "Checking",
+        "status": "Active",
+        "opened_date": "2017-09-10"
+      }
+    ],
+    "Balances": [
+      {
+        "account_id": "SA-1001",
+        "available": "25430.00",
+        "current": "25430.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "CA-1001",
+        "available": "3200.50",
+        "current": "3200.50",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "SA-2001",
+        "available": "8200.00",
+        "current": "8200.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "CA-2001",
+        "available": "1500.75",
+        "current": "1500.75",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "SA-3001",
+        "available": "45000.00",
+        "current": "45000.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "CA-3001",
+        "available": "5200.00",
+        "current": "5200.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "SA-4001",
+        "available": "1200.00",
+        "current": "1200.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "SA-5001",
+        "available": "120000.00",
+        "current": "120000.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "CA-5001",
+        "available": "15000.00",
+        "current": "15000.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "FD-5001",
+        "available": "50000.00",
+        "current": "50000.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "SA-6001",
+        "available": "3500.00",
+        "current": "3500.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "SA-7001",
+        "available": "500.00",
+        "current": "500.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "SA-8001",
+        "available": "67000.00",
+        "current": "67000.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      },
+      {
+        "account_id": "CA-8001",
+        "available": "8500.00",
+        "current": "8500.00",
+        "currency": "USD",
+        "as_of": "2026-02-23"
+      }
+    ]
+  },
+  "transaction-banking": {
+    "Payments": [
+      {
+        "payment_id": "P-1001",
+        "customer_id": "C001",
+        "from_account": "CA-1001",
+        "to_account": "EXT-9001",
+        "amount": "150.00",
+        "date": "2026-02-20",
+        "status": "Completed",
+        "description": "Electric bill"
+      },
+      {
+        "payment_id": "P-1002",
+        "customer_id": "C001",
+        "from_account": "CA-1001",
+        "to_account": "EXT-9002",
+        "amount": "85.00",
+        "date": "2026-02-18",
+        "status": "Completed",
+        "description": "Internet bill"
+      },
+      {
+        "payment_id": "P-2001",
+        "customer_id": "C002",
+        "from_account": "CA-2001",
+        "to_account": "EXT-9003",
+        "amount": "450.00",
+        "date": "2026-02-21",
+        "status": "Completed",
+        "description": "Auto loan EMI"
+      },
+      {
+        "payment_id": "P-2002",
+        "customer_id": "C002",
+        "from_account": "CA-2001",
+        "to_account": "EXT-9004",
+        "amount": "120.00",
+        "date": "2026-02-19",
+        "status": "Completed",
+        "description": "Insurance premium"
+      },
+      {
+        "payment_id": "P-2003",
+        "customer_id": "C002",
+        "from_account": "SA-2001",
+        "to_account": "CA-2001",
+        "amount": "1000.00",
+        "date": "2026-02-15",
+        "status": "Completed",
+        "description": "Internal transfer"
+      },
+      {
+        "payment_id": "P-3001",
+        "customer_id": "C003",
+        "from_account": "CA-3001",
+        "to_account": "EXT-9005",
+        "amount": "200.00",
+        "date": "2026-02-22",
+        "status": "Completed",
+        "description": "Utility bill"
+      },
+      {
+        "payment_id": "P-3002",
+        "customer_id": "C003",
+        "from_account": "CA-3001",
+        "to_account": "EXT-9006",
+        "amount": "1500.00",
+        "date": "2026-02-10",
+        "status": "Completed",
+        "description": "Rent payment"
+      },
+      {
+        "payment_id": "P-3003",
+        "customer_id": "C003",
+        "from_account": "CA-3001",
+        "to_account": "EXT-9006",
+        "amount": "1500.00",
+        "date": "2026-01-10",
+        "status": "Completed",
+        "description": "Rent payment"
+      },
+      {
+        "payment_id": "P-4001",
+        "customer_id": "C004",
+        "from_account": "SA-4001",
+        "to_account": "EXT-9007",
+        "amount": "350.00",
+        "date": "2026-01-15",
+        "status": "Failed",
+        "description": "Loan EMI - insufficient funds"
+      },
+      {
+        "payment_id": "P-4002",
+        "customer_id": "C004",
+        "from_account": "SA-4001",
+        "to_account": "EXT-9007",
+        "amount": "350.00",
+        "date": "2025-12-15",
+        "status": "Failed",
+        "description": "Loan EMI - insufficient funds"
+      },
+      {
+        "payment_id": "P-5001",
+        "customer_id": "C005",
+        "from_account": "CA-5001",
+        "to_account": "EXT-9008",
+        "amount": "3500.00",
+        "date": "2026-02-20",
+        "status": "Completed",
+        "description": "Mortgage payment"
+      }
+    ],
+    "Beneficiaries": [
+      {
+        "beneficiary_id": "B-1001",
+        "customer_id": "C001",
+        "name": "City Power Co",
+        "account_number": "EXT-9001",
+        "bank": "Utility Bank"
+      },
+      {
+        "beneficiary_id": "B-1002",
+        "customer_id": "C001",
+        "name": "NetConnect ISP",
+        "account_number": "EXT-9002",
+        "bank": "Tech Bank"
+      },
+      {
+        "beneficiary_id": "B-2001",
+        "customer_id": "C002",
+        "name": "Auto Finance Corp",
+        "account_number": "EXT-9003",
+        "bank": "Finance Bank"
+      },
+      {
+        "beneficiary_id": "B-2002",
+        "customer_id": "C002",
+        "name": "SafeGuard Insurance",
+        "account_number": "EXT-9004",
+        "bank": "Insurance Bank"
+      },
+      {
+        "beneficiary_id": "B-3001",
+        "customer_id": "C003",
+        "name": "Metro Utilities",
+        "account_number": "EXT-9005",
+        "bank": "Utility Bank"
+      },
+      {
+        "beneficiary_id": "B-3002",
+        "customer_id": "C003",
+        "name": "Sunrise Apartments",
+        "account_number": "EXT-9006",
+        "bank": "Property Bank"
+      }
+    ]
+  },
+  "lending-wealth": {
+    "Loans": [
+      {
+        "loan_id": "L-2001",
+        "customer_id": "C002",
+        "type": "Auto",
+        "principal": "25000.00",
+        "rate": "6.5",
+        "tenure": 60,
+        "status": "Active",
+        "monthly_emi": "489.15"
+      },
+      {
+        "loan_id": "L-4001",
+        "customer_id": "C004",
+        "type": "Personal",
+        "principal": "10000.00",
+        "rate": "12.0",
+        "tenure": 24,
+        "status": "Delinquent",
+        "monthly_emi": "470.73"
+      },
+      {
+        "loan_id": "L-5001",
+        "customer_id": "C005",
+        "type": "Mortgage",
+        "principal": "350000.00",
+        "rate": "4.5",
+        "tenure": 360,
+        "status": "Active",
+        "monthly_emi": "1773.40"
+      },
+      {
+        "loan_id": "L-8001",
+        "customer_id": "C008",
+        "type": "HomeEquity",
+        "principal": "75000.00",
+        "rate": "5.5",
+        "tenure": 120,
+        "status": "Active",
+        "monthly_emi": "814.45"
+      }
+    ],
+    "CreditScores": [
+      {
+        "customer_id": "C001",
+        "score": 780,
+        "last_updated": "2026-02-01",
+        "factors": [
+          "Long credit history",
+          "Low utilization",
+          "No missed payments"
+        ]
+      },
+      {
+        "customer_id": "C002",
+        "score": 710,
+        "last_updated": "2026-02-01",
+        "factors": [
+          "Active auto loan",
+          "Moderate utilization",
+          "Good payment history"
+        ]
+      },
+      {
+        "customer_id": "C003",
+        "score": 750,
+        "last_updated": "2026-02-01",
+        "factors": [
+          "No active loans",
+          "Consistent payments",
+          "High savings"
+        ]
+      },
+      {
+        "customer_id": "C004",
+        "score": 580,
+        "last_updated": "2026-02-01",
+        "factors": [
+          "Missed payments",
+          "Delinquent loan",
+          "High utilization"
+        ]
+      },
+      {
+        "customer_id": "C005",
+        "score": 820,
+        "last_updated": "2026-02-01",
+        "factors": [
+          "Excellent history",
+          "Diverse credit mix",
+          "Low utilization"
+        ]
+      },
+      {
+        "customer_id": "C006",
+        "score": 650,
+        "last_updated": "2026-02-01",
+        "factors": [
+          "Short credit history",
+          "Limited credit mix",
+          "No missed payments"
+        ]
+      },
+      {
+        "customer_id": "C008",
+        "score": 790,
+        "last_updated": "2026-02-01",
+        "factors": [
+          "Long history",
+          "Active home equity",
+          "Consistent payments"
+        ]
+      }
+    ],
+    "EMISchedule": [
+      {
+        "loan_id": "L-4001",
+        "emi_number": 1,
+        "amount": "470.73",
+        "due_date": "2025-11-15",
+        "status": "Paid"
+      },
+      {
+        "loan_id": "L-4001",
+        "emi_number": 2,
+        "amount": "470.73",
+        "due_date": "2025-12-15",
+        "status": "Missed"
+      },
+      {
+        "loan_id": "L-4001",
+        "emi_number": 3,
+        "amount": "470.73",
+        "due_date": "2026-01-15",
+        "status": "Missed"
+      },
+      {
+        "loan_id": "L-4001",
+        "emi_number": 4,
+        "amount": "470.73",
+        "due_date": "2026-02-15",
+        "status": "Overdue"
+      },
+      {
+        "loan_id": "L-2001",
+        "emi_number": 1,
+        "amount": "489.15",
+        "due_date": "2025-08-22",
+        "status": "Paid"
+      },
+      {
+        "loan_id": "L-2001",
+        "emi_number": 2,
+        "amount": "489.15",
+        "due_date": "2025-09-22",
+        "status": "Paid"
+      },
+      {
+        "loan_id": "L-2001",
+        "emi_number": 3,
+        "amount": "489.15",
+        "due_date": "2025-10-22",
+        "status": "Paid"
+      }
+    ]
+  }
+}

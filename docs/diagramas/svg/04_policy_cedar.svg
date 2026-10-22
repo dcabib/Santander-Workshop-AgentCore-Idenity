@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">A autorização acontece antes da ferramenta</title><desc id="desc">A regra exige simultaneamente usuário, aplicação, delegação, ação, Gateway e limite de entrada corretos. Uma condição falsa impede a execução.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  04</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">A autorização acontece antes da ferramenta</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Cedar combina identidade, ação, recurso e parâmetros em uma única decisão.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">CEDAR LOCAL · AWS A VALIDAR</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">50 registros podem passar. 51 devem parar antes de executar o backend.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">04 / 09</tspan>
+</text>
+<g class="node" data-x="64" data-y="361" data-w="366" data-h="285">
+<rect x="64" y="361" width="366" height="285" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="381" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(93 390) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="3" y="10" width="42" height="28" rx="5"/><circle cx="15" cy="22" r="5"/><path d="M8 33c1-7 13-7 14 0M28 20h10m-10 7h7"/>
+</g>
+<text class="node-text" x="158" y="415" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">Pedido autenticado</tspan>
+</text>
+<text class="node-text" x="88" y="473" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">Usuário: Riscos + Fraude</tspan>
+<tspan x="88" dy="29.0">Caller: supervisor</tspan>
+<tspan x="88" dy="29.0">Tool: consultar_risco</tspan>
+<tspan x="88" dy="29.0">max_registros: 50 ou 51</tspan>
+</text>
+</g>
+<rect x="492" y="223" width="596" height="584" rx="22" fill="#F2EDFB" stroke="#DAE3EE" stroke-width="1.6"/>
+<text class="" x="518" y="261" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="518" dy="0">GATEWAY · POLICY EM ENFORCE</tspan>
+</text>
+<text class="" x="518" y="291" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="400" text-anchor="start">
+<tspan x="518" dy="0">Todas as condições precisam ser verdadeiras</tspan>
+</text>
+<g transform="translate(536 336) scale(1.375)" fill="none" stroke="#7546C7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M24 3l17 7v13c0 10-8 18-17 23C15 41 7 33 7 23V10z"/><path d="M15 23l6 6 12-13"/>
+</g>
+<text class="" x="630" y="362" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="29" font-weight="700" text-anchor="start">
+<tspan x="630" dy="0">Uma regra Cedar</tspan>
+</text>
+<rect x="527" y="397" width="46" height="38" rx="19.0" fill="#F2EDFB"/>
+<text class="" x="550.0" y="421.6" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="middle">
+<tspan x="550.0" dy="0">01</tspan>
+</text>
+<text class="" x="594" y="424" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="594" dy="0">Tenant e usuário permitidos</tspan>
+</text>
+<rect x="527" y="462" width="46" height="38" rx="19.0" fill="#F2EDFB"/>
+<text class="" x="550.0" y="486.6" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="middle">
+<tspan x="550.0" dy="0">02</tspan>
+</text>
+<text class="" x="594" y="489" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="594" dy="0">Aplicação chamadora permitida</tspan>
+</text>
+<rect x="527" y="527" width="46" height="38" rx="19.0" fill="#F2EDFB"/>
+<text class="" x="550.0" y="551.6" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="middle">
+<tspan x="550.0" dy="0">03</tspan>
+</text>
+<text class="" x="594" y="554" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="594" dy="0">Contexto delegado presente</tspan>
+</text>
+<rect x="527" y="592" width="46" height="38" rx="19.0" fill="#F2EDFB"/>
+<text class="" x="550.0" y="616.6" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="middle">
+<tspan x="550.0" dy="0">04</tspan>
+</text>
+<text class="" x="594" y="619" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="594" dy="0">Ação e Gateway exatos</tspan>
+</text>
+<rect x="527" y="657" width="46" height="38" rx="19.0" fill="#F2EDFB"/>
+<text class="" x="550.0" y="681.6" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="middle">
+<tspan x="550.0" dy="0">05</tspan>
+</text>
+<text class="" x="594" y="684" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="594" dy="0">1 ≤ max_registros ≤ 50</tspan>
+</text>
+<rect x="649" y="744" width="283" height="37" rx="18.5" fill="#F2EDFB"/>
+<text class="" x="790.5" y="768.1" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="middle">
+<tspan x="790.5" dy="0">Condições ligadas por AND</tspan>
+</text>
+<g class="node" data-x="1180" data-y="309" data-w="356" data-h="184">
+<rect x="1180" y="309" width="356" height="184" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1200" y="329" width="56" height="56" rx="16" fill="#EAF7F0"/>
+<g transform="translate(1209 338) scale(0.7916666666666666)" fill="none" stroke="#14795C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="24" cy="24" r="19"/><path d="M13 24l8 8 15-17"/>
+</g>
+<text class="node-text" x="1274" y="363" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1274" dy="0">PERMITE</tspan>
+</text>
+<text class="node-text" x="1204" y="421" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1204" dy="0">50 + identidade correta</tspan>
+<tspan x="1204" dy="29.0">Backend pode executar</tspan>
+</text>
+</g>
+<g class="node" data-x="1180" data-y="578" data-w="356" data-h="184">
+<rect x="1180" y="578" width="356" height="184" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1200" y="598" width="56" height="56" rx="16" fill="#FFF0F1"/>
+<g transform="translate(1209 607) scale(0.7916666666666666)" fill="none" stroke="#D52E3F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 4h18l12 12v17L33 45H15L3 33V16zM17 17l14 14m0-14L17 31"/>
+</g>
+<text class="node-text" x="1274" y="632" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1274" dy="0">NEGA</tspan>
+</text>
+<text class="node-text" x="1204" y="690" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1204" dy="0">51 ou identidade indevida</tspan>
+<tspan x="1204" dy="29.0">Backend não deve executar</tspan>
+</text>
+</g>
+<path d="M 430 502 L 492 502" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="492,502 481.0,507.5 481.0,496.5" fill="#2469DD"/>
+<path d="M 1088 403 L 1180 403" stroke="#14795C" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1180,403 1169.0,408.5 1169.0,397.5" fill="#14795C"/>
+<path d="M 1088 668 L 1180 668" stroke="#D52E3F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1180,668 1169.0,673.5 1169.0,662.5" fill="#D52E3F"/>
+</svg>

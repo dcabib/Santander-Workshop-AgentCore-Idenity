@@ -1,0 +1,709 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander - Gateway, Identity OBO e Policy nativos",
+  "Parameters": {
+    "Project": {
+      "Type": "String",
+      "Default": "santander-demo",
+      "AllowedPattern": "[a-z][a-z0-9-]{2,30}"
+    },
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "LambdaKey": {
+      "Type": "String"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    },
+    "DiscoveryUrl": {
+      "Type": "String"
+    },
+    "GatewayAudience": {
+      "Type": "String"
+    },
+    "CallerClaim": {
+      "Type": "String",
+      "Default": "azp",
+      "AllowedValues": [
+        "azp",
+        "appid"
+      ]
+    },
+    "RisksUserOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    },
+    "BothUserOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    },
+    "NoGrantUserOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    },
+    "SupervisorClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    },
+    "RisksClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    },
+    "FraudClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    },
+    "GatewayClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}"
+    },
+    "EntraSecretArn": {
+      "Type": "String"
+    },
+    "FraudEndpoint": {
+      "Type": "String",
+      "Default": ""
+    },
+    "FraudScope": {
+      "Type": "String",
+      "Default": ""
+    },
+    "EnableFraud": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "true",
+        "false"
+      ]
+    }
+  },
+  "Resources": {
+    "RisksLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${Project}-riscos"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "RisksRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*:log-stream:*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Risks": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "${Project}-riscos"
+        },
+        "Runtime": "python3.12",
+        "Handler": "santander_demo.backends.lambda_handler",
+        "Timeout": 30,
+        "MemorySize": 256,
+        "Architectures": [
+          "arm64"
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "RisksRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "LambdaKey"
+          }
+        }
+      },
+      "DependsOn": "RisksLog"
+    },
+    "OboProvider": {
+      "Type": "AWS::BedrockAgentCore::OAuth2CredentialProvider",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-entra-obo"
+        },
+        "CredentialProviderVendor": "CustomOauth2",
+        "Oauth2ProviderConfigInput": {
+          "CustomOauth2ProviderConfig": {
+            "OauthDiscovery": {
+              "DiscoveryUrl": {
+                "Fn::Sub": "https://login.microsoftonline.com/${TenantId}/v2.0/.well-known/openid-configuration"
+              }
+            },
+            "ClientId": {
+              "Ref": "GatewayClientId"
+            },
+            "ClientSecretSource": "EXTERNAL",
+            "ClientSecretConfig": {
+              "SecretId": {
+                "Ref": "EntraSecretArn"
+              },
+              "JsonKey": "client_secret"
+            },
+            "ClientAuthenticationMethod": "CLIENT_SECRET_POST",
+            "OnBehalfOfTokenExchangeConfig": {
+              "GrantType": "JWT_AUTHORIZATION_GRANT"
+            }
+          }
+        }
+      }
+    },
+    "GatewayRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "lambda:InvokeFunction"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Risks",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetResourceOauth2Token"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "OboProvider",
+                      "CredentialProviderArn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "secretsmanager:GetSecretValue"
+                  ],
+                  "Resource": [
+                    {
+                      "Ref": "EntraSecretArn"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetWorkloadAccessToken",
+                    "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default/workload-identity/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "PolicyEngine": {
+      "Type": "AWS::BedrockAgentCore::PolicyEngine",
+      "Properties": {
+        "Name": "santander_policy",
+        "Description": "Regras do workshop Santander"
+      }
+    },
+    "Gateway": {
+      "Type": "AWS::BedrockAgentCore::Gateway",
+      "Properties": {
+        "Name": {
+          "Ref": "Project"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "GatewayRole",
+            "Arn"
+          ]
+        },
+        "ProtocolType": "MCP",
+        "AuthorizerType": "CUSTOM_JWT",
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Ref": "DiscoveryUrl"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "GatewayAudience"
+              }
+            ]
+          }
+        },
+        "PolicyEngineConfiguration": {
+          "Arn": {
+            "Fn::GetAtt": [
+              "PolicyEngine",
+              "PolicyEngineArn"
+            ]
+          },
+          "Mode": "ENFORCE"
+        },
+        "ProtocolConfiguration": {
+          "Mcp": {
+            "SearchType": "SEMANTIC"
+          }
+        }
+      }
+    },
+    "RisksTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "riscos",
+        "GatewayIdentifier": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayIdentifier"
+          ]
+        },
+        "TargetConfiguration": {
+          "Mcp": {
+            "Lambda": {
+              "LambdaArn": {
+                "Fn::GetAtt": [
+                  "Risks",
+                  "Arn"
+                ]
+              },
+              "ToolSchema": {
+                "InlinePayload": [
+                  {
+                    "Name": "consultar_risco",
+                    "Description": "Consultar risco sintético de crédito do cliente de demonstração.",
+                    "InputSchema": {
+                      "Type": "object",
+                      "Required": [
+                        "cliente_id",
+                        "max_registros"
+                      ],
+                      "Properties": {
+                        "cliente_id": {
+                          "Type": "string"
+                        },
+                        "max_registros": {
+                          "Type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "Name": "consultar_conhecimento_k2",
+                    "Description": "Consultar referência sintética de conhecimento K2; sem integração ao K2.",
+                    "InputSchema": {
+                      "Type": "object",
+                      "Required": [
+                        "cliente_id",
+                        "max_registros"
+                      ],
+                      "Properties": {
+                        "cliente_id": {
+                          "Type": "string"
+                        },
+                        "max_registros": {
+                          "Type": "integer"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "GATEWAY_IAM_ROLE"
+          }
+        ]
+      }
+    },
+    "GraphTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "graph",
+        "GatewayIdentifier": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayIdentifier"
+          ]
+        },
+        "TargetConfiguration": {
+          "Mcp": {
+            "OpenApiSchema": {
+              "InlinePayload": "{\"openapi\": \"3.0.0\", \"info\": {\"title\": \"Perfil de teste OBO\", \"version\": \"1.0\"}, \"servers\": [{\"url\": \"https://graph.microsoft.com/v1.0\"}], \"paths\": {\"/me\": {\"get\": {\"operationId\": \"getMyProfile\", \"responses\": {\"200\": {\"description\": \"Perfil do usu\\u00e1rio\"}}}}}}"
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Fn::GetAtt": [
+                    "OboProvider",
+                    "CredentialProviderArn"
+                  ]
+                },
+                "Scopes": [
+                  "https://graph.microsoft.com/.default"
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "FraudTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "fraude",
+        "GatewayIdentifier": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayIdentifier"
+          ]
+        },
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "FraudEndpoint"
+              },
+              "ListingMode": "DEFAULT",
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"consultar_fraude\", \"description\": \"Consultar ind\\u00edcios sint\\u00e9ticos de fraude do cliente de demonstra\\u00e7\\u00e3o.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\", \"enum\": [\"SANT-DEMO-001\"]}, \"max_registros\": {\"type\": \"integer\", \"minimum\": 1}}, \"required\": [\"cliente_id\", \"max_registros\"], \"additionalProperties\": false}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Fn::GetAtt": [
+                    "OboProvider",
+                    "CredentialProviderArn"
+                  ]
+                },
+                "Scopes": [
+                  {
+                    "Ref": "FraudScope"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ],
+        "MetadataConfiguration": {
+          "AllowedRequestHeaders": [
+            "Mcp-Session-Id"
+          ],
+          "AllowedResponseHeaders": [
+            "Mcp-Session-Id"
+          ]
+        }
+      },
+      "Condition": "HasFraud"
+    },
+    "ToolPolicy0": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "san_tool_0",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "PolicyEngine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal,\n  action == AgentCore::Action::\"riscos___consultar_risco\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") &&\n  principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"oid\") &&\n  [\"${RisksUserOid}\", \"${BothUserOid}\", \"${NoGrantUserOid}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"${CallerClaim}\") &&\n  [\"${SupervisorClientId}\", \"${RisksClientId}\"].contains(principal.getTag(\"${CallerClaim}\")) &&\n  principal.hasTag(\"scp\") &&\n  principal.getTag(\"scp\") != \"\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 50\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS"
+      },
+      "DependsOn": "RisksTarget"
+    },
+    "ToolPolicy1": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "san_tool_1",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "PolicyEngine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal,\n  action == AgentCore::Action::\"riscos___consultar_conhecimento_k2\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") &&\n  principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"oid\") &&\n  [\"${RisksUserOid}\", \"${BothUserOid}\", \"${NoGrantUserOid}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"${CallerClaim}\") &&\n  [\"${SupervisorClientId}\", \"${RisksClientId}\"].contains(principal.getTag(\"${CallerClaim}\")) &&\n  principal.hasTag(\"scp\") &&\n  principal.getTag(\"scp\") != \"\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 50\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS"
+      },
+      "DependsOn": "RisksTarget"
+    },
+    "ToolPolicy2": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "san_tool_2",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "PolicyEngine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal,\n  action == AgentCore::Action::\"fraude___consultar_fraude\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") &&\n  principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"oid\") &&\n  [\"${BothUserOid}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"${CallerClaim}\") &&\n  [\"${SupervisorClientId}\", \"${FraudClientId}\"].contains(principal.getTag(\"${CallerClaim}\")) &&\n  principal.hasTag(\"scp\") &&\n  principal.getTag(\"scp\") != \"\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 50\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS"
+      },
+      "DependsOn": "FraudTarget",
+      "Condition": "HasFraud"
+    },
+    "GraphPolicy": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "san_graph_profile",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "PolicyEngine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal, action == AgentCore::Action::\"graph___getMyProfile\",\n resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\")\nwhen { principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n principal.hasTag(\"oid\") && [\"${RisksUserOid}\", \"${BothUserOid}\", \"${NoGrantUserOid}\"].contains(principal.getTag(\"oid\")) &&\n principal.hasTag(\"${CallerClaim}\") && principal.getTag(\"${CallerClaim}\") == \"${SupervisorClientId}\" &&\n principal.hasTag(\"scp\") };"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS"
+      },
+      "DependsOn": "GraphTarget"
+    },
+    "GatewayLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/vendedlogs/bedrock-agentcore/${Project}"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "GatewayLogSource": {
+      "Type": "AWS::Logs::DeliverySource",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway-source"
+        },
+        "LogType": "APPLICATION_LOGS",
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayArn"
+          ]
+        }
+      }
+    },
+    "GatewayLogDestination": {
+      "Type": "AWS::Logs::DeliveryDestination",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway-destination"
+        },
+        "DestinationResourceArn": {
+          "Fn::GetAtt": [
+            "GatewayLog",
+            "Arn"
+          ]
+        },
+        "OutputFormat": "json"
+      }
+    },
+    "GatewayLogDelivery": {
+      "Type": "AWS::Logs::Delivery",
+      "Properties": {
+        "DeliverySourceName": {
+          "Ref": "GatewayLogSource"
+        },
+        "DeliveryDestinationArn": {
+          "Fn::GetAtt": [
+            "GatewayLogDestination",
+            "Arn"
+          ]
+        },
+        "RecordFields": [
+          "resource_arn",
+          "event_timestamp",
+          "body",
+          "account_id",
+          "timestamp",
+          "trace_id",
+          "span_id",
+          "request_id",
+          "gateway_id"
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "GatewayId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayIdentifier"
+        ]
+      }
+    },
+    "GatewayArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayArn"
+        ]
+      }
+    },
+    "GatewayUrl": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayUrl"
+        ]
+      }
+    },
+    "PolicyEngineId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "PolicyEngine",
+          "PolicyEngineId"
+        ]
+      }
+    },
+    "PolicyEngineArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "PolicyEngine",
+          "PolicyEngineArn"
+        ]
+      }
+    },
+    "OboProviderArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "OboProvider",
+          "CredentialProviderArn"
+        ]
+      }
+    },
+    "RisksLogGroup": {
+      "Value": {
+        "Ref": "RisksLog"
+      }
+    },
+    "GatewayLogGroup": {
+      "Value": {
+        "Ref": "GatewayLog"
+      }
+    }
+  },
+  "Conditions": {
+    "HasFraud": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableFraud"
+        },
+        "true"
+      ]
+    }
+  }
+}

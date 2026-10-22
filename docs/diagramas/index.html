@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Santander · Guia visual do workshop AgentCore</title>
+  <style>
+    :root {
+      --ink: #172b46; --muted: #52657c; --paper: #f4f6f9; --border: #dae3ee;
+      --red: #d52e3f; --identity: #2469dd; --policy: #7546c7;
+      --gateway: #bd650f; --registry: #087f82; --accent: #415571;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 Arial, Helvetica, sans-serif; }
+    button, select { font: inherit; }
+    a { color: inherit; text-underline-offset: 4px; }
+    button, a, select { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid var(--identity); outline-offset: 4px; }
+    button { cursor: pointer; }
+    button:disabled { cursor: default; opacity: .35; }
+    .wrap { width: min(1580px, calc(100% - 80px)); margin: auto; }
+    .topbar { height: 82px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-mark { height: 29px; width: 6px; background: var(--red); border-radius: 3px; }
+    .brand strong { font-size: 18px; letter-spacing: -.3px; }
+    .brand span:last-child { color: var(--muted); font-size: 14px; border-left: 1px solid var(--border); padding-left: 15px; margin-left: 2px; }
+    .text-link { font-size: 14px; color: var(--muted); }
+    .hero { display: flex; justify-content: space-between; gap: 40px; padding: 42px 0 29px; align-items: flex-end; }
+    .eyebrow { margin: 0 0 12px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: 1.9px; text-transform: uppercase; }
+    h1 { margin: 0 0 14px; font-size: clamp(32px, 3.3vw, 48px); line-height: 1.12; letter-spacing: -1.6px; font-weight: 700; }
+    .intro { margin: 0; max-width: 740px; color: var(--muted); font-size: 17px; line-height: 1.65; }
+    .metrics { display: flex; gap: 30px; flex-shrink: 0; padding-bottom: 5px; }
+    .metric strong { display: block; font-size: 29px; line-height: 1.3; font-weight: 600; letter-spacing: -1px; }
+    .metric span { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .legend { display: flex; flex-wrap: wrap; gap: 14px 28px; padding: 0 0 30px; font-size: 13px; color: var(--muted); }
+    .legend span { display: inline-flex; align-items: center; gap: 8px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--tone); display: inline-block; flex-shrink: 0; }
+    .layout { display: grid; grid-template-columns: 264px minmax(0, 1fr); gap: 24px; align-items: start; }
+    .sidebar { padding-top: 4px; }
+    .sidebar .eyebrow { padding-left: 13px; margin-bottom: 17px; }
+    .chapter-list { display: flex; flex-direction: column; gap: 5px; }
+    .chapter { width: 100%; text-align: left; display: flex; align-items: center; gap: 13px; padding: 12px 12px; background: transparent; color: var(--ink); border: 1px solid transparent; border-radius: 11px; transition: background .16s, border-color .16s; }
+    .chapter:hover { background: #e9eef5; }
+    .chapter[aria-current="step"] { background: #fff; border-color: var(--border); box-shadow: 0 3px 12px #172b4606; }
+    .chapter-number { font-size: 13px; font-weight: 700; min-width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; background: #e8edf3; color: var(--muted); }
+    .chapter[aria-current="step"] .chapter-number { color: #fff; background: var(--tone); }
+    .chapter strong { display: block; font-size: 13px; line-height: 1.4; font-weight: 600; }
+    .chapter small { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .sidebar-note { border-top: 1px solid var(--border); margin: 22px 13px 0; padding-top: 18px; font-size: 12px; line-height: 1.65; color: var(--muted); }
+    .mobile-picker { display: none; }
+    .viewer { min-width: 0; }
+    .viewer-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 39px; margin-bottom: 14px; }
+    .module-meta { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    #module-label { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+    .controls { display: flex; gap: 7px; align-items: center; white-space: nowrap; }
+    .controls button, .zoom-close { border: 1px solid var(--border); border-radius: 9px; background: #fff; height: 35px; min-width: 35px; color: var(--ink); font-size: 17px; }
+    .controls .expand { padding: 0 12px; margin-left: 5px; font-size: 12px; }
+    #position { min-width: 49px; text-align: center; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    figure { margin: 0; }
+    .figure-link { display: block; border-radius: 13px; overflow: hidden; background: white; border: 1px solid var(--border); box-shadow: 0 10px 32px #172b4607; cursor: zoom-in; }
+    .figure-link img { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; }
+    figcaption { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 15px 1px 20px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+    .downloads { display: flex; flex-wrap: wrap; gap: 8px 17px; align-items: center; }
+    .downloads a { text-decoration: none; color: var(--ink); font-weight: 600; }
+    .downloads a:hover { text-decoration: underline; }
+    .downloads .file-label { font-size: 10px; font-weight: 700; border: 1px solid var(--border); border-radius: 4px; padding: 2px 4px; margin-right: 4px; color: var(--muted); }
+    .explanation { display: grid; grid-template-columns: 1.06fr 1fr; gap: 30px; padding: 25px 0 8px; }
+    .explanation h2 { font-size: 16px; margin: 0 0 9px; letter-spacing: -.2px; }
+    .explanation p { font-size: 14px; line-height: 1.7; color: var(--muted); margin: 0; }
+    .explanation ul { margin: 0; padding-left: 17px; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .explanation li { padding-left: 3px; margin: 0 0 7px; }
+    .result { margin-top: 15px !important; padding-left: 13px; border-left: 3px solid var(--accent); color: var(--ink) !important; }
+    .result strong { font-weight: 600; }
+    footer { display: flex; justify-content: space-between; gap: 20px; margin-top: 45px; padding: 25px 0 35px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+    footer nav { display: flex; gap: 22px; }
+    dialog { width: min(1700px, calc(100vw - 40px)); max-width: none; max-height: calc(100dvh - 40px); border: 1px solid var(--border); padding: 0; border-radius: 16px; background: var(--paper); color: var(--ink); }
+    dialog::backdrop { background: #0d1c30c9; backdrop-filter: blur(5px); }
+    .zoom-toolbar { display: flex; gap: 15px; align-items: center; justify-content: space-between; padding: 14px 20px; background: #fff; position: sticky; top: 0; border-bottom: 1px solid var(--border); }
+    .zoom-toolbar strong { font-size: 14px; }
+    .zoom-toolbar div { display: flex; gap: 18px; align-items: center; }
+    .zoom-toolbar a { font-size: 13px; }
+    .zoom-close { padding: 0 12px; font-size: 13px; }
+    .zoom-image { display: block; width: 100%; height: auto; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+    @media (min-width: 1700px) { .layout { grid-template-columns: 280px minmax(0, 1fr); gap: 35px; } }
+    @media (max-width: 1150px) {
+      .wrap { width: calc(100% - 48px); }
+      .metrics { display: none; }
+      .layout { grid-template-columns: 223px minmax(0, 1fr); gap: 18px; }
+      figcaption { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .chapter { padding: 11px 8px; gap: 10px; }
+    }
+    @media (max-width: 860px) {
+      .topbar { height: 70px; }
+      .hero { padding: 29px 0 24px; }
+      .hero h1 { letter-spacing: -1px; }
+      .intro { font-size: 15px; }
+      .layout { display: block; }
+      .sidebar { display: none; }
+      .mobile-picker { display: block; margin-bottom: 22px; }
+      .mobile-picker label { display: block; margin-bottom: 8px; }
+      .mobile-picker select { width: 100%; border: 1px solid var(--border); color: var(--ink); border-radius: 10px; background: #fff; padding: 12px; font-size: 14px; }
+      .legend { padding-bottom: 23px; }
+      .explanation { gap: 25px; }
+      footer { flex-direction: column; gap: 12px; }
+    }
+    @media (max-width: 540px) {
+      .wrap { width: calc(100% - 32px); }
+      .brand span:last-child { display: none; }
+      .brand strong { font-size: 16px; }
+      .topbar .text-link { font-size: 12px; }
+      .hero h1 { max-width: 320px; }
+      .legend { gap: 12px 19px; font-size: 12px; }
+      .explanation { grid-template-columns: 1fr; gap: 22px; }
+      .controls .expand { padding: 0 9px; font-size: 11px; }
+      #module-label { font-size: 10px; letter-spacing: .2px; }
+      .viewer-toolbar { gap: 6px; }
+      .controls { gap: 4px; }
+      .controls button { min-width: 31px; }
+      #position { min-width: 42px; font-size: 11px; }
+      .downloads { gap: 12px; }
+      dialog { width: calc(100vw - 16px); max-height: calc(100dvh - 16px); }
+      .zoom-toolbar { padding: 10px; align-items: flex-start; }
+      .zoom-toolbar div { flex-shrink: 0; }
+      .zoom-toolbar a { display: none; }
+      .zoom-toolbar strong { font-size: 12px; }
+      footer nav { gap: 16px; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><strong>Santander</strong><span>Amazon Bedrock AgentCore</span></div>
+      <a class="text-link" href="../../README.md">Material do workshop ↗</a>
+    </header>
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Guia visual · 14 notebooks, passo a passo</p>
+        <h1 id="page-title">Entenda o caminho de cada chamada.</h1>
+        <p class="intro">Quem está agindo? Qual ferramenta pode usar? Quem aprova o acesso?<br>Explore os diagramas antes de executar cada laboratório.</p>
+      </div>
+      <div class="metrics" aria-label="14 notebooks, 4 pilares, 2 formatos de imagem">
+        <div class="metric"><strong>14</strong><span>notebooks</span></div>
+        <div class="metric"><strong>04</strong><span>pilares</span></div>
+        <div class="metric"><strong>02</strong><span>formatos</span></div>
+      </div>
+    </section>
+    <div class="legend" aria-label="Cores dos pilares">
+      <span><i class="dot" style="--tone:var(--identity)"></i>Identity · quem age</span>
+      <span><i class="dot" style="--tone:var(--policy)"></i>Policy · o que pode fazer</span>
+      <span><i class="dot" style="--tone:var(--gateway)"></i>Gateway · por onde acessa</span>
+      <span><i class="dot" style="--tone:var(--registry)"></i>Registry · o que existe</span>
+    </div>
+    <noscript><p>Ative JavaScript para navegar pela galeria, ou abra o <a href="README.md">índice com links para todas as imagens</a>.</p></noscript>
+    <div class="layout">
+      <aside class="sidebar" aria-label="Escolha um notebook">
+        <p class="eyebrow">Trilha dos notebooks</p>
+        <nav class="chapter-list" id="chapters"></nav>
+        <p class="sidebar-note">Os diagramas distinguem o que roda localmente dos fluxos que ainda precisam de ensaio na AWS e no Azure.</p>
+      </aside>
+      <main class="viewer" id="viewer">
+        <div class="mobile-picker">
+          <label class="eyebrow" for="module-select">Escolha um notebook</label>
+          <select id="module-select"></select>
+        </div>
+        <div class="viewer-toolbar">
+          <div class="module-meta"><i class="dot" id="active-dot"></i><span id="module-label"></span></div>
+          <div class="controls">
+            <button id="previous" aria-label="Notebook anterior">←</button>
+            <span id="position" aria-live="polite"></span>
+            <button id="next" aria-label="Próximo notebook">→</button>
+            <button class="expand" id="expand" aria-label="Ampliar o diagrama">⤢ Ampliar</button>
+          </div>
+        </div>
+        <figure>
+          <a class="figure-link" id="figure-link" href="svg/00_preflight.svg" aria-label="Ampliar o diagrama">
+            <img id="diagram" src="svg/00_preflight.svg" alt="Bancada local e ambiente AWS do workshop Santander" width="1600" height="1000">
+          </a>
+          <figcaption>
+            <span>Imagem também incluída na abertura do notebook.</span>
+            <div class="downloads">
+              <a id="png-link" href="png/00_preflight.png" download><span class="file-label">PNG</span>Baixar imagem</a>
+              <a id="svg-link" href="svg/00_preflight.svg" download><span class="file-label">SVG</span>Editável</a>
+              <a id="notebook-link" href="../../notebooks/00_preflight.ipynb">Notebook ↗</a>
+            </div>
+          </figcaption>
+        </figure>
+        <section class="explanation" aria-label="Como ler o diagrama">
+          <div>
+            <h2 id="description-title">O que você vai entender</h2>
+            <p id="description"></p>
+            <p class="result"><strong>Ao final:</strong> <span id="result"></span></p>
+          </div>
+          <div>
+            <h2>O que observar</h2>
+            <ul id="notes"></ul>
+          </div>
+        </section>
+      </main>
+    </div>
+    <footer>
+      <span>Workshop Santander · Dados sintéticos · Ilustrações conceituais</span>
+      <nav aria-label="Documentação"><a href="README.md">Índice de imagens</a><a href="../roteiro.md">Roteiro do instrutor</a><a href="../aceite.md">Critérios de aceite</a></nav>
+    </footer>
+  </div>
+  <dialog id="zoom" aria-label="Diagrama ampliado">
+    <div class="zoom-toolbar">
+      <strong id="zoom-title"></strong>
+      <div><a id="original-link" href="svg/00_preflight.svg" target="_blank" rel="noopener">Abrir imagem ↗</a><button class="zoom-close" id="close-zoom">Fechar ×</button></div>
+    </div>
+    <img class="zoom-image" id="zoom-image" alt="">
+  </dialog>
+  <script id="diagram-data" type="application/json">[{"id": "00_preflight", "pillar": "Visão geral", "title": "Antes de começar: dois ambientes", "subtitle": "O que você já consegue executar e o que ainda precisa validar nos serviços.", "status": "MAPA DO LABORATÓRIO", "takeaway": "A simulação valida a lógica. O ensaio AWS valida as integrações.", "description": "Compare a bancada local com o ambiente AWS. Tokens de teste e Cedar rodam localmente; os serviços gerenciados exigem configuração e ensaio.", "result": "Saber exatamente qual ambiente está sendo usado e o que seu resultado comprova.", "notes": ["Local: nenhuma conta AWS é utilizada.", "AWS: preflight lê o estado dos recursos; não os cria.", "Dados de negócio são sintéticos em ambas as trilhas."]}, {"id": "01_gateway_targets", "pillar": "Gateway", "title": "Uma entrada para ferramentas diferentes", "subtitle": "O Gateway expõe Lambda e um especialista MCP pelo mesmo contrato de ferramentas.", "status": "ARQUITETURA AWS PREVISTA", "takeaway": "O cliente usa tools/list e tools/call; o Gateway conecta os destinos.", "description": "O supervisor acessa Riscos/K2 em Lambda e Fraude em um servidor MCP. O Gateway autentica, aplica Policy e usa a credencial adequada a cada target.", "result": "Encontrar os nomes reais das tools e executar uma chamada pelo caminho autorizado.", "notes": ["Riscos/K2: chamada Lambda com IAM.", "Fraude: target MCP com OAuth/OBO.", "Local: protocolo MCP por stdio; roteamento AWS ainda depende de ensaio."]}, {"id": "02_identity_entra_obo", "pillar": "Identity", "title": "O usuário continua sendo o usuário", "subtitle": "Duas trocas OBO mudam a audiência do token sem substituir o principal humano.", "status": "FLUXO ENTRA / AWS A VALIDAR", "takeaway": "A prova de delegação é o destino reconhecer o usuário esperado.", "description": "O usuário entra pelo frontend Entra. O agente confidencial obtém um token para o Gateway; o AgentCore Identity participa da troca para o Microsoft Graph.", "result": "Comparar o ID devolvido por Graph /me com o OID esperado de dois usuários de teste.", "notes": ["Primeiro OBO: helper MSAL no host do instrutor.", "Segundo OBO: integração Gateway + AgentCore Identity.", "Somente Graph /me; tokens e perfis completos não entram nas evidências."]}, {"id": "03_identity_agente_mcp", "pillar": "Identity", "title": "A pessoa é a mesma. O agente mudou.", "subtitle": "A decisão considera quem é o usuário e qual aplicação está agindo por ele.", "status": "LÓGICA LOCAL · AWS A VALIDAR", "takeaway": "Permissão do usuário e permissão do agente precisam ser satisfeitas.", "description": "Com o mesmo usuário habilitado a Riscos e Fraude, o supervisor pode consultar Fraude, mas o agente de Riscos recebe uma negativa.", "result": "Mostrar uma mudança de decisão alterando apenas a identidade técnica do chamador.", "notes": ["tid + oid: identidade humana no tenant.", "azp, no fluxo Entra v2: aplicação confidencial.", "O Runtime Fraude também valida audiência, aplicação do Gateway e workload."]}, {"id": "04_policy_cedar", "pillar": "Policy", "title": "A autorização acontece antes da ferramenta", "subtitle": "Cedar combina identidade, ação, recurso e parâmetros em uma única decisão.", "status": "CEDAR LOCAL · AWS A VALIDAR", "takeaway": "50 registros podem passar. 51 devem parar antes de executar o backend.", "description": "A regra exige simultaneamente usuário, aplicação, delegação, ação, Gateway e limite de entrada corretos. Uma condição falsa impede a execução.", "result": "Reproduzir a matriz P-SAN-01 a P-SAN-06 e distinguir negação de Policy de outros erros.", "notes": ["ENFORCE no Gateway previsto por IaC.", "Contador local verifica que negativas não executam o backend.", "A prova equivalente em AWS exige correlacionar decisão, chamada e logs."]}, {"id": "05_policy_autoria", "pillar": "Policy", "title": "Da intenção à política revisada", "subtitle": "Gerar Cedar é uma etapa de autoria. Publicar exige revisão, testes e mudança por IaC.", "status": "AUTORIA LOCAL · SERVIÇO A VALIDAR", "takeaway": "Um rascunho gerado não se transforma automaticamente em permissão.", "description": "Uma intenção em linguagem natural pode gerar um rascunho por um stack separado. O notebook lê Cedar e findings; a promoção ocorre pelo pipeline revisado.", "result": "Conferir se o Cedar representa a intenção e se os casos permitidos e negados continuam corretos.", "notes": ["Provider de rascunho não recebe CreatePolicy.", "Findings precisam ser revisados, sem IGNORE_ALL_FINDINGS.", "O histórico de geração é retido; ele não concede acesso."]}, {"id": "06_registry_governanca", "pillar": "Registry", "title": "Publicar, aprovar e consumir são papéis distintos", "subtitle": "Um catálogo governado separa o ciclo do registro da autorização para executar uma tool.", "status": "MODELO LOCAL · IAM A VALIDAR", "takeaway": "O publisher submete. O approver decide. O consumer encontra aprovados.", "description": "Os registros percorrem DRAFT, PENDING_APPROVAL e APPROVED ou REJECTED. Os papéis AWS usam sessões temporárias e permissões distintas.", "result": "Verificar a separação de papéis e observar todos os estados preparados para o workshop.", "notes": ["autoApproval = false.", "Busca desta implementação usa AWS_IAM e STS.", "No modo AWS, o notebook lê estados preparados pelo IaC."]}, {"id": "07_registry_descoberta_execucao", "pillar": "Registry", "title": "Encontrar uma capacidade não libera seu uso", "subtitle": "O supervisor descobre no Registry, valida o endpoint e invoca pelo Gateway.", "status": "FLUXO LOCAL · AWS A VALIDAR", "takeaway": "Registry responde “o que existe”; Policy decide “o que este chamador pode fazer”.", "description": "O catálogo devolve capacidades aprovadas. O supervisor valida metadados antes de enviar o token; o Gateway continua sendo o ponto de autorização.", "result": "Encontrar Fraude para dois perfis e observar que só o perfil autorizado consegue executá-la.", "notes": ["Busca AWS semântica; busca local lexical.", "Somente o endpoint exato configurado recebe bearer.", "Aprovação no Registry não substitui a decisão Cedar."]}, {"id": "08_santander_multi_conta", "pillar": "Arquitetura integrada", "title": "Três contas. Fronteiras explícitas.", "subtitle": "O supervisor está na origem; governança fica no hub; Fraude pertence a outro domínio.", "status": "ARQUITETURA AWS A VALIDAR", "takeaway": "A chamada deve preservar o usuário e respeitar a autorização em cada fronteira.", "description": "Conta A hospeda o supervisor; conta C concentra Registry, Gateway, Identity e Policy; conta B hospeda o especialista de Fraude.", "result": "Executar A → C → B de verdade e reunir evidências nos três lados da chamada.", "notes": ["A → Registry C: IAM com AssumeRole.", "A → Gateway C: JWT delegado.", "C → Fraude B: OBO e restrição ao workload do Gateway."]}, {"id": "09_databricks_e_evidencias", "pillar": "Fonte de dados", "title": "A fonte de dados precisa reconhecer a pessoa", "subtitle": "A extensão Databricks verifica identidade efetiva e grants, com uma tabela canário.", "status": "EXTENSÃO AZURE A VALIDAR", "takeaway": "Sem token delegado válido, a consulta para. Não há fallback para credencial compartilhada.", "description": "O adapter de extensão troca um JWT Entra por um token Databricks e consulta o SQL Warehouse. A identidade e a permissão da fonte são verificadas separadamente.", "result": "Provar current_user() exato e acesso distinto para dois usuários na mesma tabela sintética.", "notes": ["Caminho de extensão separado do Gateway nesta entrega.", "Unity Catalog governa o acesso aos dados.", "Graph /me não comprova delegação no Databricks Azure."]}, {"id": "10_blog_multi_account_gateway_mcp", "pillar": "Gateway", "title": "Um agente, três áreas, quatro contas.", "description": "Referência do artigo AWS com Strands e M2M nas ferramentas.", "result": "Comparar a identidade humana na entrada e a credencial técnica nos destinos.", "notes": ["Leia o runbook do cenário antes de habilitar a execução cloud.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../banking/arquitetura.svg", "png": "../banking/arquitetura.png"}, {"id": "11_gateways_por_conta_identity_policy", "pillar": "Policy", "title": "Cada conta tem sua própria porta.", "description": "Gateway, Identity OBO e Policy independentes em quatro contas.", "result": "Entender a autonomia de autorização de cada domínio.", "notes": ["Leia o runbook do cenário antes de habilitar a execução cloud.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../federation/arquitetura.svg", "png": "../federation/arquitetura.png"}, {"id": "12_cenario_santander_integrado", "pillar": "Identity", "title": "Uma chamada entre áreas, até a fonte.", "description": "Agentes na conta A → hub → Gateway da conta B → MCP Databricks.", "result": "Distinguir agentes no hub e verificar a identidade humana na fonte.", "notes": ["Leia o runbook do cenário antes de habilitar a execução cloud.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../journey/arquitetura.svg", "png": "../journey/arquitetura.png"}, {"id": "13_ingestao_acl_memoria", "pillar": "Registry", "title": "Conhecimento compartilhado, acesso individual.", "description": "Contrato local de ingestão, ACL, revogação e memória por usuário.", "result": "Compartilhar o índice sem compartilhar todas as permissões.", "notes": ["Leia o runbook do cenário antes de habilitar a execução cloud.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../ingestao/arquitetura.svg", "png": "../ingestao/arquitetura.png"}]</script>
+  <script>
+    const pages = JSON.parse(document.getElementById("diagram-data").textContent);
+    const $ = id => document.getElementById(id);
+    const labels = [
+      ["Comece por aqui", "Local e AWS"],
+      ["Gateway e ferramentas", "Lambda + especialista MCP"],
+      ["Identidade e OBO", "Do usuário ao destino"],
+      ["Identidade do agente", "Mesmo usuário, outro caller"],
+      ["Autorização Cedar", "Condições e limites"],
+      ["Autoria de políticas", "Intenção, revisão e IaC"],
+      ["Governança do Registry", "Publicar, aprovar, consumir"],
+      ["Descoberta e execução", "Catálogo → Gateway"],
+      ["Arquitetura entre contas", "Origem → hub → Fraude"],
+      ["Databricks e evidências", "Identidade e acesso à fonte"],
+      ["Artigo multi-account", "Strands e M2M"],
+      ["Gateway por conta", "Autonomia dos domínios"],
+      ["Cenário Santander", "Agentes → hub → Databricks"],
+      ["Ingestão, ACL e memória", "Sessão 2 · contrato local"],
+    ];
+    const colors = {Identity:"#2469dd", Policy:"#7546c7", Gateway:"#bd650f", Registry:"#087f82"};
+    const chapterButtons = pages.map((page, index) => {
+      const button = document.createElement("button");
+      button.className = "chapter";
+      button.style.setProperty("--tone", colors[page.pillar] || "#415571");
+      button.setAttribute("aria-controls", "viewer");
+      button.setAttribute("aria-label", `Notebook ${page.id.slice(0,2)}: ${labels[index][0]}`);
+      const number = document.createElement("span");
+      number.className = "chapter-number";
+      number.textContent = page.id.slice(0, 2);
+      const text = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = labels[index][0];
+      const subtitle = document.createElement("small");
+      subtitle.textContent = labels[index][1];
+      text.append(title, subtitle);
+      button.append(number, text);
+      button.addEventListener("click", () => select(index));
+      $("chapters").append(button);
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = `${page.id.slice(0,2)} · ${labels[index][0]}`;
+      $("module-select").append(option);
+      return button;
+    });
+    let selected = 0;
+    function select(index, updateHash = true) {
+      if (!Number.isInteger(index) || index < 0 || index >= pages.length) return;
+      selected = index;
+      const page = pages[index];
+      const svg = page.svg || `svg/${page.id}.svg`;
+      const tone = colors[page.pillar] || "#415571";
+      document.documentElement.style.setProperty("--accent", tone);
+      $("active-dot").style.setProperty("--tone", tone);
+      $("module-label").textContent = `${page.id.slice(0,2)} · ${page.pillar}`;
+      $("position").textContent = `${String(index + 1).padStart(2, "0")} / ${pages.length}`;
+      $("previous").disabled = index === 0;
+      $("next").disabled = index === pages.length - 1;
+      $("diagram").src = svg;
+      $("diagram").alt = page.description;
+      $("figure-link").href = svg;
+      $("description").textContent = page.description;
+      $("result").textContent = page.result;
+      $("notes").replaceChildren(...page.notes.map(note => {
+        const li = document.createElement("li");
+        li.textContent = note;
+        return li;
+      }));
+      $("png-link").href = page.png || `png/${page.id}.png`;
+      $("svg-link").href = svg;
+      $("notebook-link").href = `../../notebooks/${page.id}.ipynb`;
+      $("module-select").value = String(index);
+      chapterButtons.forEach((button, i) => {
+        if (i === index) button.setAttribute("aria-current", "step");
+        else button.removeAttribute("aria-current");
+      });
+      document.title = `${page.id.slice(0,2)} · ${labels[index][0]} | Workshop Santander`;
+      if (updateHash) {
+        try { history.replaceState(null, "", `#${page.id}`); }
+        catch { location.hash = page.id; }
+      }
+    }
+    function fromHash() {
+      const id = location.hash.slice(1);
+      const index = pages.findIndex(page => page.id === id);
+      select(index < 0 ? 0 : index, false);
+    }
+    function openZoom(event) {
+      if (event) event.preventDefault();
+      const page = pages[selected];
+      const svg = page.svg || `svg/${page.id}.svg`;
+      $("zoom-title").textContent = `${page.id.slice(0,2)} · ${page.title}`;
+      $("zoom-image").src = svg;
+      $("zoom-image").alt = page.description;
+      $("original-link").href = svg;
+      $("zoom").showModal();
+      $("close-zoom").focus();
+    }
+    $("previous").addEventListener("click", () => select(selected - 1));
+    $("next").addEventListener("click", () => select(selected + 1));
+    $("module-select").addEventListener("change", event => select(Number(event.target.value)));
+    $("expand").addEventListener("click", openZoom);
+    $("figure-link").addEventListener("click", openZoom);
+    $("close-zoom").addEventListener("click", () => $("zoom").close());
+    $("zoom").addEventListener("click", event => {
+      if (event.target === $("zoom")) {
+        const r = $("zoom").getBoundingClientRect();
+        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) $("zoom").close();
+      }
+    });
+    window.addEventListener("hashchange", fromHash);
+    fromHash();
+  </script>
+</body>
+</html>

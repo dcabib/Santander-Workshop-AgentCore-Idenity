@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">A fonte de dados precisa reconhecer a pessoa</title><desc id="desc">O adapter de extensão troca um JWT Entra por um token Databricks e consulta o SQL Warehouse. A identidade e a permissão da fonte são verificadas separadamente.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  09</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">A fonte de dados precisa reconhecer a pessoa</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">A extensão Databricks verifica identidade efetiva e grants, com uma tabela canário.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">EXTENSÃO AZURE A VALIDAR</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">Sem token delegado válido, a consulta para. Não há fallback para credencial compartilhada.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">09 / 09</tspan>
+</text>
+<rect x="841" y="232" width="695" height="420" rx="22" fill="#EDF5FC" stroke="#DAE3EE" stroke-width="1.6"/>
+<text class="" x="867" y="270" fill="#2169B0" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="867" dy="0">DATABRICKS NO AZURE</tspan>
+</text>
+<text class="" x="867" y="300" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="400" text-anchor="start">
+<tspan x="867" dy="0">A fonte controla identidade e acesso aos dados</tspan>
+</text>
+<g class="node" data-x="64" data-y="345" data-w="279" data-h="263">
+<rect x="64" y="345" width="279" height="263" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="171.5" y="367" width="64" height="64" rx="18" fill="#ECF3FF"/>
+<g transform="translate(181.5 377) scale(0.9166666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="24" cy="14" r="8"/><path d="M8 42v-4c0-9 7-15 16-15s16 6 16 15v4"/><path d="M15 37h18"/>
+</g>
+<text class="node-text" x="203.5" y="467" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="middle">
+<tspan x="203.5" dy="0">Usuário</tspan>
+<tspan x="203.5" dy="31.7">Entra ID</tspan>
+</text>
+<text class="node-text" x="203.5" y="540.74" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="400" text-anchor="middle">
+<tspan x="203.5" dy="0">JWT para federation</tspan>
+</text>
+</g>
+<g class="node" data-x="412" data-y="345" data-w="359" data-h="263">
+<rect x="412" y="345" width="359" height="263" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="559.5" y="367" width="64" height="64" rx="18" fill="#ECF3FF"/>
+<g transform="translate(569.5 377) scale(0.9166666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="16" cy="18" r="10"/><circle cx="14" cy="16" r="2"/><path d="M23 25l17 17m-6-6 5-5m-11-1 5-5"/>
+</g>
+<text class="node-text" x="591.5" y="467" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="middle">
+<tspan x="591.5" dy="0">Adapter</tspan>
+<tspan x="591.5" dy="31.7">de extensão</tspan>
+</text>
+<text class="node-text" x="591.5" y="540.74" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="400" text-anchor="middle">
+<tspan x="591.5" dy="0">Troca delegada RFC 8693</tspan>
+<tspan x="591.5" dy="26.2">Sem fallback M2M</tspan>
+</text>
+</g>
+<g class="node" data-x="868" data-y="340" data-w="300" data-h="155">
+<rect x="868" y="340" width="300" height="155" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="888" y="360" width="56" height="56" rx="16" fill="#EDF5FC"/>
+<g transform="translate(897 369) scale(0.7916666666666666)" fill="none" stroke="#2169B0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="3" y="10" width="42" height="28" rx="5"/><circle cx="15" cy="22" r="5"/><path d="M8 33c1-7 13-7 14 0M28 20h10m-10 7h7"/>
+</g>
+<text class="node-text" x="962" y="394" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="962" dy="0">Token exchange</tspan>
+</text>
+<text class="node-text" x="892" y="452" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="892" dy="0">/oidc/v1/token</tspan>
+</text>
+</g>
+<g class="node" data-x="1208" data-y="340" data-w="300" data-h="155">
+<rect x="1208" y="340" width="300" height="155" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1228" y="360" width="56" height="56" rx="16" fill="#E8F7F5"/>
+<g transform="translate(1237 369) scale(0.7916666666666666)" fill="none" stroke="#087F82" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="8" y="21" width="32" height="23" rx="5"/><path d="M15 21V12a9 9 0 0 1 18 0v9M24 30v6"/>
+</g>
+<text class="node-text" x="1302" y="394" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1302" dy="0">Unity Catalog</tspan>
+</text>
+<text class="node-text" x="1232" y="452" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1232" dy="0">Permissões por usuário</tspan>
+</text>
+</g>
+<g class="node" data-x="868" data-y="525" data-w="640" data-h="125">
+<rect x="868" y="525" width="640" height="125" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="888" y="545" width="56" height="56" rx="16" fill="#EDF5FC"/>
+<g transform="translate(897 554) scale(0.7916666666666666)" fill="none" stroke="#2169B0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="node-text" x="962" y="579" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="962" dy="0">SQL Warehouse</tspan>
+</text>
+<text class="node-text" x="892" y="637" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="892" dy="0">SELECT current_user() · tabela canário</tspan>
+</text>
+</g>
+<path d="M 343 456 L 412 456" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="412,456 401.0,461.5 401.0,450.5" fill="#2469DD"/>
+<path d="M 771 420 L 868 420" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="868,420 857.0,425.5 857.0,414.5" fill="#2469DD"/>
+<polygon points="771,420 782.0,414.5 782.0,425.5" fill="#2469DD"/>
+<rect x="767.84" y="373" width="104.32000000000001" height="29" rx="8" fill="#FFFFFF"/>
+<text class="" x="820" y="390" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="600" text-anchor="middle">
+<tspan x="820" dy="0">1 · troca</tspan>
+</text>
+<path d="M 771 578 L 868 578" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="868,578 857.0,583.5 857.0,572.5" fill="#2469DD"/>
+<rect x="776.32" y="533" width="87.36" height="29" rx="8" fill="#FFFFFF"/>
+<text class="" x="820" y="550" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="600" text-anchor="middle">
+<tspan x="820" dy="0">2 · SQL</tspan>
+</text>
+<path d="M 1358 495 L 1358 525" stroke="#087F82" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="1358,525 1352.5,514.0 1363.5,514.0" fill="#087F82"/>
+<rect x="64" y="250" width="707" height="47" rx="23.5" fill="#ECF3FF"/>
+<text class="" x="417.5" y="280.85" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="middle">
+<tspan x="417.5" dy="0">Extensão separada do Gateway nesta entrega</tspan>
+</text>
+<g class="node" data-x="64" data-y="678" data-w="474" data-h="128">
+<rect x="64" y="678" width="474" height="128" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="698" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(93 707) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="24" cy="14" r="8"/><path d="M8 42v-4c0-9 7-15 16-15s16 6 16 15v4"/><path d="M15 37h18"/>
+</g>
+<text class="node-text" x="158" y="732" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">01 · Identidade exata</tspan>
+</text>
+<text class="node-text" x="88" y="790" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">current_user() == usuário esperado</tspan>
+</text>
+</g>
+<g class="node" data-x="563" data-y="678" data-w="474" data-h="128">
+<rect x="563" y="678" width="474" height="128" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="583" y="698" width="56" height="56" rx="16" fill="#E8F7F5"/>
+<g transform="translate(592 707) scale(0.7916666666666666)" fill="none" stroke="#087F82" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="8" y="21" width="32" height="23" rx="5"/><path d="M15 21V12a9 9 0 0 1 18 0v9M24 30v6"/>
+</g>
+<text class="node-text" x="657" y="732" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="657" dy="0">02 · Grants distintos</tspan>
+</text>
+<text class="node-text" x="587" y="790" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="587" dy="0">Um usuário acessa; o outro é recusado</tspan>
+</text>
+</g>
+<g class="node" data-x="1062" data-y="678" data-w="474" data-h="128">
+<rect x="1062" y="678" width="474" height="128" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1082" y="698" width="56" height="56" rx="16" fill="#FFF0F1"/>
+<g transform="translate(1091 707) scale(0.7916666666666666)" fill="none" stroke="#D52E3F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 4h18l12 12v17L33 45H15L3 33V16zM17 17l14 14m0-14L17 31"/>
+</g>
+<text class="node-text" x="1156" y="732" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1156" dy="0">03 · Falha fecha o acesso</tspan>
+</text>
+<text class="node-text" x="1086" y="790" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1086" dy="0">Sem troca válida, nenhuma consulta</tspan>
+</text>
+</g>
+</svg>

@@ -1,0 +1,751 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Notebook 10 - targets M2M, active Cedar, governed Registry",
+  "Parameters": {
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    },
+    "Project": {
+      "Type": "String",
+      "Default": "banking-demo"
+    },
+    "GatewayId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "GatewayUrl": {
+      "Type": "String"
+    },
+    "PolicyEngineId": {
+      "Type": "String"
+    },
+    "OAuthProviderArn": {
+      "Type": "String"
+    },
+    "Scope": {
+      "Type": "String",
+      "Default": "lobfederation.invoke"
+    },
+    "RetailEndpoint": {
+      "Type": "String"
+    },
+    "TransactionEndpoint": {
+      "Type": "String"
+    },
+    "LendingEndpoint": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "RetailTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "retail-banking",
+        "Description": "Customers, accounts and balances",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "RetailEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"get_customer\", \"description\": \"Get customer profile by ID. Returns name, email, phone, and segment.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_customerArguments\", \"type\": \"object\"}}, {\"name\": \"get_accounts\", \"description\": \"List all bank accounts for a customer. Returns account IDs, types, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_accountsArguments\", \"type\": \"object\"}}, {\"name\": \"get_balance\", \"description\": \"Get current balance for a specific bank account.\", \"inputSchema\": {\"properties\": {\"account_id\": {\"title\": \"Account Id\", \"type\": \"string\"}}, \"required\": [\"account_id\"], \"title\": \"get_balanceArguments\", \"type\": \"object\"}}, {\"name\": \"get_profile\", \"description\": \"Get full customer profile including all accounts and their balances.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_profileArguments\", \"type\": \"object\"}}, {\"name\": \"update_balance\", \"description\": \"Update account balance after a transfer. Operation is 'debit' (subtract) or 'credit' (add).\", \"inputSchema\": {\"properties\": {\"account_id\": {\"title\": \"Account Id\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"operation\": {\"default\": \"debit\", \"title\": \"Operation\", \"type\": \"string\"}}, \"required\": [\"account_id\", \"amount\"], \"title\": \"update_balanceArguments\", \"type\": \"object\"}}, {\"name\": \"delete_customer\", \"description\": \"Delete a customer and all their records from the system. This is a destructive operation.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"delete_customerArguments\", \"type\": \"object\"}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Ref": "Scope"
+                  }
+                ],
+                "GrantType": "CLIENT_CREDENTIALS"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "TransactionTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "transaction-banking",
+        "Description": "Payments, transfers and beneficiaries",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "TransactionEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"get_payments\", \"description\": \"Get payment history for a customer. Returns recent payments with amounts, dates, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"days\": {\"default\": 30, \"title\": \"Days\", \"type\": \"integer\"}}, \"required\": [\"customer_id\"], \"title\": \"get_paymentsArguments\", \"type\": \"object\"}}, {\"name\": \"transfer_funds\", \"description\": \"Transfer funds between accounts. Creates a payment record and instructs the agent to update balances via the retail-banking update_balance tool.\", \"inputSchema\": {\"properties\": {\"from_account\": {\"title\": \"From Account\", \"type\": \"string\"}, \"to_account\": {\"title\": \"To Account\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}}, \"required\": [\"from_account\", \"to_account\", \"amount\"], \"title\": \"transfer_fundsArguments\", \"type\": \"object\"}}, {\"name\": \"get_beneficiaries\", \"description\": \"List registered beneficiaries for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_beneficiariesArguments\", \"type\": \"object\"}}, {\"name\": \"schedule_payment\", \"description\": \"Schedule a future payment for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"to_account\": {\"title\": \"To Account\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"date\": {\"title\": \"Date\", \"type\": \"string\"}}, \"required\": [\"customer_id\", \"to_account\", \"amount\", \"date\"], \"title\": \"schedule_paymentArguments\", \"type\": \"object\"}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Ref": "Scope"
+                  }
+                ],
+                "GrantType": "CLIENT_CREDENTIALS"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "LendingTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "lending-wealth",
+        "Description": "Loans, credit scores, eligibility and policy retrieval",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "LendingEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"get_loans\", \"description\": \"Get all loans for a customer. Returns loan details including type, principal, rate, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_loansArguments\", \"type\": \"object\"}}, {\"name\": \"get_credit_score\", \"description\": \"Get credit score and contributing factors for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_credit_scoreArguments\", \"type\": \"object\"}}, {\"name\": \"check_eligibility\", \"description\": \"Check loan eligibility for a customer based on credit score and requested amount.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"loan_type\": {\"title\": \"Loan Type\", \"type\": \"string\"}}, \"required\": [\"customer_id\", \"amount\", \"loan_type\"], \"title\": \"check_eligibilityArguments\", \"type\": \"object\"}}, {\"name\": \"get_emi_details\", \"description\": \"Get EMI schedule for a specific loan.\", \"inputSchema\": {\"properties\": {\"loan_id\": {\"title\": \"Loan Id\", \"type\": \"string\"}}, \"required\": [\"loan_id\"], \"title\": \"get_emi_detailsArguments\", \"type\": \"object\"}}, {\"name\": \"calculate_emi\", \"description\": \"Calculate EMI for given loan parameters. Rate is annual %, tenure in months.\", \"inputSchema\": {\"properties\": {\"principal\": {\"title\": \"Principal\", \"type\": \"number\"}, \"rate\": {\"title\": \"Rate\", \"type\": \"number\"}, \"tenure\": {\"title\": \"Tenure\", \"type\": \"integer\"}}, \"required\": [\"principal\", \"rate\", \"tenure\"], \"title\": \"calculate_emiArguments\", \"type\": \"object\"}}, {\"name\": \"search_lending_policies\", \"description\": \"Search the bank's lending policy documents for guidelines, eligibility criteria,\\nregulatory requirements, and product terms. Use this when you need to check bank\\npolicies before making lending recommendations.\", \"inputSchema\": {\"properties\": {\"query\": {\"title\": \"Query\", \"type\": \"string\"}}, \"required\": [\"query\"], \"title\": \"search_lending_policiesArguments\", \"type\": \"object\"}, \"outputSchema\": {\"properties\": {\"result\": {\"title\": \"Result\", \"type\": \"string\"}}, \"required\": [\"result\"], \"title\": \"search_lending_policiesOutput\", \"type\": \"object\"}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Ref": "Scope"
+                  }
+                ],
+                "GrantType": "CLIENT_CREDENTIALS"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ReadTools": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "BankingReadTools",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal is AgentCore::OAuthUser,\n  action in [AgentCore::Action::\"retail-banking___get_customer\",\n    AgentCore::Action::\"retail-banking___get_accounts\",\n    AgentCore::Action::\"retail-banking___get_balance\",\n    AgentCore::Action::\"retail-banking___get_profile\",\n    AgentCore::Action::\"transaction-banking___get_payments\",\n    AgentCore::Action::\"transaction-banking___get_beneficiaries\",\n    AgentCore::Action::\"lending-wealth___get_loans\",\n    AgentCore::Action::\"lending-wealth___get_credit_score\",\n    AgentCore::Action::\"lending-wealth___check_eligibility\",\n    AgentCore::Action::\"lending-wealth___get_emi_details\",\n    AgentCore::Action::\"lending-wealth___calculate_emi\",\n    AgentCore::Action::\"lending-wealth___search_lending_policies\"],\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n);"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget",
+        "TransactionTarget",
+        "LendingTarget"
+      ]
+    },
+    "NeverDelete": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "BankingNeverDelete",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "forbid(\n  principal,\n  action == AgentCore::Action::\"retail-banking___delete_customer\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n);"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget",
+        "TransactionTarget",
+        "LendingTarget"
+      ]
+    },
+    "RegistryLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "${AWS::StackName}-registry"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "RegistryRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "RegistryLog",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetRegistry",
+                    "bedrock-agentcore:DeleteRegistry"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*/record/*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:CreateRegistry"
+                  ],
+                  "Resource": "*",
+                  "Condition": {
+                    "StringEquals": {
+                      "aws:RequestedRegion": {
+                        "Ref": "AWS::Region"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "RegistryProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Handler": "registry_handler.handler",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 256,
+        "Timeout": 600,
+        "Role": {
+          "Fn::GetAtt": [
+            "RegistryRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "RegistryLog"
+          }
+        },
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KIND": "Registry"
+          }
+        }
+      }
+    },
+    "RecordLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "${AWS::StackName}-record"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "RecordRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "RecordLog",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:CreateRegistryRecord",
+                    "bedrock-agentcore:GetRegistryRecord",
+                    "bedrock-agentcore:DeleteRegistryRecord",
+                    "bedrock-agentcore:SubmitRegistryRecordForApproval"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "RecordProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Handler": "registry_handler.handler",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 256,
+        "Timeout": 600,
+        "Role": {
+          "Fn::GetAtt": [
+            "RecordRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "RecordLog"
+          }
+        },
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KIND": "Record"
+          }
+        }
+      }
+    },
+    "ApprovalLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "${AWS::StackName}-approval"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "ApprovalRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "ApprovalLog",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetRegistryRecord",
+                    "bedrock-agentcore:UpdateRegistryRecordStatus"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ApprovalProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Handler": "registry_handler.handler",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 256,
+        "Timeout": 600,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApprovalRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "ApprovalLog"
+          }
+        },
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KIND": "Approval"
+          }
+        }
+      }
+    },
+    "Catalog": {
+      "Type": "Custom::AgentCoreRegistry",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RegistryProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Registry",
+        "Name": {
+          "Ref": "Project"
+        }
+      }
+    },
+    "RetailRecord": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "retail-banking",
+        "Description": "Customers, accounts and balances",
+        "Version": "1.0",
+        "Submit": "true",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.banking/retail-banking\", \"description\": \"Customers, accounts and balances\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"retail-banking___get_customer\", \"description\": \"Get customer profile by ID. Returns name, email, phone, and segment.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_customerArguments\", \"type\": \"object\"}}, {\"name\": \"retail-banking___get_accounts\", \"description\": \"List all bank accounts for a customer. Returns account IDs, types, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_accountsArguments\", \"type\": \"object\"}}, {\"name\": \"retail-banking___get_balance\", \"description\": \"Get current balance for a specific bank account.\", \"inputSchema\": {\"properties\": {\"account_id\": {\"title\": \"Account Id\", \"type\": \"string\"}}, \"required\": [\"account_id\"], \"title\": \"get_balanceArguments\", \"type\": \"object\"}}, {\"name\": \"retail-banking___get_profile\", \"description\": \"Get full customer profile including all accounts and their balances.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_profileArguments\", \"type\": \"object\"}}, {\"name\": \"retail-banking___update_balance\", \"description\": \"Update account balance after a transfer. Operation is 'debit' (subtract) or 'credit' (add).\", \"inputSchema\": {\"properties\": {\"account_id\": {\"title\": \"Account Id\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"operation\": {\"default\": \"debit\", \"title\": \"Operation\", \"type\": \"string\"}}, \"required\": [\"account_id\", \"amount\"], \"title\": \"update_balanceArguments\", \"type\": \"object\"}}, {\"name\": \"retail-banking___delete_customer\", \"description\": \"Delete a customer and all their records from the system. This is a destructive operation.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"delete_customerArguments\", \"type\": \"object\"}}]}"
+            }
+          }
+        }
+      }
+    },
+    "RetailRecordApproval": {
+      "Type": "Custom::AgentCoreRegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "ApprovalProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Approval",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "RecordId": {
+          "Fn::GetAtt": [
+            "RetailRecord",
+            "Id"
+          ]
+        },
+        "Decision": "APPROVED"
+      }
+    },
+    "TransactionRecord": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "transaction-banking",
+        "Description": "Payments, transfers and beneficiaries",
+        "Version": "1.0",
+        "Submit": "true",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.banking/transaction-banking\", \"description\": \"Payments, transfers and beneficiaries\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"transaction-banking___get_payments\", \"description\": \"Get payment history for a customer. Returns recent payments with amounts, dates, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"days\": {\"default\": 30, \"title\": \"Days\", \"type\": \"integer\"}}, \"required\": [\"customer_id\"], \"title\": \"get_paymentsArguments\", \"type\": \"object\"}}, {\"name\": \"transaction-banking___transfer_funds\", \"description\": \"Transfer funds between accounts. Creates a payment record and instructs the agent to update balances via the retail-banking update_balance tool.\", \"inputSchema\": {\"properties\": {\"from_account\": {\"title\": \"From Account\", \"type\": \"string\"}, \"to_account\": {\"title\": \"To Account\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}}, \"required\": [\"from_account\", \"to_account\", \"amount\"], \"title\": \"transfer_fundsArguments\", \"type\": \"object\"}}, {\"name\": \"transaction-banking___get_beneficiaries\", \"description\": \"List registered beneficiaries for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_beneficiariesArguments\", \"type\": \"object\"}}, {\"name\": \"transaction-banking___schedule_payment\", \"description\": \"Schedule a future payment for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"to_account\": {\"title\": \"To Account\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"date\": {\"title\": \"Date\", \"type\": \"string\"}}, \"required\": [\"customer_id\", \"to_account\", \"amount\", \"date\"], \"title\": \"schedule_paymentArguments\", \"type\": \"object\"}}]}"
+            }
+          }
+        }
+      }
+    },
+    "TransactionRecordApproval": {
+      "Type": "Custom::AgentCoreRegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "ApprovalProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Approval",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "RecordId": {
+          "Fn::GetAtt": [
+            "TransactionRecord",
+            "Id"
+          ]
+        },
+        "Decision": "APPROVED"
+      }
+    },
+    "LendingRecord": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "lending-wealth",
+        "Description": "Loans, credit scores, eligibility and policy retrieval",
+        "Version": "1.0",
+        "Submit": "true",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.banking/lending-wealth\", \"description\": \"Loans, credit scores, eligibility and policy retrieval\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"lending-wealth___get_loans\", \"description\": \"Get all loans for a customer. Returns loan details including type, principal, rate, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_loansArguments\", \"type\": \"object\"}}, {\"name\": \"lending-wealth___get_credit_score\", \"description\": \"Get credit score and contributing factors for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_credit_scoreArguments\", \"type\": \"object\"}}, {\"name\": \"lending-wealth___check_eligibility\", \"description\": \"Check loan eligibility for a customer based on credit score and requested amount.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"loan_type\": {\"title\": \"Loan Type\", \"type\": \"string\"}}, \"required\": [\"customer_id\", \"amount\", \"loan_type\"], \"title\": \"check_eligibilityArguments\", \"type\": \"object\"}}, {\"name\": \"lending-wealth___get_emi_details\", \"description\": \"Get EMI schedule for a specific loan.\", \"inputSchema\": {\"properties\": {\"loan_id\": {\"title\": \"Loan Id\", \"type\": \"string\"}}, \"required\": [\"loan_id\"], \"title\": \"get_emi_detailsArguments\", \"type\": \"object\"}}, {\"name\": \"lending-wealth___calculate_emi\", \"description\": \"Calculate EMI for given loan parameters. Rate is annual %, tenure in months.\", \"inputSchema\": {\"properties\": {\"principal\": {\"title\": \"Principal\", \"type\": \"number\"}, \"rate\": {\"title\": \"Rate\", \"type\": \"number\"}, \"tenure\": {\"title\": \"Tenure\", \"type\": \"integer\"}}, \"required\": [\"principal\", \"rate\", \"tenure\"], \"title\": \"calculate_emiArguments\", \"type\": \"object\"}}, {\"name\": \"lending-wealth___search_lending_policies\", \"description\": \"Search the bank's lending policy documents for guidelines, eligibility criteria,\\nregulatory requirements, and product terms. Use this when you need to check bank\\npolicies before making lending recommendations.\", \"inputSchema\": {\"properties\": {\"query\": {\"title\": \"Query\", \"type\": \"string\"}}, \"required\": [\"query\"], \"title\": \"search_lending_policiesArguments\", \"type\": \"object\"}, \"outputSchema\": {\"properties\": {\"result\": {\"title\": \"Result\", \"type\": \"string\"}}, \"required\": [\"result\"], \"title\": \"search_lending_policiesOutput\", \"type\": \"object\"}}]}"
+            }
+          }
+        }
+      }
+    },
+    "LendingRecordApproval": {
+      "Type": "Custom::AgentCoreRegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "ApprovalProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Approval",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "RecordId": {
+          "Fn::GetAtt": [
+            "LendingRecord",
+            "Id"
+          ]
+        },
+        "Decision": "APPROVED"
+      }
+    }
+  },
+  "Outputs": {
+    "RegistryArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Catalog",
+          "Arn"
+        ]
+      }
+    },
+    "RegistryId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Catalog",
+          "Id"
+        ]
+      }
+    }
+  }
+}

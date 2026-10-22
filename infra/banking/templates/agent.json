@@ -1,0 +1,211 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Notebook 10 - Strands agent hosted in platform Runtime",
+  "Parameters": {
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    },
+    "DiscoveryUrl": {
+      "Type": "String"
+    },
+    "Audience": {
+      "Type": "String",
+      "Default": "lobfederation"
+    },
+    "UserClientId": {
+      "Type": "String"
+    },
+    "GatewayUrl": {
+      "Type": "String"
+    },
+    "RegistryArn": {
+      "Type": "String"
+    },
+    "GuardrailId": {
+      "Type": "String"
+    },
+    "GuardrailVersion": {
+      "Type": "String"
+    },
+    "ModelId": {
+      "Type": "String",
+      "Default": "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+    },
+    "ModelResourceArns": {
+      "Type": "CommaDelimitedList",
+      "Description": "Exact inference-profile and destination foundation-model ARNs for the selected model"
+    }
+  },
+  "Resources": {
+    "RuntimeRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucket}/${ArtifactKey}"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:InvokeModel",
+                    "bedrock:InvokeModelWithResponseStream"
+                  ],
+                  "Resource": {
+                    "Ref": "ModelResourceArns"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:SearchRegistryRecords"
+                  ],
+                  "Resource": [
+                    {
+                      "Ref": "RegistryArn"
+                    },
+                    {
+                      "Fn::Sub": "${RegistryArn}/record/*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:ApplyGuardrail"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:guardrail/${GuardrailId}"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Runtime": {
+      "Type": "AWS::BedrockAgentCore::Runtime",
+      "Properties": {
+        "AgentRuntimeName": "banking_platform_agent",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "RuntimeRole",
+            "Arn"
+          ]
+        },
+        "AgentRuntimeArtifact": {
+          "CodeConfiguration": {
+            "Runtime": "PYTHON_3_12",
+            "EntryPoint": [
+              "python",
+              "banking_runtime_main.py"
+            ],
+            "Code": {
+              "S3": {
+                "Bucket": {
+                  "Ref": "ArtifactBucket"
+                },
+                "Prefix": {
+                  "Ref": "ArtifactKey"
+                }
+              }
+            }
+          }
+        },
+        "ProtocolConfiguration": "HTTP",
+        "NetworkConfiguration": {
+          "NetworkMode": "PUBLIC"
+        },
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Ref": "DiscoveryUrl"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "Audience"
+              }
+            ],
+            "CustomClaims": [
+              {
+                "InboundTokenClaimName": "cid",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "UserClientId"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "EnvironmentVariables": {
+          "BANKING_SERVICE": "agent",
+          "BANKING_CONFIG": {
+            "Fn::Sub": "{\"region\": \"${AWS::Region}\", \"gateway_url\": \"${GatewayUrl}\", \"registry_arn\": \"${RegistryArn}\", \"guardrail_id\": \"${GuardrailId}\", \"guardrail_version\": \"${GuardrailVersion}\", \"model_id\": \"${ModelId}\"}"
+          }
+        },
+        "LifecycleConfiguration": {
+          "IdleRuntimeSessionTimeout": 300,
+          "MaxLifetime": 3600
+        },
+        "RequestHeaderConfiguration": {
+          "RequestHeaderAllowlist": [
+            "Authorization"
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "AgentRuntimeArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Runtime",
+          "AgentRuntimeArn"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+[project]
+name = "santander-agentcore-workshop"
+version = "0.1.0"
+description = "Laboratório Santander: Identity, Policy, Gateway e Registry"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "boto3>=1.42",
+  "cedarpy>=4.7",
+  "httpx>=0.28",
+  "jsonschema>=4.23",
+  "mcp>=1.20,<2",
+  "msal>=1.34",
+  "pyjwt[crypto]>=2.10",
+  "pyyaml>=6.0",
+]
+
+[dependency-groups]
+dev = [
+  "cfn-lint>=1.40",
+  "ipykernel>=6.30",
+  "nbclient>=0.10",
+  "nbformat>=5.10",
+  "pytest>=8.4",
+  "pytest-asyncio>=1.2",
+  "ruff>=0.14",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/santander_demo"]
+
+[project.scripts]
+santander-demo = "santander_demo.cli:main"
+
+[project.optional-dependencies]
+banking = [
+    "bedrock-agentcore>=1.24.1",
+    "strands-agents>=1.59.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]

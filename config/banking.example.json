@@ -1,0 +1,26 @@
+{
+  "project": "banking-demo",
+  "region": "us-east-1",
+  "accounts": {
+    "platform": {"id": "111111111111", "profile": "platform"},
+    "retail-banking": {"id": "222222222222", "profile": "retail-banking"},
+    "transaction-banking": {"id": "333333333333", "profile": "transaction-banking"},
+    "lending-wealth": {"id": "444444444444", "profile": "lending-wealth"}
+  },
+  "auth": {
+    "issuer": "https://REPLACE.okta.com/oauth2/REPLACE_AUTH_SERVER",
+    "discovery_url": "https://REPLACE.okta.com/oauth2/REPLACE_AUTH_SERVER/.well-known/openid-configuration",
+    "audience": "lobfederation",
+    "user_client_id": "REPLACE_USER_APP_CLIENT_ID",
+    "m2m_client_id": "REPLACE_M2M_APP_CLIENT_ID",
+    "m2m_secret_arn": "arn:aws:secretsmanager:us-east-1:111111111111:secret:REPLACE_M2M_SECRET",
+    "scope": "lobfederation.invoke"
+  },
+  "expected_user_sub": "REPLACE_OKTA_TEST_USER_SUB",
+  "knowledge_base_id": "REPLACE_LENDING_KB_ID",
+  "model_id": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "model_resource_arns": [
+    "REPLACE_INFERENCE_PROFILE_ARN",
+    "REPLACE_EACH_FOUNDATION_MODEL_ARN_RETURNED_BY_GET_INFERENCE_PROFILE"
+  ]
+}

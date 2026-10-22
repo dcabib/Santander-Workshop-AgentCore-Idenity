@@ -1,0 +1,53 @@
+{
+  "project": "santander-journey",
+  "region": "us-east-1",
+  "tenant_id": "REPLACE_TENANT_UUID",
+  "login_client_id": "REPLACE_PUBLIC_LOGIN_APP_UUID",
+  "users": {
+    "a": "REPLACE_USER_WITH_GRANT_OID",
+    "b": "REPLACE_USER_WITHOUT_GRANT_OID"
+  },
+  "accounts": {
+    "origin": {
+      "id": "111111111111",
+      "profile": "santander-origin",
+      "gateway_client_id": "REPLACE_ORIGIN_GATEWAY_UUID",
+      "gateway_secret_arn": "arn:aws:secretsmanager:us-east-1:111111111111:secret:REPLACE_ORIGIN"
+    },
+    "platform": {
+      "id": "222222222222",
+      "profile": "santander-platform",
+      "gateway_client_id": "REPLACE_HUB_GATEWAY_UUID",
+      "gateway_secret_arn": "arn:aws:secretsmanager:us-east-1:222222222222:secret:REPLACE_HUB"
+    },
+    "data": {
+      "id": "333333333333",
+      "profile": "santander-data",
+      "gateway_client_id": "REPLACE_DATA_GATEWAY_UUID"
+    }
+  },
+  "agents": {
+    "riscos": {
+      "client_id": "REPLACE_RISCOS_RUNTIME_APP_UUID",
+      "secret_arn": "arn:aws:secretsmanager:us-east-1:111111111111:secret:REPLACE_RISCOS"
+    },
+    "fraude": {
+      "client_id": "REPLACE_FRAUDE_RUNTIME_APP_UUID",
+      "secret_arn": "arn:aws:secretsmanager:us-east-1:111111111111:secret:REPLACE_FRAUDE"
+    }
+  },
+  "databricks": {
+    "host": "https://adb-REPLACE.WORKSPACE.azuredatabricks.net",
+    "endpoint_mode": "legacy_sql",
+    "mcp_url": "https://adb-REPLACE.WORKSPACE.azuredatabricks.net/api/2.0/mcp/sql",
+    "oauth_scope": "all-apis",
+    "client_id": "REPLACE_DATABRICKS_SP_APP_ID",
+    "secret_arn": "arn:aws:secretsmanager:us-east-1:333333333333:secret:REPLACE_DATABRICKS",
+    "subject_claim": "email",
+    "public_client_exchange_enabled": false,
+    "tables": {
+      "riscos": "workshop_riscos.demo.canario",
+      "fraude": "workshop_fraude.demo.canario"
+    }
+  }
+}

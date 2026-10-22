@@ -1,0 +1,210 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander - supervisor na conta A; habilitar Runtime após configurar o hub",
+  "Parameters": {
+    "Project": {
+      "Type": "String",
+      "Default": "santander-demo"
+    },
+    "HubAccount": {
+      "Type": "String",
+      "AllowedPattern": "[0-9]{12}"
+    },
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "RuntimeKey": {
+      "Type": "String",
+      "Default": "workshop/not-built.zip"
+    },
+    "DiscoveryUrl": {
+      "Type": "String"
+    },
+    "GatewayAudience": {
+      "Type": "String"
+    },
+    "SupervisorClientId": {
+      "Type": "String",
+      "Default": ""
+    },
+    "WorkshopConfig": {
+      "Type": "String",
+      "Default": "{}"
+    },
+    "EnableRuntime": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "true",
+        "false"
+      ]
+    }
+  },
+  "Resources": {
+    "SupervisorRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "sts:AssumeRole"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:iam::${HubAccount}:role/${Project}-registry-consumer"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*"
+                  }
+                },
+                {
+                  "Fn::If": [
+                    "Enabled",
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "s3:GetObject"
+                      ],
+                      "Resource": {
+                        "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucket}/${RuntimeKey}"
+                      }
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "RoleName": {
+          "Fn::Sub": "${Project}-supervisor"
+        }
+      }
+    },
+    "SupervisorRuntime": {
+      "Type": "AWS::BedrockAgentCore::Runtime",
+      "Properties": {
+        "AgentRuntimeName": "santander_supervisor",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "SupervisorRole",
+            "Arn"
+          ]
+        },
+        "AgentRuntimeArtifact": {
+          "CodeConfiguration": {
+            "Runtime": "PYTHON_3_12",
+            "EntryPoint": [
+              "python",
+              "runtime_main.py"
+            ],
+            "Code": {
+              "S3": {
+                "Bucket": {
+                  "Ref": "ArtifactBucket"
+                },
+                "Prefix": {
+                  "Ref": "RuntimeKey"
+                }
+              }
+            }
+          }
+        },
+        "ProtocolConfiguration": "HTTP",
+        "NetworkConfiguration": {
+          "NetworkMode": "PUBLIC"
+        },
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Ref": "DiscoveryUrl"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "GatewayAudience"
+              }
+            ],
+            "AllowedClients": [
+              {
+                "Ref": "SupervisorClientId"
+              }
+            ]
+          }
+        },
+        "RequestHeaderConfiguration": {
+          "RequestHeaderAllowlist": [
+            "X-Amzn-Bedrock-AgentCore-Runtime-Custom-User-Token"
+          ]
+        },
+        "EnvironmentVariables": {
+          "WORKSHOP_CONFIG": {
+            "Ref": "WorkshopConfig"
+          },
+          "WORKSHOP_SERVICE": "supervisor"
+        },
+        "LifecycleConfiguration": {
+          "IdleRuntimeSessionTimeout": 300,
+          "MaxLifetime": 3600
+        }
+      },
+      "Condition": "Enabled"
+    }
+  },
+  "Outputs": {
+    "SupervisorRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "SupervisorRole",
+          "Arn"
+        ]
+      }
+    },
+    "SupervisorRuntimeArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "SupervisorRuntime",
+          "AgentRuntimeArn"
+        ]
+      },
+      "Condition": "Enabled"
+    }
+  },
+  "Conditions": {
+    "Enabled": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableRuntime"
+        },
+        "true"
+      ]
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Notebook 11 - transaction-banking targets OBO and independent Cedar",
+  "Parameters": {
+    "GatewayId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "PolicyEngineId": {
+      "Type": "String"
+    },
+    "OAuthProviderArn": {
+      "Type": "String"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "CallerClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "AllowedUserOids": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(,[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*"
+    },
+    "TransactionEndpoint": {
+      "Type": "String"
+    },
+    "TransactionScope": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "TransactionTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "backend",
+        "Description": "OBO to local MCP Runtime",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "TransactionEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"get_payments\", \"description\": \"Get payment history for a customer. Returns recent payments with amounts, dates, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"days\": {\"default\": 30, \"title\": \"Days\", \"type\": \"integer\"}}, \"required\": [\"customer_id\"], \"title\": \"get_paymentsArguments\", \"type\": \"object\"}}, {\"name\": \"transfer_funds\", \"description\": \"Transfer funds between accounts. Creates a payment record and instructs the agent to update balances via the retail-banking update_balance tool.\", \"inputSchema\": {\"properties\": {\"from_account\": {\"title\": \"From Account\", \"type\": \"string\"}, \"to_account\": {\"title\": \"To Account\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}}, \"required\": [\"from_account\", \"to_account\", \"amount\"], \"title\": \"transfer_fundsArguments\", \"type\": \"object\"}}, {\"name\": \"get_beneficiaries\", \"description\": \"List registered beneficiaries for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_beneficiariesArguments\", \"type\": \"object\"}}, {\"name\": \"schedule_payment\", \"description\": \"Schedule a future payment for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"to_account\": {\"title\": \"To Account\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"date\": {\"title\": \"Date\", \"type\": \"string\"}}, \"required\": [\"customer_id\", \"to_account\", \"amount\", \"date\"], \"title\": \"schedule_paymentArguments\", \"type\": \"object\"}}, {\"name\": \"whoami\", \"description\": \"Verify the delegated identity received by this account's MCP Runtime.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {}}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Ref": "TransactionScope"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ReadDelegated": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "ReadDelegated",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "permit(\n  principal is AgentCore::OAuthUser,\n  action in [AgentCore::Action::\"backend___get_payments\",\n    AgentCore::Action::\"backend___get_beneficiaries\",\n    AgentCore::Action::\"backend___whoami\"],\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${CallerClientId}\" &&\n  principal.hasTag(\"oid\") && [\"${UserList}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\"\n};",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\",\"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "TransactionTarget"
+      ]
+    }
+  },
+  "Outputs": {}
+}

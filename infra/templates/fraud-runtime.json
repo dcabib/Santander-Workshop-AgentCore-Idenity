@@ -1,0 +1,166 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander - Runtime MCP Fraude na conta B",
+  "Parameters": {
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "RuntimeKey": {
+      "Type": "String"
+    },
+    "RuntimeName": {
+      "Type": "String",
+      "Default": "santander_fraude"
+    },
+    "DiscoveryUrl": {
+      "Type": "String"
+    },
+    "RuntimeAudience": {
+      "Type": "String"
+    },
+    "GatewayClientId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "RuntimeRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucket}/${RuntimeKey}"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "FraudRuntime": {
+      "Type": "AWS::BedrockAgentCore::Runtime",
+      "Properties": {
+        "AgentRuntimeName": {
+          "Ref": "RuntimeName"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "RuntimeRole",
+            "Arn"
+          ]
+        },
+        "AgentRuntimeArtifact": {
+          "CodeConfiguration": {
+            "Runtime": "PYTHON_3_12",
+            "EntryPoint": [
+              "python",
+              "runtime_main.py"
+            ],
+            "Code": {
+              "S3": {
+                "Bucket": {
+                  "Ref": "ArtifactBucket"
+                },
+                "Prefix": {
+                  "Ref": "RuntimeKey"
+                }
+              }
+            }
+          }
+        },
+        "ProtocolConfiguration": "MCP",
+        "NetworkConfiguration": {
+          "NetworkMode": "PUBLIC"
+        },
+        "EnvironmentVariables": {
+          "WORKSHOP_SERVICE": "fraud"
+        },
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Ref": "DiscoveryUrl"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "RuntimeAudience"
+              }
+            ],
+            "AllowedClients": [
+              {
+                "Ref": "GatewayClientId"
+              }
+            ],
+            "AllowedWorkloadConfiguration": {
+              "HostingEnvironments": [
+                {
+                  "Arn": {
+                    "Ref": "GatewayArn"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "LifecycleConfiguration": {
+          "IdleRuntimeSessionTimeout": 300,
+          "MaxLifetime": 3600
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "RuntimeArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "FraudRuntime",
+          "AgentRuntimeArn"
+        ]
+      }
+    },
+    "RuntimeId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "FraudRuntime",
+          "AgentRuntimeId"
+        ]
+      }
+    }
+  }
+}

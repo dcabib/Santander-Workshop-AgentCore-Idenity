@@ -1,0 +1,461 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Notebook 10 - lending-wealth MCP and synthetic DynamoDB fixtures",
+  "Parameters": {
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    },
+    "Project": {
+      "Type": "String",
+      "Default": "banking-demo"
+    },
+    "DiscoveryUrl": {
+      "Type": "String"
+    },
+    "Audience": {
+      "Type": "String",
+      "Default": "lobfederation"
+    },
+    "M2MClientId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "KnowledgeBaseId": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z0-9]{10}"
+    }
+  },
+  "Resources": {
+    "Loans": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "${Project}-Loans"
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "loan_id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "loan_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "SSESpecification": {
+          "SSEEnabled": true
+        },
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "CreditScores": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "${Project}-CreditScores"
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "customer_id",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "customer_id",
+            "KeyType": "HASH"
+          }
+        ],
+        "SSESpecification": {
+          "SSEEnabled": true
+        },
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "EMISchedule": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": {
+          "Fn::Sub": "${Project}-EMISchedule"
+        },
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "loan_id",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "emi_number",
+            "AttributeType": "N"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "loan_id",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "emi_number",
+            "KeyType": "RANGE"
+          }
+        ],
+        "SSESpecification": {
+          "SSEEnabled": true
+        },
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "RuntimeRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucket}/${ArtifactKey}"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem",
+                    "dynamodb:Scan",
+                    "dynamodb:Query"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Loans",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "CreditScores",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "EMISchedule",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:Retrieve"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:knowledge-base/${KnowledgeBaseId}"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "SeedLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "${AWS::StackName}-fixtures"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "SeedRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:PutItem"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Loans",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "CreditScores",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "EMISchedule",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "SeedLog",
+                      "Arn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "SeedProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Handler": "banking_seed_handler.handler",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 256,
+        "Timeout": 300,
+        "Role": {
+          "Fn::GetAtt": [
+            "SeedRole",
+            "Arn"
+          ]
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "SeedLog"
+          }
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        }
+      }
+    },
+    "Fixtures": {
+      "Type": "Custom::BankingFixtures",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SeedProvider",
+            "Arn"
+          ]
+        },
+        "Lob": "lending-wealth",
+        "Tables": {
+          "Loans": {
+            "Ref": "Loans"
+          },
+          "CreditScores": {
+            "Ref": "CreditScores"
+          },
+          "EMISchedule": {
+            "Ref": "EMISchedule"
+          }
+        },
+        "FixtureVersion": "upstream-f76491b6"
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "Runtime": {
+      "Type": "AWS::BedrockAgentCore::Runtime",
+      "Properties": {
+        "AgentRuntimeName": "banking_lending",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "RuntimeRole",
+            "Arn"
+          ]
+        },
+        "AgentRuntimeArtifact": {
+          "CodeConfiguration": {
+            "Runtime": "PYTHON_3_12",
+            "EntryPoint": [
+              "python",
+              "banking_runtime_main.py"
+            ],
+            "Code": {
+              "S3": {
+                "Bucket": {
+                  "Ref": "ArtifactBucket"
+                },
+                "Prefix": {
+                  "Ref": "ArtifactKey"
+                }
+              }
+            }
+          }
+        },
+        "ProtocolConfiguration": "MCP",
+        "NetworkConfiguration": {
+          "NetworkMode": "PUBLIC"
+        },
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Ref": "DiscoveryUrl"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "Audience"
+              }
+            ],
+            "CustomClaims": [
+              {
+                "InboundTokenClaimName": "cid",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "M2MClientId"
+                    }
+                  }
+                }
+              }
+            ],
+            "AllowedWorkloadConfiguration": {
+              "HostingEnvironments": [
+                {
+                  "Arn": {
+                    "Ref": "GatewayArn"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "EnvironmentVariables": {
+          "BANKING_SERVICE": "lending-wealth",
+          "TABLE_PREFIX": {
+            "Fn::Sub": "${Project}-"
+          },
+          "KNOWLEDGE_BASE_ID": {
+            "Ref": "KnowledgeBaseId"
+          }
+        },
+        "LifecycleConfiguration": {
+          "IdleRuntimeSessionTimeout": 300,
+          "MaxLifetime": 3600
+        }
+      },
+      "DependsOn": [
+        "Fixtures"
+      ]
+    }
+  },
+  "Outputs": {
+    "RuntimeArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Runtime",
+          "AgentRuntimeArn"
+        ]
+      }
+    },
+    "RuntimeId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Runtime",
+          "AgentRuntimeId"
+        ]
+      }
+    },
+    "TablePrefix": {
+      "Value": {
+        "Fn::Sub": "${Project}-"
+      }
+    },
+    "KnowledgeBaseId": {
+      "Value": {
+        "Ref": "KnowledgeBaseId"
+      }
+    }
+  }
+}

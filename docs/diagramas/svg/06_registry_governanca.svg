@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Publicar, aprovar e consumir são papéis distintos</title><desc id="desc">Os registros percorrem DRAFT, PENDING_APPROVAL e APPROVED ou REJECTED. Os papéis AWS usam sessões temporárias e permissões distintas.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  06</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">Publicar, aprovar e consumir são papéis distintos</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Um catálogo governado separa o ciclo do registro da autorização para executar uma tool.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">MODELO LOCAL · IAM A VALIDAR</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">O publisher submete. O approver decide. O consumer encontra aprovados.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">06 / 09</tspan>
+</text>
+<g class="node" data-x="64" data-y="235" data-w="422" data-h="161">
+<rect x="64" y="235" width="422" height="161" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="255" width="56" height="56" rx="16" fill="#E8F7F5"/>
+<g transform="translate(93 264) scale(0.7916666666666666)" fill="none" stroke="#087F82" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M10 3h19l10 10v32H10zM29 3v11h10M17 23h15m-15 7h15m-15 7h10"/>
+</g>
+<text class="node-text" x="158" y="289" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">Publisher</tspan>
+</text>
+<text class="node-text" x="88" y="347" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">Publica e submete</tspan>
+<tspan x="88" dy="29.0">Não aprova a própria publicação</tspan>
+</text>
+</g>
+<g class="node" data-x="589" data-y="235" data-w="422" data-h="161">
+<rect x="589" y="235" width="422" height="161" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="609" y="255" width="56" height="56" rx="16" fill="#F2EDFB"/>
+<g transform="translate(618 264) scale(0.7916666666666666)" fill="none" stroke="#7546C7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M28 43H7V5h24v12M14 14h10m-10 8h8m-8 8h5"/><circle cx="33" cy="29" r="9"/><path d="M40 36l6 7m-17-14 3 3 5-6"/>
+</g>
+<text class="node-text" x="683" y="289" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="683" dy="0">Approver</tspan>
+</text>
+<text class="node-text" x="613" y="347" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="613" dy="0">Revisa e decide</tspan>
+<tspan x="613" dy="29.0">Não publica registros</tspan>
+</text>
+</g>
+<g class="node" data-x="1114" data-y="235" data-w="422" data-h="161">
+<rect x="1114" y="235" width="422" height="161" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1134" y="255" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(1143 264) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="20" cy="20" r="14"/><path d="M31 31l13 13M14 20h12m-6-6v12"/>
+</g>
+<text class="node-text" x="1208" y="289" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1208" dy="0">Consumer</tspan>
+</text>
+<text class="node-text" x="1138" y="347" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1138" dy="0">Busca capacidades aprovadas</tspan>
+<tspan x="1138" dy="29.0">Não publica nem aprova</tspan>
+</text>
+</g>
+<rect x="106" y="494" width="330" height="80" rx="40.0" fill="#EDF1F7"/>
+<text class="" x="271.0" y="542.75" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="700" text-anchor="middle">
+<tspan x="271.0" dy="0">DRAFT</tspan>
+</text>
+<rect x="599" y="494" width="402" height="80" rx="40.0" fill="#E8F7F5"/>
+<text class="" x="800.0" y="542.4" fill="#087F82" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="700" text-anchor="middle">
+<tspan x="800.0" dy="0">PENDING_APPROVAL</tspan>
+</text>
+<rect x="1170" y="442" width="320" height="78" rx="39.0" fill="#EAF7F0"/>
+<text class="" x="1330.0" y="489.4" fill="#14795C" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="700" text-anchor="middle">
+<tspan x="1330.0" dy="0">APPROVED</tspan>
+</text>
+<rect x="1170" y="635" width="320" height="78" rx="39.0" fill="#FFF0F1"/>
+<text class="" x="1330.0" y="682.4" fill="#D52E3F" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="700" text-anchor="middle">
+<tspan x="1330.0" dy="0">REJECTED</tspan>
+</text>
+<path d="M 275 396 L 275 494" stroke="#087F82" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="275,494 269.5,483.0 280.5,483.0" fill="#087F82"/>
+<path d="M 800 396 L 800 494" stroke="#7546C7" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="800,494 794.5,483.0 805.5,483.0" fill="#7546C7"/>
+<path d="M 1325 442 L 1325 396" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="1325,396 1330.5,407.0 1319.5,407.0" fill="#2469DD"/>
+<path d="M 436 534 L 599 534" stroke="#087F82" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="599,534 588.0,539.5 588.0,528.5" fill="#087F82"/>
+<rect x="467.96" y="487" width="100.08" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="518" y="505" fill="#087F82" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="518" dy="0">submeter</tspan>
+</text>
+<path d="M 1001 516 L 1080 516 L 1080 481 L 1170 481" stroke="#14795C" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1170,481 1159.0,486.5 1159.0,475.5" fill="#14795C"/>
+<rect x="1034.465" y="436" width="91.07" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="1080" y="454" fill="#14795C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="1080" dy="0">aprovar</tspan>
+</text>
+<path d="M 1001 550 L 1080 550 L 1080 674 L 1170 674" stroke="#D52E3F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1170,674 1159.0,679.5 1159.0,668.5" fill="#D52E3F"/>
+<rect x="1029.96" y="695" width="100.08" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="1080" y="713" fill="#D52E3F" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="1080" dy="0">rejeitar</tspan>
+</text>
+<rect x="89" y="674" width="421" height="50" rx="25.0" fill="#E8F7F5"/>
+<text class="" x="299.5" y="707.05" fill="#087F82" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="middle">
+<tspan x="299.5" dy="0">autoApproval = false</tspan>
+</text>
+<text class="" x="64" y="787" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="600" text-anchor="start">
+<tspan x="64" dy="0">Estados preparados por IaC</tspan>
+</text>
+<text class="" x="668" y="787" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="668" dy="0">AWS_IAM + STS · sem usuários IAM ou chaves permanentes</tspan>
+</text>
+</svg>

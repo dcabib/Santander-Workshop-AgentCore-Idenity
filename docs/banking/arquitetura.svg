@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Um agente. Três áreas. Quatro contas.</title><desc id="desc">Notebook invoca um agente Strands na plataforma. Registry descobre capacidades, Gateway aplica Policy e Identity fornece tokens M2M para três MCPs em contas distintas.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  10</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">Um agente. Três áreas. Quatro contas.</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">JWT do usuário até o Gateway; credencial OAuth M2M para os MCPs de cada área.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">CENÁRIO DO ARTIGO · AWS A VALIDAR</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">A Policy vê o usuário. Cada LOB recebe uma credencial técnica M2M.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">LAB 10</tspan>
+</text>
+<g class="node" data-x="64" data-y="306" data-w="260" data-h="190">
+<rect x="64" y="306" width="260" height="190" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="326" width="56" height="56" rx="16" fill="#EDF1F7"/>
+<g transform="translate(93 335) scale(0.7916666666666666)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="7" y="6" width="34" height="27" rx="3"/><path d="M3 40h42l-4-7H7zM18 17l-5 4 5 4m12-8 5 4-5 4"/>
+</g>
+<text class="node-text" x="158" y="360" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">Notebook</tspan>
+</text>
+<text class="node-text" x="88" y="418" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">Interface da demo</tspan>
+<tspan x="88" dy="29.0">JWT do usuário</tspan>
+</text>
+</g>
+<rect x="64" y="516" width="260" height="38" rx="19.0" fill="#ECF3FF"/>
+<text class="" x="194.0" y="541.3" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+<tspan x="194.0" dy="0">Login humano · Okta</tspan>
+</text>
+<rect x="385" y="220" width="1151" height="347" rx="22" fill="#FFF3E5" stroke="#DAE3EE" stroke-width="1.6"/>
+<text class="" x="411" y="258" fill="#BD650F" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="411" dy="0">CONTA DE PLATAFORMA</tspan>
+</text>
+<g class="node" data-x="412" data-y="331" data-w="300" data-h="164">
+<rect x="412" y="331" width="300" height="164" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="432" y="351" width="56" height="56" rx="16" fill="#EDF1F7"/>
+<g transform="translate(441 360) scale(0.7916666666666666)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="6" y="12" width="36" height="29" rx="8"/><path d="M24 12V5m-4 0h8M2 23v9m44-9v9"/><circle cx="16" cy="24" r="2.5"/><circle cx="32" cy="24" r="2.5"/><path d="M17 33h14"/>
+</g>
+<text class="node-text" x="506" y="385" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="506" dy="0">Agente Strands</tspan>
+</text>
+<text class="node-text" x="436" y="443" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="436" dy="0">AgentCore Runtime</tspan>
+<tspan x="436" dy="29.0">Orquestra ferramentas</tspan>
+</text>
+</g>
+<rect x="412" y="515" width="300" height="36" rx="18.0" fill="#EDF1F7"/>
+<text class="" x="562.0" y="538.6" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="middle">
+<tspan x="562.0" dy="0">Inferência · Amazon Bedrock</tspan>
+</text>
+<g class="node" data-x="818" data-y="331" data-w="312" data-h="164">
+<rect x="818" y="331" width="312" height="164" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="838" y="351" width="56" height="56" rx="16" fill="#FFF3E5"/>
+<g transform="translate(847 360) scale(0.7916666666666666)" fill="none" stroke="#BD650F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M17 7h14v34H17zM3 24h14m14 0h14M8 19l5 5-5 5m28-10 5 5-5 5"/><path d="M23 14h2m-2 20h2"/>
+</g>
+<text class="node-text" x="912" y="385" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="912" dy="0">Gateway MCP</tspan>
+</text>
+<text class="node-text" x="842" y="443" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="842" dy="0">JWT + tools/list</tspan>
+<tspan x="842" dy="29.0">Policy antes de tools/call</tspan>
+</text>
+</g>
+<g class="node" data-x="1200" data-y="261" data-w="305" data-h="96">
+<rect x="1200" y="261" width="305" height="96" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1220" y="281" width="56" height="56" rx="16" fill="#E8F7F5"/>
+<g transform="translate(1229 290) scale(0.7916666666666666)" fill="none" stroke="#087F82" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="7" y="5" width="29" height="38" rx="4"/><path d="M14 5v38m8-28h8m-8 8h8m-8 8h5M36 10h5v28"/>
+</g>
+<text class="" x="1294" y="295" fill="#087F82" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="1">
+<tspan x="1294" dy="0">DESCOBERTA IAM</tspan>
+</text>
+<text class="node-text" x="1294" y="324" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1294" dy="0">Registry</tspan>
+</text>
+</g>
+<g class="node" data-x="1200" data-y="385" data-w="305" data-h="88">
+<rect x="1200" y="385" width="305" height="88" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1220" y="405" width="56" height="56" rx="16" fill="#F2EDFB"/>
+<g transform="translate(1229 414) scale(0.7916666666666666)" fill="none" stroke="#7546C7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M24 3l17 7v13c0 10-8 18-17 23C15 41 7 33 7 23V10z"/><path d="M15 23l6 6 12-13"/>
+</g>
+<text class="" x="1294" y="419" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="1">
+<tspan x="1294" dy="0">CEDAR · ENFORCE</tspan>
+</text>
+<text class="node-text" x="1294" y="448" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1294" dy="0">Policy</tspan>
+</text>
+</g>
+<rect x="1200" y="499" width="305" height="44" rx="22.0" fill="#ECF3FF"/>
+<text class="" x="1352.5" y="526.95" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" text-anchor="middle">
+<tspan x="1352.5" dy="0">Identity · credencial M2M</tspan>
+</text>
+<path d="M 324 412 L 412 412" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="412,412 401.0,417.5 401.0,406.5" fill="#2469DD"/>
+<rect x="340.485" y="364" width="55.03" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="368" y="382" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="368" dy="0">JWT</tspan>
+</text>
+<path d="M 712 411 L 818 411" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="818,411 807.0,416.5 807.0,405.5" fill="#2469DD"/>
+<rect x="737.485" y="364" width="55.03" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="765" y="382" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="765" dy="0">JWT</tspan>
+</text>
+<path d="M 1200 296 L 565 296 L 565 331" stroke="#087F82" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="565,331 559.5,320.0 570.5,320.0" fill="#087F82"/>
+<rect x="812.395" y="269" width="217.21" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="921" y="287" fill="#087F82" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="921" dy="0">Capacidades aprovadas</tspan>
+</text>
+<path d="M 1200 428 L 1130 428" stroke="#7546C7" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="1130,428 1141.0,422.5 1141.0,433.5" fill="#7546C7"/>
+<path d="M 1130 481 L 1165 481 L 1165 521 L 1200 521" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="1200,521 1189.0,526.5 1189.0,515.5" fill="#2469DD"/>
+<polygon points="1130,481 1141.0,475.5 1141.0,486.5" fill="#2469DD"/>
+<path d="M 974 495 L 974 600 L 284 600 L 284 645" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="284,645 278.5,634.0 289.5,634.0" fill="#2469DD"/>
+<path d="M 974 600 L 799 600 L 799 645" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="799,645 793.5,634.0 804.5,634.0" fill="#2469DD"/>
+<path d="M 974 600 L 1315 600 L 1315 645" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1315,645 1309.5,634.0 1320.5,634.0" fill="#2469DD"/>
+<rect x="553.98" y="584" width="276.04" height="31" rx="8" fill="#FFFFFF"/>
+<text class="" x="692" y="603" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="600" text-anchor="middle">
+<tspan x="692" dy="0">OAuth · client_credentials</tspan>
+</text>
+<g class="node" data-x="64" data-y="645" data-w="442" data-h="174">
+<rect x="64" y="645" width="442" height="174" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="665" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(93 674) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="" x="158" y="679" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="1">
+<tspan x="158" dy="0">RUNTIME MCP · WORKLOAD DO GATEWAY</tspan>
+</text>
+<text class="node-text" x="158" y="708" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">CONTA RETAIL</tspan>
+</text>
+<text class="node-text" x="88" y="757" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">MCP · perfis, contas e saldos</tspan>
+<tspan x="88" dy="29.0">DynamoDB local à conta</tspan>
+</text>
+</g>
+<g class="node" data-x="579" data-y="645" data-w="442" data-h="174">
+<rect x="579" y="645" width="442" height="174" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="599" y="665" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(608 674) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="" x="673" y="679" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="1">
+<tspan x="673" dy="0">RUNTIME MCP · WORKLOAD DO GATEWAY</tspan>
+</text>
+<text class="node-text" x="673" y="708" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="673" dy="0">CONTA TRANSACTION</tspan>
+</text>
+<text class="node-text" x="603" y="757" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="603" dy="0">MCP · pagamentos e beneficiários</tspan>
+<tspan x="603" dy="29.0">DynamoDB local à conta</tspan>
+</text>
+</g>
+<g class="node" data-x="1094" data-y="645" data-w="442" data-h="174">
+<rect x="1094" y="645" width="442" height="174" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1114" y="665" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(1123 674) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="" x="1188" y="679" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="1">
+<tspan x="1188" dy="0">RUNTIME MCP · WORKLOAD DO GATEWAY</tspan>
+</text>
+<text class="node-text" x="1188" y="708" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1188" dy="0">CONTA LENDING</tspan>
+</text>
+<text class="node-text" x="1118" y="757" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1118" dy="0">MCP · empréstimos, score e RAG</tspan>
+<tspan x="1118" dy="29.0">DynamoDB + KB já existente</tspan>
+</text>
+</g>
+</svg>

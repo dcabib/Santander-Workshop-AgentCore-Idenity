@@ -1,0 +1,353 @@
+{
+  "retail-banking": [
+    {
+      "name": "get_customer",
+      "description": "Get customer profile by ID. Returns name, email, phone, and segment.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "title": "get_customerArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_accounts",
+      "description": "List all bank accounts for a customer. Returns account IDs, types, and status.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "title": "get_accountsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_balance",
+      "description": "Get current balance for a specific bank account.",
+      "inputSchema": {
+        "properties": {
+          "account_id": {
+            "title": "Account Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id"
+        ],
+        "title": "get_balanceArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_profile",
+      "description": "Get full customer profile including all accounts and their balances.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "title": "get_profileArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "update_balance",
+      "description": "Update account balance after a transfer. Operation is 'debit' (subtract) or 'credit' (add).",
+      "inputSchema": {
+        "properties": {
+          "account_id": {
+            "title": "Account Id",
+            "type": "string"
+          },
+          "amount": {
+            "title": "Amount",
+            "type": "number"
+          },
+          "operation": {
+            "default": "debit",
+            "title": "Operation",
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id",
+          "amount"
+        ],
+        "title": "update_balanceArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "delete_customer",
+      "description": "Delete a customer and all their records from the system. This is a destructive operation.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "title": "delete_customerArguments",
+        "type": "object"
+      }
+    }
+  ],
+  "transaction-banking": [
+    {
+      "name": "get_payments",
+      "description": "Get payment history for a customer. Returns recent payments with amounts, dates, and status.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          },
+          "days": {
+            "default": 30,
+            "title": "Days",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "title": "get_paymentsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "transfer_funds",
+      "description": "Transfer funds between accounts. Creates a payment record and instructs the agent to update balances via the retail-banking update_balance tool.",
+      "inputSchema": {
+        "properties": {
+          "from_account": {
+            "title": "From Account",
+            "type": "string"
+          },
+          "to_account": {
+            "title": "To Account",
+            "type": "string"
+          },
+          "amount": {
+            "title": "Amount",
+            "type": "number"
+          }
+        },
+        "required": [
+          "from_account",
+          "to_account",
+          "amount"
+        ],
+        "title": "transfer_fundsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_beneficiaries",
+      "description": "List registered beneficiaries for a customer.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "title": "get_beneficiariesArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "schedule_payment",
+      "description": "Schedule a future payment for a customer.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          },
+          "to_account": {
+            "title": "To Account",
+            "type": "string"
+          },
+          "amount": {
+            "title": "Amount",
+            "type": "number"
+          },
+          "date": {
+            "title": "Date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id",
+          "to_account",
+          "amount",
+          "date"
+        ],
+        "title": "schedule_paymentArguments",
+        "type": "object"
+      }
+    }
+  ],
+  "lending-wealth": [
+    {
+      "name": "get_loans",
+      "description": "Get all loans for a customer. Returns loan details including type, principal, rate, and status.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "title": "get_loansArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_credit_score",
+      "description": "Get credit score and contributing factors for a customer.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id"
+        ],
+        "title": "get_credit_scoreArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "check_eligibility",
+      "description": "Check loan eligibility for a customer based on credit score and requested amount.",
+      "inputSchema": {
+        "properties": {
+          "customer_id": {
+            "title": "Customer Id",
+            "type": "string"
+          },
+          "amount": {
+            "title": "Amount",
+            "type": "number"
+          },
+          "loan_type": {
+            "title": "Loan Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "customer_id",
+          "amount",
+          "loan_type"
+        ],
+        "title": "check_eligibilityArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_emi_details",
+      "description": "Get EMI schedule for a specific loan.",
+      "inputSchema": {
+        "properties": {
+          "loan_id": {
+            "title": "Loan Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loan_id"
+        ],
+        "title": "get_emi_detailsArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "calculate_emi",
+      "description": "Calculate EMI for given loan parameters. Rate is annual %, tenure in months.",
+      "inputSchema": {
+        "properties": {
+          "principal": {
+            "title": "Principal",
+            "type": "number"
+          },
+          "rate": {
+            "title": "Rate",
+            "type": "number"
+          },
+          "tenure": {
+            "title": "Tenure",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "principal",
+          "rate",
+          "tenure"
+        ],
+        "title": "calculate_emiArguments",
+        "type": "object"
+      }
+    },
+    {
+      "name": "search_lending_policies",
+      "description": "Search the bank's lending policy documents for guidelines, eligibility criteria,\nregulatory requirements, and product terms. Use this when you need to check bank\npolicies before making lending recommendations.",
+      "inputSchema": {
+        "properties": {
+          "query": {
+            "title": "Query",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "search_lending_policiesArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "properties": {
+          "result": {
+            "title": "Result",
+            "type": "string"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "search_lending_policiesOutput",
+        "type": "object"
+      }
+    }
+  ]
+}

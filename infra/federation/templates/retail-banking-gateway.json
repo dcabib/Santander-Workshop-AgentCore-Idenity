@@ -1,0 +1,330 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Notebook 11 - retail-banking Gateway + Identity OBO + local Policy",
+  "Parameters": {
+    "Project": {
+      "Type": "String",
+      "Default": "santander-fed"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "GatewayClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "CallerClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "GatewaySecretArn": {
+      "Type": "String"
+    },
+    "EngineName": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z][A-Za-z0-9_]*"
+    }
+  },
+  "Resources": {
+    "OAuth": {
+      "Type": "AWS::BedrockAgentCore::OAuth2CredentialProvider",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-obo"
+        },
+        "CredentialProviderVendor": "CustomOauth2",
+        "Oauth2ProviderConfigInput": {
+          "CustomOauth2ProviderConfig": {
+            "OauthDiscovery": {
+              "DiscoveryUrl": {
+                "Fn::Sub": "https://login.microsoftonline.com/${TenantId}/v2.0/.well-known/openid-configuration"
+              }
+            },
+            "ClientId": {
+              "Ref": "GatewayClientId"
+            },
+            "ClientSecretSource": "EXTERNAL",
+            "ClientSecretConfig": {
+              "SecretId": {
+                "Ref": "GatewaySecretArn"
+              },
+              "JsonKey": "client_secret"
+            },
+            "ClientAuthenticationMethod": "CLIENT_SECRET_POST",
+            "OnBehalfOfTokenExchangeConfig": {
+              "GrantType": "JWT_AUTHORIZATION_GRANT"
+            }
+          }
+        }
+      }
+    },
+    "GatewayRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetResourceOauth2Token"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "OAuth",
+                      "CredentialProviderArn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "secretsmanager:GetSecretValue"
+                  ],
+                  "Resource": {
+                    "Ref": "GatewaySecretArn"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetWorkloadAccessToken",
+                    "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default/workload-identity/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Engine": {
+      "Type": "AWS::BedrockAgentCore::PolicyEngine",
+      "Properties": {
+        "Name": {
+          "Ref": "EngineName"
+        }
+      }
+    },
+    "Gateway": {
+      "Type": "AWS::BedrockAgentCore::Gateway",
+      "Properties": {
+        "Name": {
+          "Ref": "Project"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "GatewayRole",
+            "Arn"
+          ]
+        },
+        "ProtocolType": "MCP",
+        "ProtocolConfiguration": {
+          "Mcp": {
+            "SearchType": "SEMANTIC"
+          }
+        },
+        "AuthorizerType": "CUSTOM_JWT",
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Fn::Sub": "https://login.microsoftonline.com/${TenantId}/v2.0/.well-known/openid-configuration"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "GatewayClientId"
+              }
+            ],
+            "CustomClaims": [
+              {
+                "InboundTokenClaimName": "tid",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "TenantId"
+                    }
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "azp",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "CallerClientId"
+                    }
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "ver",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": "2.0"
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "scp",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": "access_as_user"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "PolicyEngineConfiguration": {
+          "Arn": {
+            "Fn::GetAtt": [
+              "Engine",
+              "PolicyEngineArn"
+            ]
+          },
+          "Mode": "ENFORCE"
+        }
+      }
+    },
+    "GatewayLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/vendedlogs/${Project}/gateway"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "GatewayLogSource": {
+      "Type": "AWS::Logs::DeliverySource",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "LogType": "APPLICATION_LOGS",
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayArn"
+          ]
+        }
+      }
+    },
+    "GatewayLogDestination": {
+      "Type": "AWS::Logs::DeliveryDestination",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "DestinationResourceArn": {
+          "Fn::GetAtt": [
+            "GatewayLog",
+            "Arn"
+          ]
+        },
+        "OutputFormat": "json"
+      }
+    },
+    "GatewayLogDelivery": {
+      "Type": "AWS::Logs::Delivery",
+      "Properties": {
+        "DeliverySourceName": {
+          "Ref": "GatewayLogSource"
+        },
+        "DeliveryDestinationArn": {
+          "Fn::GetAtt": [
+            "GatewayLogDestination",
+            "Arn"
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "GatewayId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayIdentifier"
+        ]
+      }
+    },
+    "GatewayArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayArn"
+        ]
+      }
+    },
+    "GatewayUrl": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayUrl"
+        ]
+      }
+    },
+    "PolicyEngineId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineId"
+        ]
+      }
+    },
+    "PolicyEngineArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineArn"
+        ]
+      }
+    },
+    "OAuthProviderArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "OAuth",
+          "CredentialProviderArn"
+        ]
+      }
+    },
+    "GatewayLogGroup": {
+      "Value": {
+        "Ref": "GatewayLog"
+      }
+    }
+  }
+}

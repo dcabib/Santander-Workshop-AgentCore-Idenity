@@ -1,0 +1,170 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander 12 - platform targets and user/agent/tool policies",
+  "Parameters": {
+    "GatewayId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "PolicyEngineId": {
+      "Type": "String"
+    },
+    "OAuthProviderArn": {
+      "Type": "String"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "AllowedUserOids": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(,[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*"
+    },
+    "DataEndpoint": {
+      "Type": "String"
+    },
+    "DataClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "RiscosClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "FraudeClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "RiscosTable": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*"
+    },
+    "FraudeTable": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*"
+    }
+  },
+  "Resources": {
+    "DataTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "dados",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "DataEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"riscos___execute_sql\", \"description\": \"Execute only the identity probe or the approved read-only canary query.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"]}}, {\"name\": \"fraude___execute_sql\", \"description\": \"Execute only the identity probe or the approved read-only canary query.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"query\": {\"type\": \"string\"}}, \"required\": [\"query\"]}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Fn::Sub": "api://${DataClientId}/.default"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "RiscosDelegated": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "RiscosDelegated",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "permit(\n  principal is AgentCore::OAuthUser,\n  action == AgentCore::Action::\"dados___riscos___execute_sql\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${RiscosClientId}\" &&\n  principal.hasTag(\"oid\") && [\"${UserList}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"ver\") && principal.getTag(\"ver\") == \"2.0\" &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\" &&\n  [\"SELECT current_user() AS principal\", \"SELECT current_user() AS principal, COUNT(*) AS total FROM ${RiscosTable}\"].contains(context.input.query)\n};",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\", \"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "DataTarget"
+      ]
+    },
+    "FraudeDelegated": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "FraudeDelegated",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "permit(\n  principal is AgentCore::OAuthUser,\n  action == AgentCore::Action::\"dados___fraude___execute_sql\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${FraudeClientId}\" &&\n  principal.hasTag(\"oid\") && [\"${UserList}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"ver\") && principal.getTag(\"ver\") == \"2.0\" &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\" &&\n  [\"SELECT current_user() AS principal\", \"SELECT current_user() AS principal, COUNT(*) AS total FROM ${FraudeTable}\"].contains(context.input.query)\n};",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\", \"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "DataTarget"
+      ]
+    }
+  },
+  "Outputs": {}
+}

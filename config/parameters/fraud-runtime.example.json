@@ -1,0 +1,9 @@
+{
+  "ArtifactBucket": "REPLACE_ARTIFACTBUCKET",
+  "RuntimeKey": "REPLACE_RUNTIMEKEY",
+  "RuntimeName": "santander_fraude",
+  "DiscoveryUrl": "REPLACE_DISCOVERYURL",
+  "RuntimeAudience": "REPLACE_RUNTIMEAUDIENCE",
+  "GatewayClientId": "REPLACE_GATEWAYCLIENTID",
+  "GatewayArn": "REPLACE_GATEWAYARN"
+}

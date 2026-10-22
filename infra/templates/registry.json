@@ -1,0 +1,873 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander - Registry com providers IaC e papéis separados",
+  "Parameters": {
+    "Project": {
+      "Type": "String",
+      "Default": "santander-demo"
+    },
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ProviderKey": {
+      "Type": "String"
+    },
+    "GatewayUrl": {
+      "Type": "String"
+    },
+    "OperatorRoleArn": {
+      "Type": "String"
+    },
+    "SupervisorRoleArn": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "RegistryProviderRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*:log-stream:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:CreateRegistry",
+                    "bedrock-agentcore:GetRegistry",
+                    "bedrock-agentcore:DeleteRegistry"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "RegistryProviderLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${Project}-registry-provider"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "RegistryProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "${Project}-registry-provider"
+        },
+        "Runtime": "python3.12",
+        "Handler": "registry_handler.handler",
+        "Timeout": 600,
+        "MemorySize": 256,
+        "Architectures": [
+          "arm64"
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "RegistryProviderRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ProviderKey"
+          }
+        },
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KIND": "Registry"
+          }
+        }
+      },
+      "DependsOn": "RegistryProviderLog"
+    },
+    "RecordProviderRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*:log-stream:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:CreateRegistryRecord",
+                    "bedrock-agentcore:GetRegistryRecord",
+                    "bedrock-agentcore:DeleteRegistryRecord",
+                    "bedrock-agentcore:SubmitRegistryRecordForApproval"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "RecordProviderLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${Project}-record-provider"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "RecordProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "${Project}-record-provider"
+        },
+        "Runtime": "python3.12",
+        "Handler": "registry_handler.handler",
+        "Timeout": 600,
+        "MemorySize": 256,
+        "Architectures": [
+          "arm64"
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "RecordProviderRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ProviderKey"
+          }
+        },
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KIND": "Record"
+          }
+        }
+      },
+      "DependsOn": "RecordProviderLog"
+    },
+    "ApprovalProviderRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*:log-stream:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetRegistryRecord",
+                    "bedrock-agentcore:UpdateRegistryRecordStatus"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:registry/*/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ApprovalProviderLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${Project}-approval-provider"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "ApprovalProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "${Project}-approval-provider"
+        },
+        "Runtime": "python3.12",
+        "Handler": "registry_handler.handler",
+        "Timeout": 600,
+        "MemorySize": 256,
+        "Architectures": [
+          "arm64"
+        ],
+        "Role": {
+          "Fn::GetAtt": [
+            "ApprovalProviderRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ProviderKey"
+          }
+        },
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KIND": "Approval"
+          }
+        }
+      },
+      "DependsOn": "ApprovalProviderLog"
+    },
+    "Catalog": {
+      "Type": "Custom::AgentCoreRegistry",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RegistryProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Registry",
+        "Name": {
+          "Ref": "Project"
+        }
+      }
+    },
+    "PublisherRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::Sub": "${Project}-registry-publisher"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": [
+                  {
+                    "Ref": "OperatorRoleArn"
+                  }
+                ]
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "Publisher",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetRegistry",
+                    "bedrock-agentcore:ListRegistryRecords",
+                    "bedrock-agentcore:CreateRegistryRecord",
+                    "bedrock-agentcore:GetRegistryRecord",
+                    "bedrock-agentcore:SubmitRegistryRecordForApproval"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Catalog",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${Catalog.Arn}/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ApproverRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::Sub": "${Project}-registry-approver"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": [
+                  {
+                    "Ref": "OperatorRoleArn"
+                  }
+                ]
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "Approver",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetRegistry",
+                    "bedrock-agentcore:ListRegistryRecords",
+                    "bedrock-agentcore:GetRegistryRecord",
+                    "bedrock-agentcore:UpdateRegistryRecordStatus"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Catalog",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${Catalog.Arn}/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ConsumerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::Sub": "${Project}-registry-consumer"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": [
+                  {
+                    "Ref": "OperatorRoleArn"
+                  },
+                  {
+                    "Ref": "SupervisorRoleArn"
+                  }
+                ]
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "Consumer",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetRegistry",
+                    "bedrock-agentcore:GetRegistryRecord",
+                    "bedrock-agentcore:SearchRegistryRecords"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Catalog",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${Catalog.Arn}/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Capability0": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "san-riscos---consultar-risco",
+        "Description": "Consultar risco sintético de crédito do cliente de demonstração.",
+        "Version": "1.0",
+        "Submit": "true",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.demo/consultar_risco\", \"description\": \"Consultar risco sint\\u00e9tico de cr\\u00e9dito do cliente de demonstra\\u00e7\\u00e3o.\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"riscos___consultar_risco\", \"description\": \"Consultar risco sint\\u00e9tico de cr\\u00e9dito do cliente de demonstra\\u00e7\\u00e3o.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\", \"enum\": [\"SANT-DEMO-001\"]}, \"max_registros\": {\"type\": \"integer\", \"minimum\": 1}}, \"required\": [\"cliente_id\", \"max_registros\"], \"additionalProperties\": false}}]}"
+            }
+          }
+        }
+      }
+    },
+    "Capability0Approval": {
+      "Type": "Custom::AgentCoreRegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "ApprovalProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Approval",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "RecordId": {
+          "Fn::GetAtt": [
+            "Capability0",
+            "Id"
+          ]
+        },
+        "Decision": "APPROVED"
+      }
+    },
+    "Capability1": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "san-riscos---consultar-conhecimento-k2",
+        "Description": "Consultar referência sintética de conhecimento K2; sem integração ao K2.",
+        "Version": "1.0",
+        "Submit": "true",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.demo/consultar_conhecimento_k2\", \"description\": \"Consultar refer\\u00eancia sint\\u00e9tica de conhecimento K2; sem integra\\u00e7\\u00e3o ao K2.\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"riscos___consultar_conhecimento_k2\", \"description\": \"Consultar refer\\u00eancia sint\\u00e9tica de conhecimento K2; sem integra\\u00e7\\u00e3o ao K2.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\", \"enum\": [\"SANT-DEMO-001\"]}, \"max_registros\": {\"type\": \"integer\", \"minimum\": 1}}, \"required\": [\"cliente_id\", \"max_registros\"], \"additionalProperties\": false}}]}"
+            }
+          }
+        }
+      }
+    },
+    "Capability1Approval": {
+      "Type": "Custom::AgentCoreRegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "ApprovalProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Approval",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "RecordId": {
+          "Fn::GetAtt": [
+            "Capability1",
+            "Id"
+          ]
+        },
+        "Decision": "APPROVED"
+      }
+    },
+    "Capability2": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "san-fraude---consultar-fraude",
+        "Description": "Consultar indícios sintéticos de fraude do cliente de demonstração.",
+        "Version": "1.0",
+        "Submit": "true",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.demo/consultar_fraude\", \"description\": \"Consultar ind\\u00edcios sint\\u00e9ticos de fraude do cliente de demonstra\\u00e7\\u00e3o.\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"fraude___consultar_fraude\", \"description\": \"Consultar ind\\u00edcios sint\\u00e9ticos de fraude do cliente de demonstra\\u00e7\\u00e3o.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\", \"enum\": [\"SANT-DEMO-001\"]}, \"max_registros\": {\"type\": \"integer\", \"minimum\": 1}}, \"required\": [\"cliente_id\", \"max_registros\"], \"additionalProperties\": false}}]}"
+            }
+          }
+        }
+      }
+    },
+    "Capability2Approval": {
+      "Type": "Custom::AgentCoreRegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "ApprovalProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Approval",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "RecordId": {
+          "Fn::GetAtt": [
+            "Capability2",
+            "Id"
+          ]
+        },
+        "Decision": "APPROVED"
+      }
+    },
+    "DraftExample": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "draftexample",
+        "Description": "Fixture de governança DraftExample",
+        "Version": "1.0",
+        "Submit": "false",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.demo/consultar_risco\", \"description\": \"Consultar risco sint\\u00e9tico de cr\\u00e9dito do cliente de demonstra\\u00e7\\u00e3o.\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"riscos___consultar_risco\", \"description\": \"Consultar risco sint\\u00e9tico de cr\\u00e9dito do cliente de demonstra\\u00e7\\u00e3o.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\", \"enum\": [\"SANT-DEMO-001\"]}, \"max_registros\": {\"type\": \"integer\", \"minimum\": 1}}, \"required\": [\"cliente_id\", \"max_registros\"], \"additionalProperties\": false}}]}"
+            }
+          }
+        }
+      }
+    },
+    "PendingExample": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "pendingexample",
+        "Description": "Fixture de governança PendingExample",
+        "Version": "1.0",
+        "Submit": "true",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.demo/consultar_risco\", \"description\": \"Consultar risco sint\\u00e9tico de cr\\u00e9dito do cliente de demonstra\\u00e7\\u00e3o.\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"riscos___consultar_risco\", \"description\": \"Consultar risco sint\\u00e9tico de cr\\u00e9dito do cliente de demonstra\\u00e7\\u00e3o.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\", \"enum\": [\"SANT-DEMO-001\"]}, \"max_registros\": {\"type\": \"integer\", \"minimum\": 1}}, \"required\": [\"cliente_id\", \"max_registros\"], \"additionalProperties\": false}}]}"
+            }
+          }
+        }
+      }
+    },
+    "RejectedExample": {
+      "Type": "Custom::AgentCoreRegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RecordProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Record",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "Name": "rejectedexample",
+        "Description": "Fixture de governança RejectedExample",
+        "Version": "1.0",
+        "Submit": "true",
+        "Descriptors": {
+          "mcp": {
+            "server": {
+              "schemaVersion": "2025-12-11",
+              "inlineContent": {
+                "Fn::Sub": "{\"$schema\": \"https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json\", \"name\": \"com.santander.demo/consultar_risco\", \"description\": \"Consultar risco sint\\u00e9tico de cr\\u00e9dito do cliente de demonstra\\u00e7\\u00e3o.\", \"version\": \"1.0.0\", \"remotes\": [{\"type\": \"streamable-http\", \"url\": \"${GatewayUrl}\"}]}"
+              }
+            },
+            "tools": {
+              "protocolVersion": "2025-11-25",
+              "inlineContent": "{\"tools\": [{\"name\": \"riscos___consultar_risco\", \"description\": \"Consultar risco sint\\u00e9tico de cr\\u00e9dito do cliente de demonstra\\u00e7\\u00e3o.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\", \"enum\": [\"SANT-DEMO-001\"]}, \"max_registros\": {\"type\": \"integer\", \"minimum\": 1}}, \"required\": [\"cliente_id\", \"max_registros\"], \"additionalProperties\": false}}]}"
+            }
+          }
+        }
+      }
+    },
+    "RejectedExampleApproval": {
+      "Type": "Custom::AgentCoreRegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "ApprovalProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "Kind": "Approval",
+        "RegistryId": {
+          "Fn::GetAtt": [
+            "Catalog",
+            "Id"
+          ]
+        },
+        "RecordId": {
+          "Fn::GetAtt": [
+            "RejectedExample",
+            "Id"
+          ]
+        },
+        "Decision": "REJECTED"
+      }
+    }
+  },
+  "Outputs": {
+    "PublisherRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "PublisherRole",
+          "Arn"
+        ]
+      }
+    },
+    "ApproverRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ApproverRole",
+          "Arn"
+        ]
+      }
+    },
+    "ConsumerRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ConsumerRole",
+          "Arn"
+        ]
+      }
+    },
+    "RegistryId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Catalog",
+          "Id"
+        ]
+      }
+    },
+    "RegistryArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Catalog",
+          "Arn"
+        ]
+      }
+    }
+  }
+}

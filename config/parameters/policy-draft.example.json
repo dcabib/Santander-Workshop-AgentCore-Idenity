@@ -1,0 +1,9 @@
+{
+  "Project": "santander-demo",
+  "ArtifactBucket": "REPLACE_ARTIFACTBUCKET",
+  "ProviderKey": "set-by-pipeline",
+  "PolicyEngineId": "REPLACE_POLICYENGINEID",
+  "PolicyEngineArn": "REPLACE_POLICYENGINEARN",
+  "GatewayArn": "REPLACE_GATEWAYARN",
+  "RawText": "REPLACE_RAWTEXT"
+}

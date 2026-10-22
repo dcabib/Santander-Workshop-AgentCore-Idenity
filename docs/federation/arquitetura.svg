@@ -1,0 +1,248 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Cada conta tem sua própria porta.</title><desc id="desc">Gateway autentica. Policy autoriza. Identity troca o token para a próxima audiência. O Runtime aceita o workload do Gateway local.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  11</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">Cada conta tem sua própria porta.</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Quatro Gateways. Quatro decisões locais. O mesmo usuário em todos os saltos.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">OBO ENTRA · ARQUITETURA AWS A VALIDAR</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">Permitir na plataforma não obriga a conta de destino a permitir.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">LAB 11</tspan>
+</text>
+<g class="node" data-x="64" data-y="245" data-w="288" data-h="184">
+<rect x="64" y="245" width="288" height="184" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="265" width="56" height="56" rx="16" fill="#EDF1F7"/>
+<g transform="translate(93 274) scale(0.7916666666666666)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="7" y="6" width="34" height="27" rx="3"/><path d="M3 40h42l-4-7H7zM18 17l-5 4 5 4m12-8 5 4-5 4"/>
+</g>
+<text class="node-text" x="158" y="299" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">Notebook + agente</tspan>
+</text>
+<text class="node-text" x="88" y="357" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">Login Entra · JWT humano</tspan>
+<tspan x="88" dy="29.0">Strands no kernel local</tspan>
+<tspan x="88" dy="29.0">Bedrock na plataforma</tspan>
+</text>
+</g>
+<rect x="430" y="215" width="1106" height="261" rx="22" fill="#FFF3E5" stroke="#DAE3EE" stroke-width="1.6"/>
+<text class="" x="456" y="253" fill="#BD650F" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="456" dy="0">CONTA PLATAFORMA</tspan>
+</text>
+<g class="node" data-x="462" data-y="290" data-w="336" data-h="151">
+<rect x="462" y="290" width="336" height="151" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="482" y="310" width="56" height="56" rx="16" fill="#FFF3E5"/>
+<g transform="translate(491 319) scale(0.7916666666666666)" fill="none" stroke="#BD650F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M17 7h14v34H17zM3 24h14m14 0h14M8 19l5 5-5 5m28-10 5 5-5 5"/><path d="M23 14h2m-2 20h2"/>
+</g>
+<text class="node-text" x="556" y="344" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="556" dy="0">Gateway Plataforma</tspan>
+</text>
+<text class="node-text" x="486" y="402" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="486" dy="0">Valida JWT e roteia tools</tspan>
+<tspan x="486" dy="29.0">Entrada das três áreas</tspan>
+</text>
+</g>
+<g class="node" data-x="837" data-y="289" data-w="313" data-h="66">
+<rect x="837" y="289" width="313" height="66" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="851" y="301" width="42" height="42" rx="12" fill="#F2EDFB"/>
+<g transform="translate(858 308) scale(0.5833333333333334)" fill="none" stroke="#7546C7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M24 3l17 7v13c0 10-8 18-17 23C15 41 7 33 7 23V10z"/><path d="M15 23l6 6 12-13"/>
+</g>
+<text class="node-text" x="907" y="330" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="start">
+<tspan x="907" dy="0">Policy Plataforma</tspan>
+</text>
+</g>
+<g class="node" data-x="837" data-y="376" data-w="313" data-h="66">
+<rect x="837" y="376" width="313" height="66" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="851" y="388" width="42" height="42" rx="12" fill="#ECF3FF"/>
+<g transform="translate(858 395) scale(0.5833333333333334)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="16" cy="18" r="10"/><circle cx="14" cy="16" r="2"/><path d="M23 25l17 17m-6-6 5-5m-11-1 5-5"/>
+</g>
+<text class="node-text" x="907" y="417" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="start">
+<tspan x="907" dy="0">Identity · OBO</tspan>
+</text>
+</g>
+<g class="node" data-x="1190" data-y="290" data-w="314" data-h="151">
+<rect x="1190" y="290" width="314" height="151" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1210" y="310" width="56" height="56" rx="16" fill="#E8F7F5"/>
+<g transform="translate(1219 319) scale(0.7916666666666666)" fill="none" stroke="#087F82" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="7" y="5" width="29" height="38" rx="4"/><path d="M14 5v38m8-28h8m-8 8h8m-8 8h5M36 10h5v28"/>
+</g>
+<text class="node-text" x="1284" y="344" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1284" dy="0">Registry</tspan>
+</text>
+<text class="node-text" x="1214" y="402" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1214" dy="0">Capacidades aprovadas</tspan>
+<tspan x="1214" dy="29.0">Descoberta via IAM</tspan>
+</text>
+</g>
+<path d="M 352 368 L 462 368" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="462,368 451.0,373.5 451.0,362.5" fill="#2469DD"/>
+<rect x="375.485" y="326" width="55.03" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="403" y="344" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="403" dy="0">JWT</tspan>
+</text>
+<path d="M 837 324 L 798 324" stroke="#7546C7" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="798,324 809.0,318.5 809.0,329.5" fill="#7546C7"/>
+<path d="M 798 409 L 837 409" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="837,409 826.0,414.5 826.0,403.5" fill="#2469DD"/>
+<rect x="64" y="535" width="464" height="292" rx="22" fill="#FFF3E5" stroke="#DAE3EE" stroke-width="1.6"/>
+<text class="" x="90" y="573" fill="#BD650F" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="90" dy="0">CONTA RETAIL</tspan>
+</text>
+<g class="node" data-x="88" data-y="588" data-w="416" data-h="68">
+<rect x="88" y="588" width="416" height="68" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="102" y="600" width="42" height="42" rx="12" fill="#FFF3E5"/>
+<g transform="translate(109 607) scale(0.5833333333333334)" fill="none" stroke="#BD650F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M17 7h14v34H17zM3 24h14m14 0h14M8 19l5 5-5 5m28-10 5 5-5 5"/><path d="M23 14h2m-2 20h2"/>
+</g>
+<text class="node-text" x="158" y="629" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">Gateway Retail</tspan>
+</text>
+</g>
+<rect x="88" y="672" width="194" height="38" rx="19.0" fill="#F2EDFB"/>
+<text class="" x="185.0" y="697.3" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+<tspan x="185.0" dy="0">Policy local</tspan>
+</text>
+<rect x="294" y="672" width="210" height="38" rx="19.0" fill="#ECF3FF"/>
+<text class="" x="399.0" y="697.3" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+<tspan x="399.0" dy="0">Identity · OBO</tspan>
+</text>
+<path d="M 296 710 L 296 738" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="296,738 290.5,727.0 301.5,727.0" fill="#2469DD"/>
+<g class="node" data-x="88" data-y="744" data-w="416" data-h="62">
+<rect x="88" y="744" width="416" height="62" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="102" y="756" width="42" height="42" rx="12" fill="#EDF1F7"/>
+<g transform="translate(109 763) scale(0.5833333333333334)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="node-text" x="158" y="772" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">Runtime MCP</tspan>
+</text>
+<text class="node-text" x="158" y="793" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="400" text-anchor="start">
+<tspan x="158" dy="0">DynamoDB local</tspan>
+</text>
+</g>
+<rect x="568" y="535" width="464" height="292" rx="22" fill="#FFF3E5" stroke="#DAE3EE" stroke-width="1.6"/>
+<text class="" x="594" y="573" fill="#BD650F" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="594" dy="0">CONTA TRANSACTION</tspan>
+</text>
+<g class="node" data-x="592" data-y="588" data-w="416" data-h="68">
+<rect x="592" y="588" width="416" height="68" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="606" y="600" width="42" height="42" rx="12" fill="#FFF3E5"/>
+<g transform="translate(613 607) scale(0.5833333333333334)" fill="none" stroke="#BD650F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M17 7h14v34H17zM3 24h14m14 0h14M8 19l5 5-5 5m28-10 5 5-5 5"/><path d="M23 14h2m-2 20h2"/>
+</g>
+<text class="node-text" x="662" y="629" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="start">
+<tspan x="662" dy="0">Gateway Transaction</tspan>
+</text>
+</g>
+<rect x="592" y="672" width="194" height="38" rx="19.0" fill="#F2EDFB"/>
+<text class="" x="689.0" y="697.3" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+<tspan x="689.0" dy="0">Policy local</tspan>
+</text>
+<rect x="798" y="672" width="210" height="38" rx="19.0" fill="#ECF3FF"/>
+<text class="" x="903.0" y="697.3" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+<tspan x="903.0" dy="0">Identity · OBO</tspan>
+</text>
+<path d="M 800 710 L 800 738" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="800,738 794.5,727.0 805.5,727.0" fill="#2469DD"/>
+<g class="node" data-x="592" data-y="744" data-w="416" data-h="62">
+<rect x="592" y="744" width="416" height="62" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="606" y="756" width="42" height="42" rx="12" fill="#EDF1F7"/>
+<g transform="translate(613 763) scale(0.5833333333333334)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="node-text" x="662" y="772" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="start">
+<tspan x="662" dy="0">Runtime MCP</tspan>
+</text>
+<text class="node-text" x="662" y="793" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="400" text-anchor="start">
+<tspan x="662" dy="0">DynamoDB local</tspan>
+</text>
+</g>
+<rect x="1072" y="535" width="464" height="292" rx="22" fill="#FFF3E5" stroke="#DAE3EE" stroke-width="1.6"/>
+<text class="" x="1098" y="573" fill="#BD650F" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="1098" dy="0">CONTA LENDING</tspan>
+</text>
+<g class="node" data-x="1096" data-y="588" data-w="416" data-h="68">
+<rect x="1096" y="588" width="416" height="68" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1110" y="600" width="42" height="42" rx="12" fill="#FFF3E5"/>
+<g transform="translate(1117 607) scale(0.5833333333333334)" fill="none" stroke="#BD650F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M17 7h14v34H17zM3 24h14m14 0h14M8 19l5 5-5 5m28-10 5 5-5 5"/><path d="M23 14h2m-2 20h2"/>
+</g>
+<text class="node-text" x="1166" y="629" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="start">
+<tspan x="1166" dy="0">Gateway Lending</tspan>
+</text>
+</g>
+<rect x="1096" y="672" width="194" height="38" rx="19.0" fill="#F2EDFB"/>
+<text class="" x="1193.0" y="697.3" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+<tspan x="1193.0" dy="0">Policy local</tspan>
+</text>
+<rect x="1302" y="672" width="210" height="38" rx="19.0" fill="#ECF3FF"/>
+<text class="" x="1407.0" y="697.3" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+<tspan x="1407.0" dy="0">Identity · OBO</tspan>
+</text>
+<path d="M 1304 710 L 1304 738" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1304,738 1298.5,727.0 1309.5,727.0" fill="#2469DD"/>
+<g class="node" data-x="1096" data-y="744" data-w="416" data-h="62">
+<rect x="1096" y="744" width="416" height="62" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1110" y="756" width="42" height="42" rx="12" fill="#EDF1F7"/>
+<g transform="translate(1117 763) scale(0.5833333333333334)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="node-text" x="1166" y="772" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="700" text-anchor="start">
+<tspan x="1166" dy="0">Runtime MCP</tspan>
+</text>
+<text class="node-text" x="1166" y="793" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="400" text-anchor="start">
+<tspan x="1166" dy="0">DynamoDB + Knowledge Base</tspan>
+</text>
+</g>
+<path d="M 630 441 L 630 500 L 296 500 L 296 535" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="296,535 290.5,524.0 301.5,524.0" fill="#2469DD"/>
+<path d="M 630 500 L 800 500 L 800 535" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="800,535 794.5,524.0 805.5,524.0" fill="#2469DD"/>
+<path d="M 800 500 L 1304 500 L 1304 535" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1304,535 1298.5,524.0 1309.5,524.0" fill="#2469DD"/>
+<rect x="894.365" y="485" width="271.27" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="1030" y="503" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="1030" dy="0">OBO · audiência por destino</tspan>
+</text>
+<path d="M 208 245 L 208 201 L 1347 201 L 1347 290" stroke="#087F82" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="7 7"/>
+<polygon points="1347,290 1341.5,279.0 1352.5,279.0" fill="#087F82"/>
+<rect x="1000.35" y="188" width="139.3" height="28" rx="8" fill="#FFFFFF"/>
+<text class="" x="1070" y="204" fill="#087F82" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="600" text-anchor="middle">
+<tspan x="1070" dy="0">Descoberta IAM</tspan>
+</text>
+</svg>

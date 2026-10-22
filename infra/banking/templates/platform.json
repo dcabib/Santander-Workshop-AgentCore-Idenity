@@ -1,0 +1,337 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Notebook 10 - platform Gateway, OAuth M2M, Policy engine, Guardrail",
+  "Parameters": {
+    "Project": {
+      "Type": "String",
+      "Default": "banking-demo"
+    },
+    "DiscoveryUrl": {
+      "Type": "String"
+    },
+    "Audience": {
+      "Type": "String",
+      "Default": "lobfederation"
+    },
+    "UserClientId": {
+      "Type": "String"
+    },
+    "M2MClientId": {
+      "Type": "String"
+    },
+    "M2MSecretArn": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "OAuth": {
+      "Type": "AWS::BedrockAgentCore::OAuth2CredentialProvider",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-m2m"
+        },
+        "CredentialProviderVendor": "CustomOauth2",
+        "Oauth2ProviderConfigInput": {
+          "CustomOauth2ProviderConfig": {
+            "OauthDiscovery": {
+              "DiscoveryUrl": {
+                "Ref": "DiscoveryUrl"
+              }
+            },
+            "ClientId": {
+              "Ref": "M2MClientId"
+            },
+            "ClientSecretSource": "EXTERNAL",
+            "ClientSecretConfig": {
+              "SecretId": {
+                "Ref": "M2MSecretArn"
+              },
+              "JsonKey": "client_secret"
+            },
+            "ClientAuthenticationMethod": "CLIENT_SECRET_BASIC"
+          }
+        }
+      }
+    },
+    "GatewayRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetResourceOauth2Token"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "OAuth",
+                      "CredentialProviderArn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "secretsmanager:GetSecretValue"
+                  ],
+                  "Resource": {
+                    "Ref": "M2MSecretArn"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetWorkloadAccessToken",
+                    "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default"
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default/workload-identity/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Engine": {
+      "Type": "AWS::BedrockAgentCore::PolicyEngine",
+      "Properties": {
+        "Name": "banking_blog_policy"
+      }
+    },
+    "Gateway": {
+      "Type": "AWS::BedrockAgentCore::Gateway",
+      "Properties": {
+        "Name": {
+          "Ref": "Project"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "GatewayRole",
+            "Arn"
+          ]
+        },
+        "ProtocolType": "MCP",
+        "ProtocolConfiguration": {
+          "Mcp": {
+            "SearchType": "SEMANTIC"
+          }
+        },
+        "AuthorizerType": "CUSTOM_JWT",
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Ref": "DiscoveryUrl"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "Audience"
+              }
+            ],
+            "CustomClaims": [
+              {
+                "InboundTokenClaimName": "cid",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "UserClientId"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "PolicyEngineConfiguration": {
+          "Arn": {
+            "Fn::GetAtt": [
+              "Engine",
+              "PolicyEngineArn"
+            ]
+          },
+          "Mode": "ENFORCE"
+        }
+      }
+    },
+    "Guardrail": {
+      "Type": "AWS::Bedrock::Guardrail",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-guardrail"
+        },
+        "BlockedInputMessaging": "Entrada bloqueada pelo guardrail do laboratório.",
+        "BlockedOutputsMessaging": "Saída bloqueada pelo guardrail do laboratório.",
+        "SensitiveInformationPolicyConfig": {
+          "PiiEntitiesConfig": [
+            {
+              "Type": "US_SOCIAL_SECURITY_NUMBER",
+              "Action": "ANONYMIZE"
+            },
+            {
+              "Type": "CREDIT_DEBIT_CARD_NUMBER",
+              "Action": "ANONYMIZE"
+            }
+          ]
+        }
+      }
+    },
+    "GuardrailVersion": {
+      "Type": "AWS::Bedrock::GuardrailVersion",
+      "Properties": {
+        "GuardrailIdentifier": {
+          "Ref": "Guardrail"
+        },
+        "Description": "Notebook 10 - synthetic banking"
+      }
+    },
+    "GatewayLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/vendedlogs/${Project}/gateway"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "GatewayLogSource": {
+      "Type": "AWS::Logs::DeliverySource",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "LogType": "APPLICATION_LOGS",
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayArn"
+          ]
+        }
+      }
+    },
+    "GatewayLogDestination": {
+      "Type": "AWS::Logs::DeliveryDestination",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "DestinationResourceArn": {
+          "Fn::GetAtt": [
+            "GatewayLog",
+            "Arn"
+          ]
+        },
+        "OutputFormat": "json"
+      }
+    },
+    "GatewayLogDelivery": {
+      "Type": "AWS::Logs::Delivery",
+      "Properties": {
+        "DeliverySourceName": {
+          "Ref": "GatewayLogSource"
+        },
+        "DeliveryDestinationArn": {
+          "Fn::GetAtt": [
+            "GatewayLogDestination",
+            "Arn"
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "GatewayId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayIdentifier"
+        ]
+      }
+    },
+    "GatewayArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayArn"
+        ]
+      }
+    },
+    "GatewayUrl": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayUrl"
+        ]
+      }
+    },
+    "PolicyEngineId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineId"
+        ]
+      }
+    },
+    "PolicyEngineArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineArn"
+        ]
+      }
+    },
+    "OAuthProviderArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "OAuth",
+          "CredentialProviderArn"
+        ]
+      }
+    },
+    "GuardrailId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Guardrail",
+          "GuardrailId"
+        ]
+      }
+    },
+    "GuardrailVersion": {
+      "Value": {
+        "Fn::GetAtt": [
+          "GuardrailVersion",
+          "Version"
+        ]
+      }
+    },
+    "GatewayLogGroup": {
+      "Value": {
+        "Ref": "GatewayLog"
+      }
+    }
+  }
+}

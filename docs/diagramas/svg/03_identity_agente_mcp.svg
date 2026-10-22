@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">A pessoa é a mesma. O agente mudou.</title><desc id="desc">Com o mesmo usuário habilitado a Riscos e Fraude, o supervisor pode consultar Fraude, mas o agente de Riscos recebe uma negativa.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  03</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">A pessoa é a mesma. O agente mudou.</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">A decisão considera quem é o usuário e qual aplicação está agindo por ele.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">LÓGICA LOCAL · AWS A VALIDAR</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">Permissão do usuário e permissão do agente precisam ser satisfeitas.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">03 / 09</tspan>
+</text>
+<rect x="64" y="224" width="475" height="568" rx="22" fill="#ECF3FF" stroke="#DAE3EE" stroke-width="1.6"/>
+<text class="" x="90" y="262" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="90" dy="0">MESMO USUÁRIO</tspan>
+</text>
+<text class="" x="90" y="292" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="400" text-anchor="start">
+<tspan x="90" dy="0">Perfil humano: Riscos + Fraude</tspan>
+</text>
+<g transform="translate(90 325) scale(1.4583333333333333)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="24" cy="14" r="8"/><path d="M8 42v-4c0-9 7-15 16-15s16 6 16 15v4"/><path d="M15 37h18"/>
+</g>
+<text class="" x="183" y="353" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="26" font-weight="700" text-anchor="start">
+<tspan x="183" dy="0">tid + oid preservados</tspan>
+</text>
+<g class="node" data-x="92" data-y="416" data-w="418" data-h="134">
+<rect x="92" y="416" width="418" height="134" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="112" y="436" width="56" height="56" rx="16" fill="#EAF7F0"/>
+<g transform="translate(121 445) scale(0.7916666666666666)" fill="none" stroke="#14795C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="6" y="12" width="36" height="29" rx="8"/><path d="M24 12V5m-4 0h8M2 23v9m44-9v9"/><circle cx="16" cy="24" r="2.5"/><circle cx="32" cy="24" r="2.5"/><path d="M17 33h14"/>
+</g>
+<text class="node-text" x="186" y="470" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="186" dy="0">Supervisor</tspan>
+</text>
+<text class="node-text" x="116" y="528" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="116" dy="0">Aplicação autorizada a Fraude</tspan>
+</text>
+</g>
+<g class="node" data-x="92" data-y="613" data-w="418" data-h="134">
+<rect x="92" y="613" width="418" height="134" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="112" y="633" width="56" height="56" rx="16" fill="#FFF0F1"/>
+<g transform="translate(121 642) scale(0.7916666666666666)" fill="none" stroke="#D52E3F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="6" y="12" width="36" height="29" rx="8"/><path d="M24 12V5m-4 0h8M2 23v9m44-9v9"/><circle cx="16" cy="24" r="2.5"/><circle cx="32" cy="24" r="2.5"/><path d="M17 33h14"/>
+</g>
+<text class="node-text" x="186" y="667" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="186" dy="0">Agente de Riscos</tspan>
+</text>
+<text class="node-text" x="116" y="725" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="116" dy="0">Aplicação sem permissão de Fraude</tspan>
+</text>
+</g>
+<g class="node" data-x="670" data-y="418" data-w="362" data-h="243">
+<rect x="670" y="418" width="362" height="243" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="690" y="438" width="56" height="56" rx="16" fill="#F2EDFB"/>
+<g transform="translate(699 447) scale(0.7916666666666666)" fill="none" stroke="#7546C7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M24 3l17 7v13c0 10-8 18-17 23C15 41 7 33 7 23V10z"/><path d="M15 23l6 6 12-13"/>
+</g>
+<text class="node-text" x="764" y="472" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="764" dy="0">Gateway +</tspan>
+<tspan x="764" dy="31.7">Policy</tspan>
+</text>
+<text class="node-text" x="694" y="530" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="694" dy="0">Usuário + caller + ação</tspan>
+<tspan x="694" dy="29.0">precisam ser autorizados</tspan>
+</text>
+</g>
+<g class="node" data-x="1170" data-y="418" data-w="366" data-h="243">
+<rect x="1170" y="418" width="366" height="243" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1190" y="438" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(1199 447) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="6" y="12" width="36" height="29" rx="8"/><path d="M24 12V5m-4 0h8M2 23v9m44-9v9"/><circle cx="16" cy="24" r="2.5"/><circle cx="32" cy="24" r="2.5"/><path d="M17 33h14"/>
+</g>
+<text class="node-text" x="1264" y="472" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1264" dy="0">Runtime Fraude</tspan>
+</text>
+<text class="node-text" x="1194" y="530" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1194" dy="0">MCP protegido</tspan>
+<tspan x="1194" dy="29.0">Valida token e workload</tspan>
+</text>
+</g>
+<path d="M 510 480 L 670 480" stroke="#14795C" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="670,480 659.0,485.5 659.0,474.5" fill="#14795C"/>
+<rect x="544.465" y="435" width="91.07" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="590" y="453" fill="#14795C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="590" dy="0">PERMITE</tspan>
+</text>
+<path d="M 510 680 L 588 680 L 588 598 L 670 598" stroke="#D52E3F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="670,598 659.0,603.5 659.0,592.5" fill="#D52E3F"/>
+<rect x="555.98" y="711" width="64.03999999999999" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="588" y="729" fill="#D52E3F" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="588" dy="0">NEGA</tspan>
+</text>
+<path d="M 1032 508 L 1170 508" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1170,508 1159.0,513.5 1159.0,502.5" fill="#2469DD"/>
+<rect x="1073.485" y="463" width="55.03" height="30" rx="8" fill="#FFFFFF"/>
+<text class="" x="1101" y="481" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="600" text-anchor="middle">
+<tspan x="1101" dy="0">OBO</tspan>
+</text>
+<rect x="1135" y="718" width="401" height="44" rx="22.0" fill="#ECF3FF"/>
+<text class="" x="1335.5" y="746.3" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" text-anchor="middle">
+<tspan x="1335.5" dy="0">Somente via workload do Gateway</tspan>
+</text>
+<text class="" x="670" y="803" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="400" text-anchor="start">
+<tspan x="670" dy="0">No fluxo Entra v2, azp distingue as aplicações.</tspan>
+</text>
+</svg>

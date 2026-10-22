@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Conhecimento compartilhado. Acesso individual.</title><desc id="desc">Conectores, BDA, OpenSearch/KB e Memory AWS são a arquitetura proposta. O notebook executa o contrato local de ciclo de vida, ACL e memória.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  13</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">Conhecimento compartilhado. Acesso individual.</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Um contrato de ingestão; ACL revalidada no retrieval e na memória.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">SESSÃO 2 · EXERCÍCIO LOCAL</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">Indexar juntos não significa conceder o mesmo acesso a todos.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">LAB 13</tspan>
+</text>
+<rect x="64" y="262" width="420" height="90" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="78" y="283" width="48" height="48" rx="12" fill="#EDF5FC"/>
+<g transform="translate(87 292) scale(0.625)" fill="none" stroke="#2169B0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="" x="142" y="297" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="142" dy="0">SharePoint</tspan>
+</text>
+<text class="" x="142" y="325" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="400" text-anchor="start">
+<tspan x="142" dy="0">Fonte + versão + ACL do proprietário</tspan>
+</text>
+<path d="M 484 307 L 545 307 L 545 456 L 610 456" stroke="#2169B0" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="610,456 599.0,461.5 599.0,450.5" fill="#2169B0"/>
+<rect x="64" y="392" width="420" height="90" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="78" y="413" width="48" height="48" rx="12" fill="#EDF5FC"/>
+<g transform="translate(87 422) scale(0.625)" fill="none" stroke="#2169B0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="" x="142" y="427" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="142" dy="0">Databricks Silver/Gold</tspan>
+</text>
+<text class="" x="142" y="455" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="400" text-anchor="start">
+<tspan x="142" dy="0">Fonte + versão + ACL do proprietário</tspan>
+</text>
+<path d="M 484 437 L 545 437 L 545 456 L 610 456" stroke="#2169B0" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="610,456 599.0,461.5 599.0,450.5" fill="#2169B0"/>
+<rect x="64" y="522" width="420" height="90" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="78" y="543" width="48" height="48" rx="12" fill="#EDF5FC"/>
+<g transform="translate(87 552) scale(0.625)" fill="none" stroke="#2169B0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="" x="142" y="557" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="142" dy="0">SQL on-prem</tspan>
+</text>
+<text class="" x="142" y="585" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="400" text-anchor="start">
+<tspan x="142" dy="0">Fonte + versão + ACL do proprietário</tspan>
+</text>
+<path d="M 484 567 L 545 567 L 545 456 L 610 456" stroke="#2169B0" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="610,456 599.0,461.5 599.0,450.5" fill="#2169B0"/>
+<rect x="64" y="652" width="420" height="90" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="78" y="673" width="48" height="48" rx="12" fill="#EDF5FC"/>
+<g transform="translate(87 682) scale(0.625)" fill="none" stroke="#2169B0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="" x="142" y="687" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" text-anchor="start">
+<tspan x="142" dy="0">APIs e backends AWS</tspan>
+</text>
+<text class="" x="142" y="715" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="400" text-anchor="start">
+<tspan x="142" dy="0">Fonte + versão + ACL do proprietário</tspan>
+</text>
+<path d="M 484 697 L 545 697 L 545 456 L 610 456" stroke="#2169B0" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="610,456 599.0,461.5 599.0,450.5" fill="#2169B0"/>
+<g class="node" data-x="610" data-y="358" data-w="370" data-h="196">
+<rect x="610" y="358" width="370" height="196" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="630" y="378" width="56" height="56" rx="16" fill="#FFF3E5"/>
+<g transform="translate(639 387) scale(0.7916666666666666)" fill="none" stroke="#BD650F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M17 7h14v34H17zM3 24h14m14 0h14M8 19l5 5-5 5m28-10 5 5-5 5"/><path d="M23 14h2m-2 20h2"/>
+</g>
+<text class="node-text" x="704" y="412" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="704" dy="0">Indexador comum</tspan>
+</text>
+<text class="node-text" x="634" y="470" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="634" dy="0">Discover · register</tspan>
+<tspan x="634" dy="29.0">Update · delete</tspan>
+<tspan x="634" dy="29.0">Markdown + metadados ACL</tspan>
+</text>
+</g>
+<rect x="610" y="585" width="370" height="42" rx="21.0" fill="#EDF1F7"/>
+<text class="" x="795.0" y="611.95" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="17" font-weight="700" text-anchor="middle">
+<tspan x="795.0" dy="0">BDA / KB / índice: desenho cloud</tspan>
+</text>
+<g class="node" data-x="1110" data-y="274" data-w="420" data-h="169">
+<rect x="1110" y="274" width="420" height="169" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1130" y="294" width="56" height="56" rx="16" fill="#F2EDFB"/>
+<g transform="translate(1139 303) scale(0.7916666666666666)" fill="none" stroke="#7546C7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M24 3l17 7v13c0 10-8 18-17 23C15 41 7 33 7 23V10z"/><path d="M15 23l6 6 12-13"/>
+</g>
+<text class="node-text" x="1204" y="328" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1204" dy="0">Retrieval autorizado</tspan>
+</text>
+<text class="node-text" x="1134" y="386" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1134" dy="0">Grupos vindos do IdP</tspan>
+<tspan x="1134" dy="29.0">Fonte e versão na resposta</tspan>
+</text>
+</g>
+<g class="node" data-x="1110" data-y="552" data-w="420" data-h="169">
+<rect x="1110" y="552" width="420" height="169" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1130" y="572" width="56" height="56" rx="16" fill="#E8F7F5"/>
+<g transform="translate(1139 581) scale(0.7916666666666666)" fill="none" stroke="#087F82" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="7" y="5" width="29" height="38" rx="4"/><path d="M14 5v38m8-28h8m-8 8h8m-8 8h5M36 10h5v28"/>
+</g>
+<text class="node-text" x="1204" y="606" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1204" dy="0">Memória por usuário</tspan>
+</text>
+<text class="node-text" x="1134" y="664" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1134" dy="0">Referências a documentos</tspan>
+<tspan x="1134" dy="29.0">Revalida ACL e exclusões</tspan>
+</text>
+</g>
+<path d="M 980 420 L 1046 420 L 1046 358 L 1110 358" stroke="#7546C7" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1110,358 1099.0,363.5 1099.0,352.5" fill="#7546C7"/>
+<path d="M 1320 443 L 1320 552" stroke="#087F82" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1320,552 1314.5,541.0 1325.5,541.0" fill="#087F82"/>
+</svg>

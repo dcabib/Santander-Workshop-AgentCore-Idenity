@@ -1,0 +1,20 @@
+{
+  "Project": "santander-demo",
+  "ArtifactBucket": "REPLACE_ARTIFACTBUCKET",
+  "LambdaKey": "set-by-pipeline",
+  "TenantId": "REPLACE_TENANTID",
+  "DiscoveryUrl": "REPLACE_DISCOVERYURL",
+  "GatewayAudience": "REPLACE_GATEWAYAUDIENCE",
+  "CallerClaim": "azp",
+  "RisksUserOid": "REPLACE_RISKSUSEROID",
+  "BothUserOid": "REPLACE_BOTHUSEROID",
+  "NoGrantUserOid": "REPLACE_NOGRANTUSEROID",
+  "SupervisorClientId": "REPLACE_SUPERVISORCLIENTID",
+  "RisksClientId": "REPLACE_RISKSCLIENTID",
+  "FraudClientId": "REPLACE_FRAUDCLIENTID",
+  "GatewayClientId": "REPLACE_GATEWAYCLIENTID",
+  "EntraSecretArn": "REPLACE_ENTRASECRETARN",
+  "FraudEndpoint": "",
+  "FraudScope": "",
+  "EnableFraud": "false"
+}

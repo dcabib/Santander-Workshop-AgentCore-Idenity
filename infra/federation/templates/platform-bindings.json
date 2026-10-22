@@ -1,0 +1,300 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Notebook 11 - platform targets OBO and independent Cedar",
+  "Parameters": {
+    "GatewayId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "PolicyEngineId": {
+      "Type": "String"
+    },
+    "OAuthProviderArn": {
+      "Type": "String"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "CallerClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "AllowedUserOids": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(,[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*"
+    },
+    "RetailEndpoint": {
+      "Type": "String"
+    },
+    "RetailScope": {
+      "Type": "String"
+    },
+    "TransactionEndpoint": {
+      "Type": "String"
+    },
+    "TransactionScope": {
+      "Type": "String"
+    },
+    "LendingEndpoint": {
+      "Type": "String"
+    },
+    "LendingScope": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "RetailTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "retail",
+        "Description": "OBO to retail-banking Gateway",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "RetailEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"backend___get_customer\", \"description\": \"Get customer profile by ID. Returns name, email, phone, and segment.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_customerArguments\", \"type\": \"object\"}}, {\"name\": \"backend___get_accounts\", \"description\": \"List all bank accounts for a customer. Returns account IDs, types, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_accountsArguments\", \"type\": \"object\"}}, {\"name\": \"backend___get_balance\", \"description\": \"Get current balance for a specific bank account.\", \"inputSchema\": {\"properties\": {\"account_id\": {\"title\": \"Account Id\", \"type\": \"string\"}}, \"required\": [\"account_id\"], \"title\": \"get_balanceArguments\", \"type\": \"object\"}}, {\"name\": \"backend___get_profile\", \"description\": \"Get full customer profile including all accounts and their balances.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_profileArguments\", \"type\": \"object\"}}, {\"name\": \"backend___update_balance\", \"description\": \"Update account balance after a transfer. Operation is 'debit' (subtract) or 'credit' (add).\", \"inputSchema\": {\"properties\": {\"account_id\": {\"title\": \"Account Id\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"operation\": {\"default\": \"debit\", \"title\": \"Operation\", \"type\": \"string\"}}, \"required\": [\"account_id\", \"amount\"], \"title\": \"update_balanceArguments\", \"type\": \"object\"}}, {\"name\": \"backend___delete_customer\", \"description\": \"Delete a customer and all their records from the system. This is a destructive operation.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"delete_customerArguments\", \"type\": \"object\"}}, {\"name\": \"backend___whoami\", \"description\": \"Verify the delegated identity received by this account's MCP Runtime.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {}}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Ref": "RetailScope"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "TransactionTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "transaction",
+        "Description": "OBO to transaction-banking Gateway",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "TransactionEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"backend___get_payments\", \"description\": \"Get payment history for a customer. Returns recent payments with amounts, dates, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"days\": {\"default\": 30, \"title\": \"Days\", \"type\": \"integer\"}}, \"required\": [\"customer_id\"], \"title\": \"get_paymentsArguments\", \"type\": \"object\"}}, {\"name\": \"backend___transfer_funds\", \"description\": \"Transfer funds between accounts. Creates a payment record and instructs the agent to update balances via the retail-banking update_balance tool.\", \"inputSchema\": {\"properties\": {\"from_account\": {\"title\": \"From Account\", \"type\": \"string\"}, \"to_account\": {\"title\": \"To Account\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}}, \"required\": [\"from_account\", \"to_account\", \"amount\"], \"title\": \"transfer_fundsArguments\", \"type\": \"object\"}}, {\"name\": \"backend___get_beneficiaries\", \"description\": \"List registered beneficiaries for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_beneficiariesArguments\", \"type\": \"object\"}}, {\"name\": \"backend___schedule_payment\", \"description\": \"Schedule a future payment for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"to_account\": {\"title\": \"To Account\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"date\": {\"title\": \"Date\", \"type\": \"string\"}}, \"required\": [\"customer_id\", \"to_account\", \"amount\", \"date\"], \"title\": \"schedule_paymentArguments\", \"type\": \"object\"}}, {\"name\": \"backend___whoami\", \"description\": \"Verify the delegated identity received by this account's MCP Runtime.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {}}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Ref": "TransactionScope"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "LendingTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "lending",
+        "Description": "OBO to lending-wealth Gateway",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "LendingEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"backend___get_loans\", \"description\": \"Get all loans for a customer. Returns loan details including type, principal, rate, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_loansArguments\", \"type\": \"object\"}}, {\"name\": \"backend___get_credit_score\", \"description\": \"Get credit score and contributing factors for a customer.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_credit_scoreArguments\", \"type\": \"object\"}}, {\"name\": \"backend___check_eligibility\", \"description\": \"Check loan eligibility for a customer based on credit score and requested amount.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"loan_type\": {\"title\": \"Loan Type\", \"type\": \"string\"}}, \"required\": [\"customer_id\", \"amount\", \"loan_type\"], \"title\": \"check_eligibilityArguments\", \"type\": \"object\"}}, {\"name\": \"backend___get_emi_details\", \"description\": \"Get EMI schedule for a specific loan.\", \"inputSchema\": {\"properties\": {\"loan_id\": {\"title\": \"Loan Id\", \"type\": \"string\"}}, \"required\": [\"loan_id\"], \"title\": \"get_emi_detailsArguments\", \"type\": \"object\"}}, {\"name\": \"backend___calculate_emi\", \"description\": \"Calculate EMI for given loan parameters. Rate is annual %, tenure in months.\", \"inputSchema\": {\"properties\": {\"principal\": {\"title\": \"Principal\", \"type\": \"number\"}, \"rate\": {\"title\": \"Rate\", \"type\": \"number\"}, \"tenure\": {\"title\": \"Tenure\", \"type\": \"integer\"}}, \"required\": [\"principal\", \"rate\", \"tenure\"], \"title\": \"calculate_emiArguments\", \"type\": \"object\"}}, {\"name\": \"backend___search_lending_policies\", \"description\": \"Search the bank's lending policy documents for guidelines, eligibility criteria,\\nregulatory requirements, and product terms. Use this when you need to check bank\\npolicies before making lending recommendations.\", \"inputSchema\": {\"properties\": {\"query\": {\"title\": \"Query\", \"type\": \"string\"}}, \"required\": [\"query\"], \"title\": \"search_lending_policiesArguments\", \"type\": \"object\"}, \"outputSchema\": {\"properties\": {\"result\": {\"title\": \"Result\", \"type\": \"string\"}}, \"required\": [\"result\"], \"title\": \"search_lending_policiesOutput\", \"type\": \"object\"}}, {\"name\": \"backend___whoami\", \"description\": \"Verify the delegated identity received by this account's MCP Runtime.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {}}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Ref": "LendingScope"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ReadDelegated": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "ReadDelegated",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "permit(\n  principal is AgentCore::OAuthUser,\n  action in [AgentCore::Action::\"retail___backend___get_customer\",\n    AgentCore::Action::\"retail___backend___get_accounts\",\n    AgentCore::Action::\"retail___backend___get_balance\",\n    AgentCore::Action::\"retail___backend___get_profile\",\n    AgentCore::Action::\"retail___backend___whoami\",\n    AgentCore::Action::\"transaction___backend___get_payments\",\n    AgentCore::Action::\"transaction___backend___get_beneficiaries\",\n    AgentCore::Action::\"transaction___backend___whoami\",\n    AgentCore::Action::\"lending___backend___get_loans\",\n    AgentCore::Action::\"lending___backend___get_credit_score\",\n    AgentCore::Action::\"lending___backend___check_eligibility\",\n    AgentCore::Action::\"lending___backend___get_emi_details\",\n    AgentCore::Action::\"lending___backend___calculate_emi\",\n    AgentCore::Action::\"lending___backend___search_lending_policies\",\n    AgentCore::Action::\"lending___backend___whoami\"],\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${CallerClientId}\" &&\n  principal.hasTag(\"oid\") && [\"${UserList}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\"\n};",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\",\"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget",
+        "TransactionTarget",
+        "LendingTarget"
+      ]
+    },
+    "NeverDelete": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "NeverDelete",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "forbid(\n  principal,\n  action == AgentCore::Action::\"retail___backend___delete_customer\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n);",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\",\"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget",
+        "TransactionTarget",
+        "LendingTarget"
+      ]
+    },
+    "BoundaryDemo": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "BoundaryDemo",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "forbid(\n  principal,\n  action == AgentCore::Action::\"retail___backend___get_profile\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen { context.input.customer_id == \"C007\" };",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\",\"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget",
+        "TransactionTarget",
+        "LendingTarget"
+      ]
+    }
+  },
+  "Outputs": {}
+}

@@ -1,0 +1,196 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Notebook 11 - retail-banking targets OBO and independent Cedar",
+  "Parameters": {
+    "GatewayId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "PolicyEngineId": {
+      "Type": "String"
+    },
+    "OAuthProviderArn": {
+      "Type": "String"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "CallerClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "AllowedUserOids": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(,[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*"
+    },
+    "RetailEndpoint": {
+      "Type": "String"
+    },
+    "RetailScope": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "RetailTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "backend",
+        "Description": "OBO to local MCP Runtime",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "RetailEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"get_customer\", \"description\": \"Get customer profile by ID. Returns name, email, phone, and segment.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_customerArguments\", \"type\": \"object\"}}, {\"name\": \"get_accounts\", \"description\": \"List all bank accounts for a customer. Returns account IDs, types, and status.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_accountsArguments\", \"type\": \"object\"}}, {\"name\": \"get_balance\", \"description\": \"Get current balance for a specific bank account.\", \"inputSchema\": {\"properties\": {\"account_id\": {\"title\": \"Account Id\", \"type\": \"string\"}}, \"required\": [\"account_id\"], \"title\": \"get_balanceArguments\", \"type\": \"object\"}}, {\"name\": \"get_profile\", \"description\": \"Get full customer profile including all accounts and their balances.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"get_profileArguments\", \"type\": \"object\"}}, {\"name\": \"update_balance\", \"description\": \"Update account balance after a transfer. Operation is 'debit' (subtract) or 'credit' (add).\", \"inputSchema\": {\"properties\": {\"account_id\": {\"title\": \"Account Id\", \"type\": \"string\"}, \"amount\": {\"title\": \"Amount\", \"type\": \"number\"}, \"operation\": {\"default\": \"debit\", \"title\": \"Operation\", \"type\": \"string\"}}, \"required\": [\"account_id\", \"amount\"], \"title\": \"update_balanceArguments\", \"type\": \"object\"}}, {\"name\": \"delete_customer\", \"description\": \"Delete a customer and all their records from the system. This is a destructive operation.\", \"inputSchema\": {\"properties\": {\"customer_id\": {\"title\": \"Customer Id\", \"type\": \"string\"}}, \"required\": [\"customer_id\"], \"title\": \"delete_customerArguments\", \"type\": \"object\"}}, {\"name\": \"whoami\", \"description\": \"Verify the delegated identity received by this account's MCP Runtime.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {}}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Ref": "RetailScope"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "ReadDelegated": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "ReadDelegated",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "permit(\n  principal is AgentCore::OAuthUser,\n  action in [AgentCore::Action::\"backend___get_customer\",\n    AgentCore::Action::\"backend___get_accounts\",\n    AgentCore::Action::\"backend___get_balance\",\n    AgentCore::Action::\"backend___get_profile\",\n    AgentCore::Action::\"backend___whoami\"],\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${CallerClientId}\" &&\n  principal.hasTag(\"oid\") && [\"${UserList}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\"\n};",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\",\"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget"
+      ]
+    },
+    "NeverDelete": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "NeverDelete",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "forbid(\n  principal,\n  action == AgentCore::Action::\"backend___delete_customer\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n);",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\",\"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget"
+      ]
+    },
+    "BoundaryDemo": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "BoundaryDemo",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "forbid(\n  principal,\n  action == AgentCore::Action::\"backend___get_profile\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen { context.input.customer_id == \"C008\" };",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\",\"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget"
+      ]
+    }
+  },
+  "Outputs": {}
+}

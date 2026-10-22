@@ -1,0 +1,352 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander 12 - riscos hosted deterministic agent, OBO through Identity",
+  "Parameters": {
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    },
+    "Project": {
+      "Type": "String",
+      "Default": "santander-journey"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "RuntimeClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "CallerClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "AgentSecretArn": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "HubUrl": {
+      "Type": "String"
+    },
+    "HubClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "RegistryArn": {
+      "Type": "String"
+    },
+    "RegistryConsumerRoleArn": {
+      "Type": "String"
+    },
+    "SubjectClaim": {
+      "Type": "String",
+      "Default": "preferred_username",
+      "AllowedValues": [
+        "preferred_username",
+        "email",
+        "upn"
+      ]
+    },
+    "RiscosTable": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*"
+    },
+    "FraudeTable": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*\\.[A-Za-z_][A-Za-z0-9_]*"
+    },
+    "RuntimeName": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z][A-Za-z0-9_]*"
+    }
+  },
+  "Resources": {
+    "Workload": {
+      "Type": "AWS::BedrockAgentCore::WorkloadIdentity",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-riscos"
+        }
+      }
+    },
+    "OAuth": {
+      "Type": "AWS::BedrockAgentCore::OAuth2CredentialProvider",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-riscos-obo"
+        },
+        "CredentialProviderVendor": "CustomOauth2",
+        "Oauth2ProviderConfigInput": {
+          "CustomOauth2ProviderConfig": {
+            "OauthDiscovery": {
+              "DiscoveryUrl": {
+                "Fn::Sub": "https://login.microsoftonline.com/${TenantId}/v2.0/.well-known/openid-configuration"
+              }
+            },
+            "ClientId": {
+              "Ref": "RuntimeClientId"
+            },
+            "ClientSecretSource": "EXTERNAL",
+            "ClientSecretConfig": {
+              "SecretId": {
+                "Ref": "AgentSecretArn"
+              },
+              "JsonKey": "client_secret"
+            },
+            "ClientAuthenticationMethod": "CLIENT_SECRET_POST",
+            "OnBehalfOfTokenExchangeConfig": {
+              "GrantType": "JWT_AUTHORIZATION_GRANT"
+            }
+          }
+        }
+      }
+    },
+    "RuntimeRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucket}/${ArtifactKey}"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "sts:AssumeRole"
+                  ],
+                  "Resource": {
+                    "Ref": "RegistryConsumerRoleArn"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Workload",
+                        "WorkloadIdentityArn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetResourceOauth2Token"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "OAuth",
+                        "CredentialProviderArn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "Workload",
+                        "WorkloadIdentityArn"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "secretsmanager:GetSecretValue"
+                  ],
+                  "Resource": {
+                    "Ref": "AgentSecretArn"
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "RoleName": {
+          "Fn::Sub": "${Project}-riscos-runtime"
+        }
+      }
+    },
+    "Runtime": {
+      "Type": "AWS::BedrockAgentCore::Runtime",
+      "Properties": {
+        "AgentRuntimeName": {
+          "Fn::Sub": "${RuntimeName}"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "RuntimeRole",
+            "Arn"
+          ]
+        },
+        "AgentRuntimeArtifact": {
+          "CodeConfiguration": {
+            "Runtime": "PYTHON_3_12",
+            "EntryPoint": [
+              "python",
+              "journey_runtime_main.py"
+            ],
+            "Code": {
+              "S3": {
+                "Bucket": {
+                  "Ref": "ArtifactBucket"
+                },
+                "Prefix": {
+                  "Ref": "ArtifactKey"
+                }
+              }
+            }
+          }
+        },
+        "ProtocolConfiguration": "MCP",
+        "NetworkConfiguration": {
+          "NetworkMode": "PUBLIC"
+        },
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Fn::Sub": "https://login.microsoftonline.com/${TenantId}/v2.0/.well-known/openid-configuration"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "RuntimeClientId"
+              }
+            ],
+            "CustomClaims": [
+              {
+                "InboundTokenClaimName": "tid",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "TenantId"
+                    }
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "azp",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "CallerClientId"
+                    }
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "ver",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": "2.0"
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "scp",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": "access_as_user"
+                  }
+                }
+              }
+            ],
+            "AllowedWorkloadConfiguration": {
+              "HostingEnvironments": [
+                {
+                  "Arn": {
+                    "Ref": "GatewayArn"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "EnvironmentVariables": {
+          "JOURNEY_CONFIG": {
+            "Fn::Sub": "{\"agent\": \"riscos\", \"project\": \"${Project}\", \"region\": \"${AWS::Region}\", \"tenant\": \"${TenantId}\", \"audience\": \"${RuntimeClientId}\", \"caller\": \"${CallerClientId}\", \"hub_url\": \"${HubUrl}\", \"hub_audience\": \"${HubClientId}\", \"subject_claim\": \"${SubjectClaim}\", \"workload_name\": \"${Project}-riscos\", \"provider_name\": \"${Project}-riscos-obo\", \"registry_arn\": \"${RegistryArn}\", \"registry_role_arn\": \"${RegistryConsumerRoleArn}\", \"tables\": {\"riscos\": \"${RiscosTable}\", \"fraude\": \"${FraudeTable}\"}}"
+          }
+        },
+        "LifecycleConfiguration": {
+          "IdleRuntimeSessionTimeout": 300,
+          "MaxLifetime": 3600
+        },
+        "RequestHeaderConfiguration": {
+          "RequestHeaderAllowlist": [
+            "Authorization"
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "RuntimeArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Runtime",
+          "AgentRuntimeArn"
+        ]
+      }
+    },
+    "RuntimeId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Runtime",
+          "AgentRuntimeId"
+        ]
+      }
+    }
+  }
+}

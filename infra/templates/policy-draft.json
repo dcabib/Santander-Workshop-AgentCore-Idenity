@@ -1,0 +1,172 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander - geração assistida de rascunho Cedar, sem publicação",
+  "Parameters": {
+    "Project": {
+      "Type": "String",
+      "Default": "santander-demo"
+    },
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ProviderKey": {
+      "Type": "String"
+    },
+    "PolicyEngineId": {
+      "Type": "String"
+    },
+    "PolicyEngineArn": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "RawText": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "DraftRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/*:log-stream:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:StartPolicyGeneration",
+                    "bedrock-agentcore:GetPolicyGeneration"
+                  ],
+                  "Resource": [
+                    {
+                      "Ref": "PolicyEngineArn"
+                    },
+                    {
+                      "Fn::Sub": "${PolicyEngineArn}/policy-generation/*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetGateway",
+                    "bedrock-agentcore:ListGatewayTargets",
+                    "bedrock-agentcore:GetGatewayTarget"
+                  ],
+                  "Resource": [
+                    {
+                      "Ref": "GatewayArn"
+                    },
+                    {
+                      "Fn::Sub": "${GatewayArn}/target/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "DraftLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${Project}-draft-provider"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "DraftProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "${Project}-draft-provider"
+        },
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "Handler": "policy_draft_handler.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "DraftRole",
+            "Arn"
+          ]
+        },
+        "Timeout": 600,
+        "MemorySize": 256,
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ProviderKey"
+          }
+        }
+      },
+      "DependsOn": "DraftLog"
+    },
+    "Draft": {
+      "Type": "Custom::AgentCorePolicyDraft",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "DraftProvider",
+            "Arn"
+          ]
+        },
+        "ServiceTimeout": 650,
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "GatewayArn": {
+          "Ref": "GatewayArn"
+        },
+        "RawText": {
+          "Ref": "RawText"
+        }
+      },
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain"
+    }
+  },
+  "Outputs": {
+    "PolicyGenerationId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Draft",
+          "Id"
+        ]
+      }
+    }
+  }
+}

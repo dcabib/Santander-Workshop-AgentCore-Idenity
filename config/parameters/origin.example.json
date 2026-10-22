@@ -1,0 +1,11 @@
+{
+  "Project": "santander-demo",
+  "HubAccount": "REPLACE_HUBACCOUNT",
+  "ArtifactBucket": "REPLACE_ARTIFACTBUCKET",
+  "RuntimeKey": "workshop/not-built.zip",
+  "DiscoveryUrl": "REPLACE_DISCOVERYURL",
+  "GatewayAudience": "REPLACE_GATEWAYAUDIENCE",
+  "SupervisorClientId": "",
+  "WorkshopConfig": "{}",
+  "EnableRuntime": "false"
+}

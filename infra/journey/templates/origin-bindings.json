@@ -1,0 +1,209 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander 12 - origin targets and user/agent/tool policies",
+  "Parameters": {
+    "GatewayId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "PolicyEngineId": {
+      "Type": "String"
+    },
+    "OAuthProviderArn": {
+      "Type": "String"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "AllowedUserOids": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}(,[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})*"
+    },
+    "CallerClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "RiscosEndpoint": {
+      "Type": "String"
+    },
+    "RiscosClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "FraudeEndpoint": {
+      "Type": "String"
+    },
+    "FraudeClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    }
+  },
+  "Resources": {
+    "RiscosTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "riscos",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "RiscosEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"consultar\", \"description\": \"Consultar uma capacidade aprovada, preservando o usu\\u00e1rio at\\u00e9 a fonte.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"capacidade\": {\"type\": \"string\", \"enum\": [\"riscos\", \"fraude\"]}, \"request_id\": {\"type\": \"string\"}}, \"required\": [\"capacidade\", \"request_id\"], \"additionalProperties\": false}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Fn::Sub": "api://${RiscosClientId}/.default"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "FraudeTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "Name": "fraude",
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "FraudeEndpoint"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"consultar\", \"description\": \"Consultar uma capacidade aprovada, preservando o usu\\u00e1rio at\\u00e9 a fonte.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"capacidade\": {\"type\": \"string\", \"enum\": [\"riscos\", \"fraude\"]}, \"request_id\": {\"type\": \"string\"}}, \"required\": [\"capacidade\", \"request_id\"], \"additionalProperties\": false}}]}"
+              }
+            }
+          }
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "OAUTH",
+            "CredentialProvider": {
+              "OauthCredentialProvider": {
+                "ProviderArn": {
+                  "Ref": "OAuthProviderArn"
+                },
+                "Scopes": [
+                  {
+                    "Fn::Sub": "api://${FraudeClientId}/.default"
+                  }
+                ],
+                "GrantType": "TOKEN_EXCHANGE",
+                "CustomParameters": {
+                  "requested_token_use": "on_behalf_of"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "RiscosDelegated": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "RiscosDelegated",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "permit(\n  principal is AgentCore::OAuthUser,\n  action == AgentCore::Action::\"riscos___consultar\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${CallerClientId}\" &&\n  principal.hasTag(\"oid\") && [\"${UserList}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"ver\") && principal.getTag(\"ver\") == \"2.0\" &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\"\n};",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\", \"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RiscosTarget",
+        "FraudeTarget"
+      ]
+    },
+    "FraudeDelegated": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "FraudeDelegated",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": [
+                "permit(\n  principal is AgentCore::OAuthUser,\n  action == AgentCore::Action::\"fraude___consultar\",\n  resource == AgentCore::Gateway::\"${GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${CallerClientId}\" &&\n  principal.hasTag(\"oid\") && [\"${UserList}\"].contains(principal.getTag(\"oid\")) &&\n  principal.hasTag(\"ver\") && principal.getTag(\"ver\") == \"2.0\" &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\"\n};",
+                {
+                  "UserList": {
+                    "Fn::Join": [
+                      "\", \"",
+                      {
+                        "Fn::Split": [
+                          ",",
+                          {
+                            "Ref": "AllowedUserOids"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RiscosTarget",
+        "FraudeTarget"
+      ]
+    }
+  },
+  "Outputs": {}
+}

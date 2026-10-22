@@ -1,0 +1,8 @@
+{
+  "Project": "santander-demo",
+  "ArtifactBucket": "REPLACE_ARTIFACTBUCKET",
+  "ProviderKey": "set-by-pipeline",
+  "GatewayUrl": "REPLACE_GATEWAYURL",
+  "OperatorRoleArn": "REPLACE_OPERATORROLEARN",
+  "SupervisorRoleArn": "REPLACE_SUPERVISORROLEARN"
+}

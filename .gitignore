@@ -1,0 +1,37 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.aws-sam/
+build/
+dist/
+config/local.*
+.env
+.env.*
+!.env.example
+evidence/*.json
+evidence/executed/
+*.db
+*.db-*
+*.pem
+*.key
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfplan
+
+# Material de referência fornecido no workspace (entrada, não entregável)
+2026-10-05-AgentCore-casos-de-uso-Santander.html
+asrOutput.json
+conversa.md
+
+# Artefatos de ferramentas de AI usadas na construção do laboratório
+.claude/
+.claude-flow/
+.swarm/
+.hive-mind/
+*.rvf
+*.rvf.lock
+ruvector.db

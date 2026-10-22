@@ -1,0 +1,42 @@
+{
+  "project": "santander-fed",
+  "region": "us-east-1",
+  "tenant_id": "REPLACE_ENTRA_TENANT_UUID",
+  "login_client_id": "REPLACE_PUBLIC_LOGIN_APP_UUID",
+  "expected_user_oid": "REPLACE_TEST_USER_OBJECT_UUID",
+  "knowledge_base_id": "REPLACE_LENDING_KB_ID",
+  "model_id": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+  "accounts": {
+    "platform": {
+      "id": "111111111111",
+      "profile": "platform",
+      "gateway_client_id": "REPLACE_PLATFORM_GATEWAY_APP_UUID",
+      "gateway_secret_arn": "arn:aws:secretsmanager:us-east-1:111111111111:secret:REPLACE_PLATFORM_SECRET",
+      "allowed_user_oids": ["REPLACE_TEST_USER_OBJECT_UUID"]
+    },
+    "retail-banking": {
+      "id": "222222222222",
+      "profile": "retail-banking",
+      "gateway_client_id": "REPLACE_RETAIL_GATEWAY_APP_UUID",
+      "runtime_client_id": "REPLACE_RETAIL_RUNTIME_APP_UUID",
+      "gateway_secret_arn": "arn:aws:secretsmanager:us-east-1:222222222222:secret:REPLACE_RETAIL_SECRET",
+      "allowed_user_oids": ["REPLACE_TEST_USER_OBJECT_UUID"]
+    },
+    "transaction-banking": {
+      "id": "333333333333",
+      "profile": "transaction-banking",
+      "gateway_client_id": "REPLACE_TRANSACTION_GATEWAY_APP_UUID",
+      "runtime_client_id": "REPLACE_TRANSACTION_RUNTIME_APP_UUID",
+      "gateway_secret_arn": "arn:aws:secretsmanager:us-east-1:333333333333:secret:REPLACE_TRANSACTION_SECRET",
+      "allowed_user_oids": ["REPLACE_TEST_USER_OBJECT_UUID"]
+    },
+    "lending-wealth": {
+      "id": "444444444444",
+      "profile": "lending-wealth",
+      "gateway_client_id": "REPLACE_LENDING_GATEWAY_APP_UUID",
+      "runtime_client_id": "REPLACE_LENDING_RUNTIME_APP_UUID",
+      "gateway_secret_arn": "arn:aws:secretsmanager:us-east-1:444444444444:secret:REPLACE_LENDING_SECRET",
+      "allowed_user_oids": ["REPLACE_TEST_USER_OBJECT_UUID"]
+    }
+  }
+}
