@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 11 - transaction-banking Gateway + Identity OBO + local Policy",
+  "Description": "Notebook 12 - transaction-banking Gateway + Identity OBO + local Policy",
   "Parameters": {
     "Project": {
       "Type": "String",

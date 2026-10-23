@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 10 - Strands agent hosted in platform Runtime",
+  "Description": "Notebook 11 - Strands agent hosted in platform Runtime",
   "Parameters": {
     "ArtifactBucket": {
       "Type": "String"

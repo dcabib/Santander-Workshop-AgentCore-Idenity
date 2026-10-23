@@ -1,20 +1,18 @@
-# Cenário integrado Santander — notebook 12
+# Laboratório 14 — compor agentes, Gateways e acesso à fonte
 
-Este cenário implementa a composição que faltava na revisão: **agente na conta A
-→ Gateway central → Gateway da conta B → MCP Databricks Azure**. A entrada
-dos agentes também passa por um Gateway. Há três contas, dois agentes em Runtime,
-três Policies independentes e um Registry central.
+No laboratório 12, preservamos a pessoa até os MCPs; no 09, verificamos quem a
+fonte reconhece e quais grants aplica. Agora reunimos esses conhecimentos:
+agentes Riscos e Fraude na origem → Gateway central → Gateway de dados →
+MCP Databricks. Cada fronteira tem uma responsabilidade que precisa ser testada.
 
-Os notebooks 10/11 continuam como referências. O 12 é a trilha principal para
-o pedido Santander. Seus testes locais não constituem um ensaio cloud.
-
-[Abrir notebook](../../notebooks/12_cenario_santander_integrado.ipynb) ·
+[Abrir notebook 14](../../notebooks/14_cenario_santander_integrado.ipynb) ·
 [Configuração](../../config/journey.example.json) ·
-[Decisões](decisoes.md) · [Trace](trace.md)
+[Responsabilidades da arquitetura](arquitetura.md) · [Trace](trace.md) ·
+[Jornada](../jornada.md)
 
-![Arquitetura integrada](arquitetura.png)
+![Agentes na origem, hub central e Gateway de dados até o Databricks](arquitetura.png)
 
-## O que está implementado
+## O que cada parte acrescenta
 
 | Item | Implementação |
 |---|---|
@@ -27,7 +25,7 @@ o pedido Santander. Seus testes locais não constituem um ensaio cloud.
 | Evidências | Request ID, usuário pseudonimizado, agente, tool, hash da query, IDs HTTP do hub e query ID, quando devolvido pelo MCP. |
 | Quotas e ingestão | Contratos locais explícitos e matriz de responsabilidades. Não são medição cloud nem conectores produtivos. |
 
-## Pré-requisitos que precisam estar prontos
+## Preparar as dependências
 
 1. Três contas AWS distintas na mesma região, com perfis e acesso a Gateway,
    Identity, Policy, Registry e Runtime. Endpoints deste lab são públicos
@@ -52,9 +50,8 @@ o pedido Santander. Seus testes locais não constituem um ensaio cloud.
 
 Em `legacy_sql`, o endpoint é `/api/2.0/mcp/sql`, com `all-apis` no sample AWS
 (o escopo específico documentado é `sql`). Em `unity_dbsql`, o endpoint é
-`/ai-gateway/mcp-services/system.ai.dbsql`, com `ai-gateway`. Esse último DBSQL
-é beta na documentação Azure consultada. Não alternar endpoint sem rever
-habilitação, schema, scopes, grants e observabilidade.
+`/ai-gateway/mcp-services/system.ai.dbsql`, com `ai-gateway`. Confira a disponibilidade e o contrato do endpoint no workspace. Alterar o
+endpoint exige rever habilitação, schema, scopes, grants e observabilidade.
 
 Publicamos um schema estático e restrito de `execute_sql(query)`, baseado no
 sample, para não depender de sincronização com uma credencial compartilhada.
@@ -100,8 +97,8 @@ federation de conta. Execute pelo pipeline do proprietário Databricks, após
 revisão da audiência/issuer/mapeamento. Ele não cria usuários, não muda grants
 existentes e não concede acesso a tabelas.
 
-Os módulos têm lockfiles de providers. Foram preparados para `terraform plan`
-e `apply` pelo pipeline; a validação local não usa credenciais. O state Entra
+Os módulos têm lockfiles de providers. Revise `terraform plan` antes de aplicar
+pelo pipeline; a validação local não usa credenciais. O state Entra
 contém senhas de aplicação: configure o backend cifrado e os controles de acesso
 do pipeline antes de aplicar. Os outputs entregam IDs/ARNs, sem valores de segredos.
 
@@ -140,7 +137,7 @@ cross-account de consumo possui somente `SearchRegistryRecords`. A decisão de
 aprovação é versionada no IaC. Remover a condição de aprovação não revoga uma
 aprovação existente: publique uma nova versão ou remova o registro pelo IaC.
 
-## Ensaio real
+## Verificar onde cada decisão acontece
 
 Volte `DEPLOY_PHASE=None` e execute o preflight. Depois:
 
@@ -150,7 +147,7 @@ Volte `DEPLOY_PHASE=None` e execute o preflight. Depois:
 4. B/Riscos → Riscos: identidade correta na consulta inicial; SELECT negado pela fonte.
 5. Concluir a [correlação](trace.md) e salvar evidências sanitizadas.
 
-Aqueça o warehouse com a consulta de identidade antes do horário da demo.
+Comece pela consulta de identidade para verificar que o warehouse está pronto.
 O código trata query pendente, timeout, erro de token e erro genérico como
 ausência de prova. Não faz polling por outra rota ou troca para uma identidade
 compartilhada para obter um resultado.
@@ -164,9 +161,13 @@ Use cada perfil/conta correto e o ARN exato do stack revisado.
 Buckets são retidos. Entra, federation, segredos externos, warehouse e grants
 são removidos ou revertidos pelo IaC de seus proprietários.
 
-## Referências
+## Próximo aprendizado
 
-Consultadas em 09/10/2026:
+O acesso à fonte não resolve sozinho o que acontece com uma cópia do documento.
+No [laboratório 15](../ingestao/README.md), acompanhe suas permissões durante
+ingestão, atualização e reutilização na memória.
+
+## Referências
 
 - [AWS native OBO Databricks, commit f33b4f14](https://github.com/awslabs/agentcore-samples/tree/f33b4f14ea46cae2379196948073a6bb4d0e21cf/03-integrations/data-platforms/databricks-dbsql-native-obo): shape nativo, dependência de habilitação e comparação de identidade.
 - [AgentCore OBO](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-behalf-of-token-exchange.html).

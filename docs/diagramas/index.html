@@ -137,12 +137,12 @@
     </header>
     <section class="hero" aria-labelledby="page-title">
       <div>
-        <p class="eyebrow">Guia visual · 14 notebooks, passo a passo</p>
+        <p class="eyebrow">Guia visual · 16 notebooks, passo a passo</p>
         <h1 id="page-title">Entenda o caminho de cada chamada.</h1>
         <p class="intro">Quem está agindo? Qual ferramenta pode usar? Quem aprova o acesso?<br>Explore os diagramas antes de executar cada laboratório.</p>
       </div>
-      <div class="metrics" aria-label="14 notebooks, 4 pilares, 2 formatos de imagem">
-        <div class="metric"><strong>14</strong><span>notebooks</span></div>
+      <div class="metrics" aria-label="16 notebooks, 4 pilares, 2 formatos de imagem">
+        <div class="metric"><strong>16</strong><span>notebooks</span></div>
         <div class="metric"><strong>04</strong><span>pilares</span></div>
         <div class="metric"><strong>02</strong><span>formatos</span></div>
       </div>
@@ -158,7 +158,7 @@
       <aside class="sidebar" aria-label="Escolha um notebook">
         <p class="eyebrow">Trilha dos notebooks</p>
         <nav class="chapter-list" id="chapters"></nav>
-        <p class="sidebar-note">Os diagramas distinguem o que roda localmente dos fluxos que ainda precisam de ensaio na AWS e no Azure.</p>
+        <p class="sidebar-note">Siga a ordem de aprendizagem: fundamentos, primeira implantação, múltiplas contas e acesso a dados. Os números identificam os arquivos.</p>
       </aside>
       <main class="viewer" id="viewer">
         <div class="mobile-picker">
@@ -202,7 +202,7 @@
     </div>
     <footer>
       <span>Workshop Santander · Dados sintéticos · Ilustrações conceituais</span>
-      <nav aria-label="Documentação"><a href="README.md">Índice de imagens</a><a href="../roteiro.md">Roteiro do instrutor</a><a href="../aceite.md">Critérios de aceite</a></nav>
+      <nav aria-label="Documentação"><a href="README.md">Índice de imagens</a><a href="../jornada.md">Jornada de aprendizagem</a><a href="../validacao.md">Validar o aprendizado</a></nav>
     </footer>
   </div>
   <dialog id="zoom" aria-label="Diagrama ampliado">
@@ -212,48 +212,102 @@
     </div>
     <img class="zoom-image" id="zoom-image" alt="">
   </dialog>
-  <script id="diagram-data" type="application/json">[{"id": "00_preflight", "pillar": "Visão geral", "title": "Antes de começar: dois ambientes", "subtitle": "O que você já consegue executar e o que ainda precisa validar nos serviços.", "status": "MAPA DO LABORATÓRIO", "takeaway": "A simulação valida a lógica. O ensaio AWS valida as integrações.", "description": "Compare a bancada local com o ambiente AWS. Tokens de teste e Cedar rodam localmente; os serviços gerenciados exigem configuração e ensaio.", "result": "Saber exatamente qual ambiente está sendo usado e o que seu resultado comprova.", "notes": ["Local: nenhuma conta AWS é utilizada.", "AWS: preflight lê o estado dos recursos; não os cria.", "Dados de negócio são sintéticos em ambas as trilhas."]}, {"id": "01_gateway_targets", "pillar": "Gateway", "title": "Uma entrada para ferramentas diferentes", "subtitle": "O Gateway expõe Lambda e um especialista MCP pelo mesmo contrato de ferramentas.", "status": "ARQUITETURA AWS PREVISTA", "takeaway": "O cliente usa tools/list e tools/call; o Gateway conecta os destinos.", "description": "O supervisor acessa Riscos/K2 em Lambda e Fraude em um servidor MCP. O Gateway autentica, aplica Policy e usa a credencial adequada a cada target.", "result": "Encontrar os nomes reais das tools e executar uma chamada pelo caminho autorizado.", "notes": ["Riscos/K2: chamada Lambda com IAM.", "Fraude: target MCP com OAuth/OBO.", "Local: protocolo MCP por stdio; roteamento AWS ainda depende de ensaio."]}, {"id": "02_identity_entra_obo", "pillar": "Identity", "title": "O usuário continua sendo o usuário", "subtitle": "Duas trocas OBO mudam a audiência do token sem substituir o principal humano.", "status": "FLUXO ENTRA / AWS A VALIDAR", "takeaway": "A prova de delegação é o destino reconhecer o usuário esperado.", "description": "O usuário entra pelo frontend Entra. O agente confidencial obtém um token para o Gateway; o AgentCore Identity participa da troca para o Microsoft Graph.", "result": "Comparar o ID devolvido por Graph /me com o OID esperado de dois usuários de teste.", "notes": ["Primeiro OBO: helper MSAL no host do instrutor.", "Segundo OBO: integração Gateway + AgentCore Identity.", "Somente Graph /me; tokens e perfis completos não entram nas evidências."]}, {"id": "03_identity_agente_mcp", "pillar": "Identity", "title": "A pessoa é a mesma. O agente mudou.", "subtitle": "A decisão considera quem é o usuário e qual aplicação está agindo por ele.", "status": "LÓGICA LOCAL · AWS A VALIDAR", "takeaway": "Permissão do usuário e permissão do agente precisam ser satisfeitas.", "description": "Com o mesmo usuário habilitado a Riscos e Fraude, o supervisor pode consultar Fraude, mas o agente de Riscos recebe uma negativa.", "result": "Mostrar uma mudança de decisão alterando apenas a identidade técnica do chamador.", "notes": ["tid + oid: identidade humana no tenant.", "azp, no fluxo Entra v2: aplicação confidencial.", "O Runtime Fraude também valida audiência, aplicação do Gateway e workload."]}, {"id": "04_policy_cedar", "pillar": "Policy", "title": "A autorização acontece antes da ferramenta", "subtitle": "Cedar combina identidade, ação, recurso e parâmetros em uma única decisão.", "status": "CEDAR LOCAL · AWS A VALIDAR", "takeaway": "50 registros podem passar. 51 devem parar antes de executar o backend.", "description": "A regra exige simultaneamente usuário, aplicação, delegação, ação, Gateway e limite de entrada corretos. Uma condição falsa impede a execução.", "result": "Reproduzir a matriz P-SAN-01 a P-SAN-06 e distinguir negação de Policy de outros erros.", "notes": ["ENFORCE no Gateway previsto por IaC.", "Contador local verifica que negativas não executam o backend.", "A prova equivalente em AWS exige correlacionar decisão, chamada e logs."]}, {"id": "05_policy_autoria", "pillar": "Policy", "title": "Da intenção à política revisada", "subtitle": "Gerar Cedar é uma etapa de autoria. Publicar exige revisão, testes e mudança por IaC.", "status": "AUTORIA LOCAL · SERVIÇO A VALIDAR", "takeaway": "Um rascunho gerado não se transforma automaticamente em permissão.", "description": "Uma intenção em linguagem natural pode gerar um rascunho por um stack separado. O notebook lê Cedar e findings; a promoção ocorre pelo pipeline revisado.", "result": "Conferir se o Cedar representa a intenção e se os casos permitidos e negados continuam corretos.", "notes": ["Provider de rascunho não recebe CreatePolicy.", "Findings precisam ser revisados, sem IGNORE_ALL_FINDINGS.", "O histórico de geração é retido; ele não concede acesso."]}, {"id": "06_registry_governanca", "pillar": "Registry", "title": "Publicar, aprovar e consumir são papéis distintos", "subtitle": "Um catálogo governado separa o ciclo do registro da autorização para executar uma tool.", "status": "MODELO LOCAL · IAM A VALIDAR", "takeaway": "O publisher submete. O approver decide. O consumer encontra aprovados.", "description": "Os registros percorrem DRAFT, PENDING_APPROVAL e APPROVED ou REJECTED. Os papéis AWS usam sessões temporárias e permissões distintas.", "result": "Verificar a separação de papéis e observar todos os estados preparados para o workshop.", "notes": ["autoApproval = false.", "Busca desta implementação usa AWS_IAM e STS.", "No modo AWS, o notebook lê estados preparados pelo IaC."]}, {"id": "07_registry_descoberta_execucao", "pillar": "Registry", "title": "Encontrar uma capacidade não libera seu uso", "subtitle": "O supervisor descobre no Registry, valida o endpoint e invoca pelo Gateway.", "status": "FLUXO LOCAL · AWS A VALIDAR", "takeaway": "Registry responde “o que existe”; Policy decide “o que este chamador pode fazer”.", "description": "O catálogo devolve capacidades aprovadas. O supervisor valida metadados antes de enviar o token; o Gateway continua sendo o ponto de autorização.", "result": "Encontrar Fraude para dois perfis e observar que só o perfil autorizado consegue executá-la.", "notes": ["Busca AWS semântica; busca local lexical.", "Somente o endpoint exato configurado recebe bearer.", "Aprovação no Registry não substitui a decisão Cedar."]}, {"id": "08_santander_multi_conta", "pillar": "Arquitetura integrada", "title": "Três contas. Fronteiras explícitas.", "subtitle": "O supervisor está na origem; governança fica no hub; Fraude pertence a outro domínio.", "status": "ARQUITETURA AWS A VALIDAR", "takeaway": "A chamada deve preservar o usuário e respeitar a autorização em cada fronteira.", "description": "Conta A hospeda o supervisor; conta C concentra Registry, Gateway, Identity e Policy; conta B hospeda o especialista de Fraude.", "result": "Executar A → C → B de verdade e reunir evidências nos três lados da chamada.", "notes": ["A → Registry C: IAM com AssumeRole.", "A → Gateway C: JWT delegado.", "C → Fraude B: OBO e restrição ao workload do Gateway."]}, {"id": "09_databricks_e_evidencias", "pillar": "Fonte de dados", "title": "A fonte de dados precisa reconhecer a pessoa", "subtitle": "A extensão Databricks verifica identidade efetiva e grants, com uma tabela canário.", "status": "EXTENSÃO AZURE A VALIDAR", "takeaway": "Sem token delegado válido, a consulta para. Não há fallback para credencial compartilhada.", "description": "O adapter de extensão troca um JWT Entra por um token Databricks e consulta o SQL Warehouse. A identidade e a permissão da fonte são verificadas separadamente.", "result": "Provar current_user() exato e acesso distinto para dois usuários na mesma tabela sintética.", "notes": ["Caminho de extensão separado do Gateway nesta entrega.", "Unity Catalog governa o acesso aos dados.", "Graph /me não comprova delegação no Databricks Azure."]}, {"id": "10_blog_multi_account_gateway_mcp", "pillar": "Gateway", "title": "Um agente, três áreas, quatro contas.", "description": "Referência do artigo AWS com Strands e M2M nas ferramentas.", "result": "Comparar a identidade humana na entrada e a credencial técnica nos destinos.", "notes": ["Leia o runbook do cenário antes de habilitar a execução cloud.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../banking/arquitetura.svg", "png": "../banking/arquitetura.png"}, {"id": "11_gateways_por_conta_identity_policy", "pillar": "Policy", "title": "Cada conta tem sua própria porta.", "description": "Gateway, Identity OBO e Policy independentes em quatro contas.", "result": "Entender a autonomia de autorização de cada domínio.", "notes": ["Leia o runbook do cenário antes de habilitar a execução cloud.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../federation/arquitetura.svg", "png": "../federation/arquitetura.png"}, {"id": "12_cenario_santander_integrado", "pillar": "Identity", "title": "Uma chamada entre áreas, até a fonte.", "description": "Agentes na conta A → hub → Gateway da conta B → MCP Databricks.", "result": "Distinguir agentes no hub e verificar a identidade humana na fonte.", "notes": ["Leia o runbook do cenário antes de habilitar a execução cloud.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../journey/arquitetura.svg", "png": "../journey/arquitetura.png"}, {"id": "13_ingestao_acl_memoria", "pillar": "Registry", "title": "Conhecimento compartilhado, acesso individual.", "description": "Contrato local de ingestão, ACL, revogação e memória por usuário.", "result": "Compartilhar o índice sem compartilhar todas as permissões.", "notes": ["Leia o runbook do cenário antes de habilitar a execução cloud.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../ingestao/arquitetura.svg", "png": "../ingestao/arquitetura.png"}]</script>
+  <script id="diagram-data" type="application/json">[{"id": "00_preflight", "pillar": "Visão geral", "title": "Antes de começar: dois ambientes", "subtitle": "O que você já consegue executar e o que ainda precisa validar nos serviços.", "status": "MAPA DO LABORATÓRIO", "takeaway": "A simulação valida a lógica. O ensaio AWS valida as integrações.", "description": "Compare a bancada local com o ambiente AWS. Tokens de teste e Cedar rodam localmente; os serviços gerenciados exigem configuração e ensaio.", "result": "Saber exatamente qual ambiente está sendo usado e o que seu resultado comprova.", "notes": ["Local: nenhuma conta AWS é utilizada.", "AWS: preflight lê o estado dos recursos; não os cria.", "Dados de negócio são sintéticos em ambas as trilhas."]}, {"id": "01_gateway_targets", "pillar": "Gateway", "title": "Uma entrada para ferramentas diferentes", "subtitle": "O Gateway expõe Lambda e um especialista MCP pelo mesmo contrato de ferramentas.", "status": "ARQUITETURA AWS PREVISTA", "takeaway": "O cliente usa tools/list e tools/call; o Gateway conecta os destinos.", "description": "O supervisor acessa Riscos/K2 em Lambda e Fraude em um servidor MCP. O Gateway autentica, aplica Policy e usa a credencial adequada a cada target.", "result": "Encontrar os nomes reais das tools e executar uma chamada pelo caminho autorizado.", "notes": ["Riscos/K2: chamada Lambda com IAM.", "Fraude: target MCP com OAuth/OBO.", "Local: protocolo MCP por stdio; roteamento AWS ainda depende de ensaio."]}, {"id": "02_identity_entra_obo", "pillar": "Identity", "title": "O usuário continua sendo o usuário", "subtitle": "Duas trocas OBO mudam a audiência do token sem substituir o principal humano.", "status": "FLUXO ENTRA / AWS A VALIDAR", "takeaway": "A prova de delegação é o destino reconhecer o usuário esperado.", "description": "O usuário entra pelo frontend Entra. O agente confidencial obtém um token para o Gateway; o AgentCore Identity participa da troca para o Microsoft Graph.", "result": "Comparar o ID devolvido por Graph /me com o OID esperado de dois usuários de teste.", "notes": ["Primeiro OBO: helper MSAL no host do instrutor.", "Segundo OBO: integração Gateway + AgentCore Identity.", "Somente Graph /me; tokens e perfis completos não entram nas evidências."]}, {"id": "03_identity_agente_mcp", "pillar": "Identity", "title": "A pessoa é a mesma. O agente mudou.", "subtitle": "A decisão considera quem é o usuário e qual aplicação está agindo por ele.", "status": "LÓGICA LOCAL · AWS A VALIDAR", "takeaway": "Permissão do usuário e permissão do agente precisam ser satisfeitas.", "description": "Com o mesmo usuário habilitado a Riscos e Fraude, o supervisor pode consultar Fraude, mas o agente de Riscos recebe uma negativa.", "result": "Mostrar uma mudança de decisão alterando apenas a identidade técnica do chamador.", "notes": ["tid + oid: identidade humana no tenant.", "azp, no fluxo Entra v2: aplicação confidencial.", "O Runtime Fraude também valida audiência, aplicação do Gateway e workload."]}, {"id": "04_policy_cedar", "pillar": "Policy", "title": "A autorização acontece antes da ferramenta", "subtitle": "Cedar combina identidade, ação, recurso e parâmetros em uma única decisão.", "status": "CEDAR LOCAL · AWS A VALIDAR", "takeaway": "50 registros podem passar. 51 devem parar antes de executar o backend.", "description": "A regra exige simultaneamente usuário, aplicação, delegação, ação, Gateway e limite de entrada corretos. Uma condição falsa impede a execução.", "result": "Reproduzir a matriz P-SAN-01 a P-SAN-06 e distinguir negação de Policy de outros erros.", "notes": ["ENFORCE no Gateway previsto por IaC.", "Contador local verifica que negativas não executam o backend.", "A prova equivalente em AWS exige correlacionar decisão, chamada e logs."]}, {"id": "05_policy_autoria", "pillar": "Policy", "title": "Da intenção à política revisada", "subtitle": "Gerar Cedar é uma etapa de autoria. Publicar exige revisão, testes e mudança por IaC.", "status": "AUTORIA LOCAL · SERVIÇO A VALIDAR", "takeaway": "Um rascunho gerado não se transforma automaticamente em permissão.", "description": "Uma intenção em linguagem natural pode gerar um rascunho por um stack separado. O notebook lê Cedar e findings; a promoção ocorre pelo pipeline revisado.", "result": "Conferir se o Cedar representa a intenção e se os casos permitidos e negados continuam corretos.", "notes": ["Provider de rascunho não recebe CreatePolicy.", "Findings precisam ser revisados, sem IGNORE_ALL_FINDINGS.", "O histórico de geração é retido; ele não concede acesso."]}, {"id": "06_registry_governanca", "pillar": "Registry", "title": "Publicar, aprovar e consumir são papéis distintos", "subtitle": "Um catálogo governado separa o ciclo do registro da autorização para executar uma tool.", "status": "MODELO LOCAL · IAM A VALIDAR", "takeaway": "O publisher submete. O approver decide. O consumer encontra aprovados.", "description": "Os registros percorrem DRAFT, PENDING_APPROVAL e APPROVED ou REJECTED. Os papéis AWS usam sessões temporárias e permissões distintas.", "result": "Verificar a separação de papéis e observar todos os estados preparados para o workshop.", "notes": ["autoApproval = false.", "Busca desta implementação usa AWS_IAM e STS.", "No modo AWS, o notebook lê estados preparados pelo IaC."]}, {"id": "07_registry_personas", "pillar": "Registry", "title": "Da ideia à capacidade aprovada.", "description": "Quatro personas acompanham um MCP e um agente.", "result": "Separar desenvolvimento, publicação, aprovação e execução.", "notes": ["Leia o guia do cenário antes de habilitar a execução na nuvem.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../registry/arquitetura.svg", "png": "../registry/arquitetura.png"}, {"id": "08_registry_descoberta_execucao", "pillar": "Registry", "title": "Encontrar uma capacidade não libera seu uso", "subtitle": "O supervisor descobre no Registry, valida o endpoint e invoca pelo Gateway.", "status": "FLUXO LOCAL · AWS A VALIDAR", "takeaway": "Registry responde “o que existe”; Policy decide “o que este chamador pode fazer”.", "description": "O catálogo devolve capacidades aprovadas. O supervisor valida metadados antes de enviar o token; o Gateway continua sendo o ponto de autorização.", "result": "Encontrar Fraude para dois perfis e observar que só o perfil autorizado consegue executá-la.", "notes": ["Busca AWS semântica; busca local lexical.", "Somente o endpoint exato configurado recebe bearer.", "Aprovação no Registry não substitui a decisão Cedar."]}, {"id": "09_terraform_runtime_gateway_identity", "pillar": "Gateway", "title": "A primeira implantação, em uma conta.", "description": "Terraform provisiona Runtime, Identity, Cognito, Gateway e Lambda.", "result": "Planejar, implantar e testar a identidade de aplicação antes de avançar para múltiplas contas.", "notes": ["Leia o guia do cenário antes de habilitar a execução na nuvem.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../terraform/arquitetura.svg", "png": null}, {"id": "10_santander_multi_conta", "pillar": "Arquitetura integrada", "title": "Três contas. Fronteiras explícitas.", "subtitle": "O supervisor está na origem; governança fica no hub; Fraude pertence a outro domínio.", "status": "ARQUITETURA AWS A VALIDAR", "takeaway": "A chamada deve preservar o usuário e respeitar a autorização em cada fronteira.", "description": "Conta A hospeda o supervisor; conta C concentra Registry, Gateway, Identity e Policy; conta B hospeda o especialista de Fraude.", "result": "Executar A → C → B de verdade e reunir evidências nos três lados da chamada.", "notes": ["A → Registry C: IAM com AssumeRole.", "A → Gateway C: JWT delegado.", "C → Fraude B: OBO e restrição ao workload do Gateway."]}, {"id": "11_blog_multi_account_gateway_mcp", "pillar": "Gateway", "title": "Um agente, três áreas, quatro contas.", "description": "Referência do artigo AWS com Strands e M2M nas ferramentas.", "result": "Comparar a identidade humana na entrada e a credencial técnica nos destinos.", "notes": ["Leia o guia do cenário antes de habilitar a execução na nuvem.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../banking/arquitetura.svg", "png": "../banking/arquitetura.png"}, {"id": "12_gateways_por_conta_identity_policy", "pillar": "Policy", "title": "Cada conta tem sua própria porta.", "description": "Gateway, Identity OBO e Policy independentes em quatro contas.", "result": "Entender a autonomia de autorização de cada domínio.", "notes": ["Leia o guia do cenário antes de habilitar a execução na nuvem.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../federation/arquitetura.svg", "png": "../federation/arquitetura.png"}, {"id": "13_databricks_e_evidencias", "pillar": "Fonte de dados", "title": "A fonte de dados precisa reconhecer a pessoa", "subtitle": "A extensão Databricks verifica identidade efetiva e grants, com uma tabela canário.", "status": "EXTENSÃO AZURE A VALIDAR", "takeaway": "Sem token delegado válido, a consulta para. Não há fallback para credencial compartilhada.", "description": "O adapter de extensão troca um JWT Entra por um token Databricks e consulta o SQL Warehouse. A identidade e a permissão da fonte são verificadas separadamente.", "result": "Provar current_user() exato e acesso distinto para dois usuários na mesma tabela sintética.", "notes": ["Caminho de extensão separado do Gateway nesta entrega.", "Unity Catalog governa o acesso aos dados.", "Graph /me não comprova delegação no Databricks Azure."]}, {"id": "14_cenario_santander_integrado", "pillar": "Identity", "title": "Uma chamada entre áreas, até a fonte.", "description": "Agentes na conta A → hub → Gateway da conta B → MCP Databricks.", "result": "Distinguir agentes no hub e verificar a identidade humana na fonte.", "notes": ["Leia o guia do cenário antes de habilitar a execução na nuvem.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../journey/arquitetura.svg", "png": "../journey/arquitetura.png"}, {"id": "15_ingestao_acl_memoria", "pillar": "Registry", "title": "Conhecimento compartilhado, acesso individual.", "description": "Contrato local de ingestão, ACL, revogação e memória por usuário.", "result": "Compartilhar o índice sem compartilhar todas as permissões.", "notes": ["Este laboratório executa somente o contrato local de documentos e memória.", "Observe a recuperação após revogar uma ACL ou excluir um documento."], "svg": "../ingestao/arquitetura.svg", "png": "../ingestao/arquitetura.png"}, {"id": "16_rag_managed_identity_policy", "pillar": "Policy", "title": "Uma base, quatro experiências de acesso.", "description": "Cognito, AgentCore Identity, Policy e ACLs nativas da Managed Knowledge Base.", "result": "A vê Riscos, B vê Fraude, C vê ambos e D não acessa o RAG.", "notes": ["Leia o guia do cenário antes de habilitar a execução na nuvem.", "Resultados locais não comprovam os serviços gerenciados."], "svg": "../rag/arquitetura.svg", "png": "../rag/arquitetura.png"}]</script>
   <script>
     const pages = JSON.parse(document.getElementById("diagram-data").textContent);
     const $ = id => document.getElementById(id);
     const labels = [
-      ["Comece por aqui", "Local e AWS"],
-      ["Gateway e ferramentas", "Lambda + especialista MCP"],
-      ["Identidade e OBO", "Do usuário ao destino"],
-      ["Identidade do agente", "Mesmo usuário, outro caller"],
-      ["Autorização Cedar", "Condições e limites"],
-      ["Autoria de políticas", "Intenção, revisão e IaC"],
-      ["Governança do Registry", "Publicar, aprovar, consumir"],
-      ["Descoberta e execução", "Catálogo → Gateway"],
-      ["Arquitetura entre contas", "Origem → hub → Fraude"],
-      ["Databricks e evidências", "Identidade e acesso à fonte"],
-      ["Artigo multi-account", "Strands e M2M"],
-      ["Gateway por conta", "Autonomia dos domínios"],
-      ["Cenário Santander", "Agentes → hub → Databricks"],
-      ["Ingestão, ACL e memória", "Sessão 2 · contrato local"],
-    ];
+      [
+            "Comece por aqui",
+            "Local e AWS"
+      ],
+      [
+            "Gateway e ferramentas",
+            "Lambda + especialista MCP"
+      ],
+      [
+            "Identidade e OBO",
+            "Do usuário ao destino"
+      ],
+      [
+            "Identidade do agente",
+            "Mesmo usuário, outro caller"
+      ],
+      [
+            "Autorização Cedar",
+            "Condições e limites"
+      ],
+      [
+            "Autoria de políticas",
+            "Intenção, revisão e IaC"
+      ],
+      [
+            "Governança do Registry",
+            "Estados e responsabilidades"
+      ],
+      [
+            "Quatro personas no Registry",
+            "Desenvolver → publicar → aprovar → consumir"
+      ],
+      [
+            "Descoberta e execução",
+            "Catálogo → Gateway"
+      ],
+      [
+            "Implantação Terraform",
+            "Runtime, Gateway e Identity"
+      ],
+      [
+            "Arquitetura entre contas",
+            "Origem → hub → Fraude"
+      ],
+      [
+            "Agente central e três áreas",
+            "Strands e M2M"
+      ],
+      [
+            "Gateway por conta",
+            "Autonomia dos domínios"
+      ],
+      [
+            "Databricks e evidências",
+            "Identidade e acesso à fonte"
+      ],
+      [
+            "Cenário Santander",
+            "Agentes → hub → Databricks"
+      ],
+      [
+            "Ingestão, ACL e memória",
+            "Ciclo de vida do documento"
+      ],
+      [
+            "RAG por usuário",
+            "Identidade, Policy e ACL"
+      ]
+];
     const colors = {Identity:"#2469dd", Policy:"#7546c7", Gateway:"#bd650f", Registry:"#087f82"};
     const chapterButtons = pages.map((page, index) => {
       const button = document.createElement("button");
       button.className = "chapter";
       button.style.setProperty("--tone", colors[page.pillar] || "#415571");
       button.setAttribute("aria-controls", "viewer");
-      button.setAttribute("aria-label", `Notebook ${page.id.slice(0,2)}: ${labels[index][0]}`);
+      button.setAttribute("aria-label", `Notebook ${page.id.slice(0,2)}: ${labels[Number(page.id.slice(0, 2))][0]}`);
       const number = document.createElement("span");
       number.className = "chapter-number";
       number.textContent = page.id.slice(0, 2);
       const text = document.createElement("span");
       const title = document.createElement("strong");
-      title.textContent = labels[index][0];
+      title.textContent = labels[Number(page.id.slice(0, 2))][0];
       const subtitle = document.createElement("small");
-      subtitle.textContent = labels[index][1];
+      subtitle.textContent = labels[Number(page.id.slice(0, 2))][1];
       text.append(title, subtitle);
       button.append(number, text);
       button.addEventListener("click", () => select(index));
       $("chapters").append(button);
       const option = document.createElement("option");
       option.value = index;
-      option.textContent = `${page.id.slice(0,2)} · ${labels[index][0]}`;
+      option.textContent = `${page.id.slice(0,2)} · ${labels[Number(page.id.slice(0, 2))][0]}`;
       $("module-select").append(option);
       return button;
     });
@@ -280,7 +334,9 @@
         li.textContent = note;
         return li;
       }));
-      $("png-link").href = page.png || `png/${page.id}.png`;
+      $("png-link").hidden = page.png === null;
+      if (page.png === null) $("png-link").removeAttribute("href");
+      else $("png-link").href = page.png || `png/${page.id}.png`;
       $("svg-link").href = svg;
       $("notebook-link").href = `../../notebooks/${page.id}.ipynb`;
       $("module-select").value = String(index);
@@ -288,7 +344,7 @@
         if (i === index) button.setAttribute("aria-current", "step");
         else button.removeAttribute("aria-current");
       });
-      document.title = `${page.id.slice(0,2)} · ${labels[index][0]} | Workshop Santander`;
+      document.title = `${page.id.slice(0,2)} · ${labels[Number(page.id.slice(0, 2))][0]} | Workshop Santander`;
       if (updateHash) {
         try { history.replaceState(null, "", `#${page.id}`); }
         catch { location.hash = page.id; }

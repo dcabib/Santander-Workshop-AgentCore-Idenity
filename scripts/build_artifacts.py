@@ -70,6 +70,7 @@ def main():
     )
     shutil.copy(ROOT / "infra/runtime_main.py", target / "runtime_main.py")
     if args.banking:
+        shutil.copy(ROOT / "infra/registry_workflow/runtime_main.py", target / "registry_runtime_main.py")
         shutil.copy(ROOT / "infra/banking/runtime_main.py", target / "banking_runtime_main.py")
         shutil.copy(ROOT / "infra/journey/runtime_main.py", target / "journey_runtime_main.py")
         shutil.copy(ROOT / "infra/banking/seed_handler.py", target / "banking_seed_handler.py")

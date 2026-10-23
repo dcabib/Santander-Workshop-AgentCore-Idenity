@@ -1,4 +1,4 @@
-"""IaC do notebook 10: gera templates locais, sem acessar contas AWS."""
+"""IaC do notebook 11: gera templates locais, sem acessar contas AWS."""
 
 import json
 import sys
@@ -85,7 +85,7 @@ def runtime_resource(name, service, environment, authorizer, role_name="RuntimeR
 
 def platform():
     t = template(
-        "Notebook 10 - platform Gateway, OAuth M2M, Policy engine, Guardrail",
+        "Notebook 11 - platform Gateway, OAuth M2M, Policy engine, Guardrail",
         {
             "Project": param("banking-demo"),
             "DiscoveryUrl": param(),
@@ -176,7 +176,7 @@ def platform():
     )
     r["GuardrailVersion"] = resource(
         "AWS::Bedrock::GuardrailVersion",
-        {"GuardrailIdentifier": ref("Guardrail"), "Description": "Notebook 10 - synthetic banking"},
+        {"GuardrailIdentifier": ref("Guardrail"), "Description": "Notebook 11 - synthetic banking"},
     )
     # Data-plane delivery pertence ao stack; o notebook apenas consulta seu status.
     r["GatewayLog"] = resource(
@@ -224,7 +224,7 @@ def platform():
 def lob(name):
     fixtures = data_file("fixtures.json")[name]
     t = template(
-        "Notebook 10 - " + name + " MCP and synthetic DynamoDB fixtures",
+        "Notebook 11 - " + name + " MCP and synthetic DynamoDB fixtures",
         {
             **artifact_params(),
             "Project": param("banking-demo"),
@@ -335,7 +335,7 @@ def lob(name):
 
 def bindings():
     t = template(
-        "Notebook 10 - targets M2M, active Cedar, governed Registry",
+        "Notebook 11 - targets M2M, active Cedar, governed Registry",
         {
             **artifact_params(),
             "Project": param("banking-demo"),
@@ -521,7 +521,7 @@ def bindings():
 
 def agent():
     t = template(
-        "Notebook 10 - Strands agent hosted in platform Runtime",
+        "Notebook 11 - Strands agent hosted in platform Runtime",
         {
             **artifact_params(),
             "DiscoveryUrl": param(),

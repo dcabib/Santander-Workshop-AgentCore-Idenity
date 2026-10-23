@@ -1,0 +1,457 @@
+[IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+.............................                                            [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/bedrock_agentcore/runtime/context.py:17
+  /Users/daniabib/Desktop/tmp/Santander-Workshop-AgentCore-Idenity/.venv/lib/python3.13/site-packages/bedrock_agentcore/runtime/context.py:17: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    class RequestContext(BaseModel):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+29 passed, 1 warning in 0.45s
+{"preflight": {"account_id": "496714466045", "region": "us-east-1", "profile": "default", "principal_arn": "arn:aws:sts::496714466045:assumed-role/FullAccessRole/daniabib-Isengard"}}
+{"preflight": {"account_id": "496714466045", "region": "us-east-1", "profile": "default", "principal_arn": "arn:aws:sts::496714466045:assumed-role/FullAccessRole/daniabib-Isengard"}}
+{
+  "account_id": "496714466045",
+  "agent_client_id": "23mknao8op9e7chnujqk7js43a",
+  "artifacts_bucket": "santander-tf-lab-ba4e0722fef9589b1c4b69f9f9",
+  "denied_client_id": "5mhvjifuq3hoap5e20jcijarbs",
+  "gateway_id": "santander-tf-lab-gateway-n9youh8hs2",
+  "gateway_url": "https://santander-tf-lab-gateway-n9youh8hs2.gateway.bedrock-agentcore.us-east-1.amazonaws.com/mcp",
+  "lambda_log_group": "/aws/lambda/santander-tf-lab-banking",
+  "lambda_name": "santander-tf-lab-banking",
+  "model_id": "amazon.nova-lite-v1:0",
+  "project_name": "santander-tf-lab",
+  "provider_arn": "arn:aws:bedrock-agentcore:us-east-1:496714466045:token-vault/default/oauth2credentialprovider/santander-tf-lab-oauth",
+  "provider_name": "santander-tf-lab-oauth",
+  "region": "us-east-1",
+  "runtime_arn": "arn:aws:bedrock-agentcore:us-east-1:496714466045:runtime/santander_tf_lab_agent-DNGFGq305A",
+  "runtime_id": "santander_tf_lab_agent-DNGFGq305A",
+  "runtime_log_group": "/aws/bedrock-agentcore/runtimes/santander_tf_lab_agent-DNGFGq305A-DEFAULT",
+  "runtime_logs_managed": true,
+  "runtime_zip_sha256": "968e5d1bbdb9f6a4a8a84f6e55e8a98664b7759502a6d9c4b092c99267a95fa9",
+  "scope": "santander-tf-lab/tools.read",
+  "token_endpoint": "https://santander-tf-lab-496714466045.auth.us-east-1.amazoncognito.com/oauth2/token",
+  "tool_name": "banking___get_customer_profile",
+  "user_pool_id": "us-east-1_gMmSrcuQN",
+  "workload_arn": "arn:aws:bedrock-agentcore:us-east-1:496714466045:workload-identity-directory/default/workload-identity/santander-tf-lab-workload",
+  "workload_name": "santander-tf-lab-workload"
+}
+{
+  "status": "PASS",
+  "mode": "AWS_LIVE",
+  "tested_at": "2026-10-23T13:22:49.837362+00:00",
+  "region": "us-east-1",
+  "runtime_zip_sha256": "968e5d1bbdb9f6a4a8a84f6e55e8a98664b7759502a6d9c4b092c99267a95fa9",
+  "checks": {
+    "runtime_anonymous_denied": {
+      "status": "PASS",
+      "http_status": 403
+    },
+    "gateway_anonymous_denied": {
+      "status": "PASS",
+      "http_status": 401
+    },
+    "gateway_invalid_token_denied": {
+      "status": "PASS",
+      "http_status": 401
+    },
+    "gateway_wrong_client_denied": {
+      "status": "PASS",
+      "http_status": 403
+    },
+    "identity_to_gateway_mcp": {
+      "status": "PASS",
+      "tools": [
+        "banking___get_customer_profile"
+      ]
+    },
+    "unknown_customer_error_observed": {
+      "status": "PASS",
+      "scope": "ERROR_WITHOUT_PROFILE",
+      "cause": "NOT_PROVEN",
+      "error_category": "GATEWAY_INTERNAL_ERROR"
+    },
+    "runtime_C001": {
+      "status": "PASS",
+      "runtime_request_id": "73fa90b7-dc51-4ee8-bd67-9ed5a8e97263",
+      "result": {
+        "mode": "AWS_LIVE",
+        "execution": "deterministic",
+        "identity_flow": "M2M",
+        "workload_name": "santander-tf-lab-workload",
+        "provider_name": "santander-tf-lab-oauth",
+        "records": [
+          {
+            "data_classification": "SYNTHETIC",
+            "customer_id": "C001",
+            "display_name": "Cliente sintético Aurora",
+            "segment": "varejo",
+            "balance_brl": "1250.00",
+            "risk_band": "baixo",
+            "execution": {
+              "gateway_request_id": "54a0c661-1243-49fa-b384-382849921cdf",
+              "lambda_request_id": "d3a02e54-ab3e-4586-ba17-48301ada0a47",
+              "tool": "banking___get_customer_profile"
+            }
+          }
+        ],
+        "tool_calls": [
+          "banking___get_customer_profile"
+        ]
+      }
+    },
+    "runtime_C002": {
+      "status": "PASS",
+      "runtime_request_id": "803a346d-9db4-4a9e-9450-b799c1c96011",
+      "result": {
+        "mode": "AWS_LIVE",
+        "execution": "deterministic",
+        "identity_flow": "M2M",
+        "workload_name": "santander-tf-lab-workload",
+        "provider_name": "santander-tf-lab-oauth",
+        "records": [
+          {
+            "data_classification": "SYNTHETIC",
+            "customer_id": "C002",
+            "display_name": "Cliente sintético Horizonte",
+            "segment": "empresas",
+            "balance_brl": "8700.00",
+            "risk_band": "moderado",
+            "execution": {
+              "gateway_request_id": "f6767b66-2f1e-43ec-be4e-413207cc126a",
+              "lambda_request_id": "073bbdce-68b3-4c7d-a6f5-48c25edabae3",
+              "tool": "banking___get_customer_profile"
+            }
+          }
+        ],
+        "tool_calls": [
+          "banking___get_customer_profile"
+        ]
+      }
+    }
+  },
+  "llm": "NOT_RUN"
+}
+{
+  "status": "PASS",
+  "mode": "AWS_LIVE",
+  "tested_at": "2026-10-23T13:23:10.920991+00:00",
+  "region": "us-east-1",
+  "runtime_zip_sha256": "968e5d1bbdb9f6a4a8a84f6e55e8a98664b7759502a6d9c4b092c99267a95fa9",
+  "checks": {
+    "runtime_anonymous_denied": {
+      "status": "PASS",
+      "http_status": 403
+    },
+    "gateway_anonymous_denied": {
+      "status": "PASS",
+      "http_status": 401
+    },
+    "gateway_invalid_token_denied": {
+      "status": "PASS",
+      "http_status": 401
+    },
+    "gateway_wrong_client_denied": {
+      "status": "PASS",
+      "http_status": 403
+    },
+    "identity_to_gateway_mcp": {
+      "status": "PASS",
+      "tools": [
+        "banking___get_customer_profile"
+      ]
+    },
+    "unknown_customer_error_observed": {
+      "status": "PASS",
+      "scope": "ERROR_WITHOUT_PROFILE",
+      "cause": "NOT_PROVEN",
+      "error_category": "GATEWAY_INTERNAL_ERROR"
+    },
+    "runtime_C001": {
+      "status": "PASS",
+      "runtime_request_id": "a1e48729-c7c1-4b13-87b4-1aa29ddad0a9",
+      "result": {
+        "mode": "AWS_LIVE",
+        "execution": "deterministic",
+        "identity_flow": "M2M",
+        "workload_name": "santander-tf-lab-workload",
+        "provider_name": "santander-tf-lab-oauth",
+        "records": [
+          {
+            "data_classification": "SYNTHETIC",
+            "customer_id": "C001",
+            "display_name": "Cliente sintético Aurora",
+            "segment": "varejo",
+            "balance_brl": "1250.00",
+            "risk_band": "baixo",
+            "execution": {
+              "gateway_request_id": "6fe41ce0-c724-490a-9572-9732470fef70",
+              "lambda_request_id": "86ab95e6-8c27-40a0-b5ac-f7607ad88b62",
+              "tool": "banking___get_customer_profile"
+            }
+          }
+        ],
+        "tool_calls": [
+          "banking___get_customer_profile"
+        ]
+      }
+    },
+    "runtime_C002": {
+      "status": "PASS",
+      "runtime_request_id": "45505ec9-5b38-444a-9430-d5726ff2288f",
+      "result": {
+        "mode": "AWS_LIVE",
+        "execution": "deterministic",
+        "identity_flow": "M2M",
+        "workload_name": "santander-tf-lab-workload",
+        "provider_name": "santander-tf-lab-oauth",
+        "records": [
+          {
+            "data_classification": "SYNTHETIC",
+            "customer_id": "C002",
+            "display_name": "Cliente sintético Horizonte",
+            "segment": "empresas",
+            "balance_brl": "8700.00",
+            "risk_band": "moderado",
+            "execution": {
+              "gateway_request_id": "c4a238f7-ea6a-4331-a1d9-55b5e4542afa",
+              "lambda_request_id": "9d18275f-6068-4816-a185-5c97afc7cf0f",
+              "tool": "banking___get_customer_profile"
+            }
+          }
+        ],
+        "tool_calls": [
+          "banking___get_customer_profile"
+        ]
+      }
+    },
+    "runtime_llm": {
+      "status": "PASS",
+      "runtime_request_id": "6f097ab3-90c2-448e-9f58-b7cb0fabea1a",
+      "result": {
+        "mode": "AWS_LIVE",
+        "execution": "llm",
+        "identity_flow": "M2M",
+        "workload_name": "santander-tf-lab-workload",
+        "provider_name": "santander-tf-lab-oauth",
+        "answer": "Os dados são sintéticos. O perfil do cliente C001 é o seguinte:\n\n- **Nome:** Cliente sintético Aurora\n- **Segmento:** Varejo\n- **Saldo em Reais:** R$ 1.250,00\n- **Faixa de Risco:** Baixo",
+        "tool_calls": [
+          "banking___get_customer_profile"
+        ],
+        "records": [
+          {
+            "data_classification": "SYNTHETIC",
+            "customer_id": "C001",
+            "display_name": "Cliente sintético Aurora",
+            "segment": "varejo",
+            "balance_brl": "1250.00",
+            "risk_band": "baixo",
+            "execution": {
+              "gateway_request_id": "c3b6a80f-c52f-474c-a5b5-13399844a42f",
+              "lambda_request_id": "02ee69a6-5869-4d1b-b004-350cbd8271fb",
+              "tool": "banking___get_customer_profile"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "llm": "PASS"
+}
+{"preflight": {"account_id": "496714466045", "region": "us-east-1", "profile": "default", "principal_arn": "arn:aws:sts::496714466045:assumed-role/FullAccessRole/daniabib-Isengard"}}
+data.aws_caller_identity.current: Reading...
+data.aws_partition.current: Reading...
+aws_cloudwatch_log_group.lambda: Refreshing state... [id=/aws/lambda/santander-tf-lab-banking]
+aws_bedrockagentcore_workload_identity.agent: Refreshing state... [name=santander-tf-lab-workload]
+aws_iam_role.lambda: Refreshing state... [id=santander-tf-lab-tool]
+data.aws_partition.current: Read complete after 0s [id=aws]
+aws_s3_bucket.artifacts: Refreshing state... [id=santander-tf-lab-ba4e0722fef9589b1c4b69f9f9]
+aws_cognito_user_pool.lab: Refreshing state... [id=us-east-1_gMmSrcuQN]
+data.aws_caller_identity.current: Read complete after 0s [id=496714466045]
+data.aws_iam_policy_document.agentcore_trust: Reading...
+data.aws_iam_policy_document.agentcore_trust: Read complete after 0s [id=2361468104]
+aws_iam_role.gateway: Refreshing state... [id=santander-tf-lab-gateway]
+aws_iam_role.runtime: Refreshing state... [id=santander-tf-lab-runtime]
+aws_cognito_resource_server.tools: Refreshing state... [id=us-east-1_gMmSrcuQN|santander-tf-lab]
+aws_cognito_user_pool_domain.lab: Refreshing state... [id=santander-tf-lab-496714466045]
+aws_cognito_user_pool_client.machine["unauthorized"]: Refreshing state... [id=5mhvjifuq3hoap5e20jcijarbs]
+aws_cognito_user_pool_client.machine["agent"]: Refreshing state... [id=23mknao8op9e7chnujqk7js43a]
+aws_iam_role_policy.lambda: Refreshing state... [id=santander-tf-lab-tool:terraform-af50ebdd6d9967b191410586cd]
+aws_bedrockagentcore_oauth2_credential_provider.gateway: Refreshing state... [name=santander-tf-lab-oauth]
+aws_lambda_function.banking: Refreshing state... [id=santander-tf-lab-banking]
+aws_iam_role_policy.gateway: Refreshing state... [id=santander-tf-lab-gateway:terraform-02c32fb8beec32a3584a39978f]
+aws_bedrockagentcore_gateway.banking: Refreshing state... [name=santander-tf-lab-gateway]
+aws_bedrockagentcore_gateway_target.banking: Refreshing state... [name=banking]
+aws_s3_bucket_policy.tls: Refreshing state... [id=santander-tf-lab-ba4e0722fef9589b1c4b69f9f9]
+aws_s3_bucket_versioning.artifacts: Refreshing state... [id=santander-tf-lab-ba4e0722fef9589b1c4b69f9f9]
+aws_iam_role_policy.runtime: Refreshing state... [id=santander-tf-lab-runtime:terraform-cda5b9a9e57945bfdd8140a2ae]
+aws_s3_bucket_public_access_block.artifacts: Refreshing state... [id=santander-tf-lab-ba4e0722fef9589b1c4b69f9f9]
+aws_s3_bucket_server_side_encryption_configuration.artifacts: Refreshing state... [id=santander-tf-lab-ba4e0722fef9589b1c4b69f9f9]
+aws_s3_object.runtime: Refreshing state... [id=santander-tf-lab-ba4e0722fef9589b1c4b69f9f9/runtime/968e5d1bbdb9f6a4a8a84f6e55e8a98664b7759502a6d9c4b092c99267a95fa9.zip]
+aws_bedrockagentcore_agent_runtime.agent: Refreshing state...
+aws_cloudwatch_log_group.runtime[0]: Refreshing state... [id=/aws/bedrock-agentcore/runtimes/santander_tf_lab_agent-DNGFGq305A-DEFAULT]
+
+No changes. Your infrastructure matches the configuration.
+
+Terraform has compared your real infrastructure against your configuration
+and found no differences, so no changes are needed.
+{"drift": "NONE"}
+{
+  "status": "PASS",
+  "mode": "AWS_LIVE",
+  "started_at": "2026-10-23T13:22:30.369362+00:00",
+  "source_sha256": "193859b1367aed4196376944fa154d43b600eef91036fefb33cb99ed3ae19d1d",
+  "executed_notebook": "evidence/executed/09_terraform_runtime_gateway_identity.aws.ipynb",
+  "deploy_and_destroy": "DISABLED",
+  "cleanup_local": "PASS",
+  "cleanup_cloud": "NOT_RUN",
+  "finished_at": "2026-10-23T13:23:20.619016+00:00",
+  "executed_code_cells": 24
+}
+{
+  "notebook": "09_terraform_runtime_gateway_identity.ipynb",
+  "mode": "AWS_LIVE",
+  "checks": [
+    {
+      "requirement": "runtime_anonymous_denied: status HTTP observado",
+      "matches": true,
+      "observed": 403
+    },
+    {
+      "requirement": "gateway_anonymous_denied: status HTTP observado",
+      "matches": true,
+      "observed": 401
+    },
+    {
+      "requirement": "gateway_invalid_token_denied: status HTTP observado",
+      "matches": true,
+      "observed": 401
+    },
+    {
+      "requirement": "gateway_wrong_client_denied: status HTTP observado",
+      "matches": true,
+      "observed": 403
+    },
+    {
+      "requirement": "Catálogo MCP real da trilha",
+      "matches": true,
+      "observed": [
+        "banking___get_customer_profile"
+      ]
+    },
+    {
+      "requirement": "C999 permanece erro sem causa comprovada",
+      "matches": true,
+      "observed": {
+        "status": "PASS",
+        "scope": "ERROR_WITHOUT_PROFILE",
+        "cause": "NOT_PROVEN",
+        "error_category": "GATEWAY_INTERNAL_ERROR"
+      }
+    },
+    {
+      "requirement": "runtime_C001: dados literais previstos",
+      "matches": true,
+      "observed": {
+        "data_classification": "SYNTHETIC",
+        "customer_id": "C001",
+        "display_name": "Cliente sintético Aurora",
+        "segment": "varejo",
+        "balance_brl": "1250.00",
+        "risk_band": "baixo",
+        "execution": {
+          "gateway_request_id": "6fe41ce0-c724-490a-9572-9732470fef70",
+          "lambda_request_id": "86ab95e6-8c27-40a0-b5ac-f7607ad88b62",
+          "tool": "banking___get_customer_profile"
+        }
+      }
+    },
+    {
+      "requirement": "runtime_C001: IDs provam execução Lambda em CloudWatch",
+      "matches": true,
+      "observed": {
+        "execution": {
+          "gateway_request_id": "6fe41ce0-c724-490a-9572-9732470fef70",
+          "lambda_request_id": "86ab95e6-8c27-40a0-b5ac-f7607ad88b62",
+          "tool": "banking___get_customer_profile"
+        },
+        "log_events": [
+          "39979923673389246146845477786273051574878121046669000705"
+        ]
+      }
+    },
+    {
+      "requirement": "runtime_C002: dados literais previstos",
+      "matches": true,
+      "observed": {
+        "data_classification": "SYNTHETIC",
+        "customer_id": "C002",
+        "display_name": "Cliente sintético Horizonte",
+        "segment": "empresas",
+        "balance_brl": "8700.00",
+        "risk_band": "moderado",
+        "execution": {
+          "gateway_request_id": "c4a238f7-ea6a-4331-a1d9-55b5e4542afa",
+          "lambda_request_id": "9d18275f-6068-4816-a185-5c97afc7cf0f",
+          "tool": "banking___get_customer_profile"
+        }
+      }
+    },
+    {
+      "requirement": "runtime_C002: IDs provam execução Lambda em CloudWatch",
+      "matches": true,
+      "observed": {
+        "execution": {
+          "gateway_request_id": "c4a238f7-ea6a-4331-a1d9-55b5e4542afa",
+          "lambda_request_id": "9d18275f-6068-4816-a185-5c97afc7cf0f",
+          "tool": "banking___get_customer_profile"
+        },
+        "log_events": [
+          "39979923772962073458284710113230033662253055170871558149"
+        ]
+      }
+    },
+    {
+      "requirement": "runtime_llm: dados literais previstos",
+      "matches": true,
+      "observed": {
+        "data_classification": "SYNTHETIC",
+        "customer_id": "C001",
+        "display_name": "Cliente sintético Aurora",
+        "segment": "varejo",
+        "balance_brl": "1250.00",
+        "risk_band": "baixo",
+        "execution": {
+          "gateway_request_id": "c3b6a80f-c52f-474c-a5b5-13399844a42f",
+          "lambda_request_id": "02ee69a6-5869-4d1b-b004-350cbd8271fb",
+          "tool": "banking___get_customer_profile"
+        }
+      }
+    },
+    {
+      "requirement": "runtime_llm: IDs provam execução Lambda em CloudWatch",
+      "matches": true,
+      "observed": {
+        "execution": {
+          "gateway_request_id": "c3b6a80f-c52f-474c-a5b5-13399844a42f",
+          "lambda_request_id": "02ee69a6-5869-4d1b-b004-350cbd8271fb",
+          "tool": "banking___get_customer_profile"
+        },
+        "log_events": [
+          "39979923873716840265246065466688408818078352454891077641"
+        ]
+      }
+    },
+    {
+      "requirement": "Resposta do agente usa cliente, saldo e risco retornados",
+      "matches": true,
+      "observed": "Os dados são sintéticos. O perfil do cliente C001 é o seguinte:\n\n- **Nome:** Cliente sintético Aurora\n- **Segmento:** Varejo\n- **Saldo em Reais:** R$ 1.250,00\n- **Faixa de Risco:** Baixo"
+    },
+    {
+      "requirement": "Fonte testada não mudou",
+      "matches": true
+    }
+  ],
+  "source_sha256": "193859b1367aed4196376944fa154d43b600eef91036fefb33cb99ed3ae19d1d",
+  "tested_at": "2026-10-23T13:23:22.881012+00:00",
+  "status": "MATCH"
+}

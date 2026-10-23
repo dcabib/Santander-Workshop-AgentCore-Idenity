@@ -13,7 +13,7 @@
 <rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
 <rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
 <text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
-<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  12</tspan>
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  14</tspan>
 </text>
 <text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
 <tspan x="64" dy="0">Uma chamada entre áreas, até a fonte.</tspan>
@@ -39,7 +39,7 @@
 <tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
 </text>
 <text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
-<tspan x="1536" dy="0">LAB 12</tspan>
+<tspan x="1536" dy="0">14 / 16</tspan>
 </text>
 <rect x="64" y="219" width="460" height="90" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
 <rect x="78" y="240" width="48" height="48" rx="12" fill="#ECF3FF"/>

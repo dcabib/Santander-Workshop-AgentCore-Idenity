@@ -1,146 +1,115 @@
-# Notebook 10 — Um agente central, três LOBs e quatro contas
+# Laboratório 11 — um agente consulta três áreas de negócio
 
-Abra [`10_blog_multi_account_gateway_mcp.ipynb`](../../notebooks/10_blog_multi_account_gateway_mcp.ipynb).
-Ele adapta o [artigo AWS de 24/09/2026](https://aws.amazon.com/blogs/machine-learning/build-a-multi-account-ai-agent-with-agentcore-gateway-and-mcp/)
-para uma demonstração guiada pelo Jupyter. O notebook é a interface; o agente
-Strands roda no AgentCore Runtime da conta de plataforma.
+Após compreender a [topologia entre contas no notebook 10](../../notebooks/10_santander_multi_conta.ipynb),
+vamos hospedar um agente central e distribuir suas ferramentas entre Retail,
+Transaction e Lending. A pergunta agora é: como consultar capacidades mantidas
+por equipes diferentes sem conceder ao agente acesso direto a todas as bases?
 
-![Quatro contas com JWT até o Gateway e OAuth M2M nos MCPs das LOBs](arquitetura.png)
+[Abrir notebook 11](../../notebooks/11_blog_multi_account_gateway_mcp.ipynb) ·
+[Voltar à jornada](../jornada.md)
 
-## O que está implementado
+![Agente central, Gateway e três MCPs em contas distintas](arquitetura.png)
 
-| Parte | Implementação nesta pasta |
+## Entender o fluxo
+
+O agente Strands roda no AgentCore Runtime da plataforma. Recebe o JWT humano
+Okta e o encaminha ao Gateway. A Policy avalia essa identidade e a ferramenta.
+Identity obtém uma credencial OAuth M2M para chamar o Runtime MCP da área.
+Cada MCP usa sua role IAM para consultar as tabelas locais; Lending também
+consulta uma Knowledge Base existente.
+
+A delegação humana termina no Gateway central. As fontes recebem chamadas
+com identidades técnicas. Esse detalhe será a motivação do
+[laboratório 12](../federation/README.md), que preserva o usuário até os MCPs.
+
+| Componente | O que observar |
 |---|---|
-| Plataforma | Gateway MCP com busca semântica, Identity OAuth `CLIENT_CREDENTIALS`, Policy `ENFORCE`, Guardrail e log delivery. |
-| Agent Runtime | Strands + Bedrock; recebe o JWT do usuário no header `Authorization` e o encaminha ao Gateway. |
-| Retail | Runtime MCP, tabelas Customers/Accounts/Balances e fixtures sintéticas da referência. |
-| Transaction | Runtime MCP, tabelas Payments/Beneficiaries e fixtures sintéticas da referência. |
-| Lending | Runtime MCP, tabelas Loans/CreditScores/EMISchedule e `Retrieve` em uma KB **já existente nessa conta**. |
-| Registry | Três registros MCP aprovados por recursos CloudFormation, `AWS_IAM`, publicação e aprovação com roles separadas. |
-| Notebook | Preflight das quatro contas, preparação de parâmetros, execução opcional do pipeline IaC, JWT verificado, MCP real, negativa Cedar, RAG, agente hospedado e evidência sanitizada. |
+| Runtime central | Ciclo Strands/Bedrock: escolher ferramenta, ler resultado e responder |
+| Gateway e Policy | Ferramentas disponíveis e autorização da chamada |
+| Identity | Troca `CLIENT_CREDENTIALS` sem entregar o segredo ao agente |
+| Retail e Transaction | Consultas DynamoDB pelas roles locais |
+| Lending | Consultas de crédito e `Retrieve` na KB local |
+| Registry | Três capacidades aprovadas, consumidas por IAM |
+| Guardrail | Avaliação explícita de conteúdo; não substitui a Policy de ferramentas |
 
-Os **16 schemas** do repositório estão expostos. O roteiro usa as 12 ferramentas
-de consulta/cálculo; as três de escrita ficam sem `permit` e sem permissões IAM
-de escrita. `delete_customer` tem `forbid` explícito e continua sendo o stub não
-destrutivo da referência. A simulação de transferência do artigo não integra
-este roteiro: ela usa várias chamadas sem uma transação distribuída.
+São expostos 16 schemas. O exercício usa as 12 ferramentas de consulta/cálculo;
+as três de escrita ficam sem `permit` e sem IAM de escrita. `delete_customer`
+é um stub não destrutivo com `forbid` explícito. O roteiro não executa transferência.
 
-As chamadas aos serviços são reais. Executar o notebook com `RUN_AWS=False`
-valida arquivos e contratos localmente e marca as integrações como `NOT_RUN`;
-não fabrica respostas do Bedrock, DynamoDB, Registry ou Gateway.
+## Preparar as dependências
 
-## Pré-requisitos
+São necessárias quatro contas de laboratório distintas na mesma região,
+perfis de implantação e acesso ao modelo Bedrock na plataforma. Para inference
+profiles entre regiões, declare no IAM o profile e todos os ARNs de modelos
+destino retornados por `get-inference-profile`.
 
-1. Quatro contas de sandbox distintas, na organização destinada ao laboratório,
-   com perfis AWS CLI e região habilitada para AgentCore/Registry.
-2. Acesso ao modelo Bedrock na conta de plataforma. Em inferência entre regiões,
-   incluir no IAM o ARN do inference profile e **todos os ARNs de modelos destino**
-   devolvidos por `bedrock get-inference-profile`. O arquivo de exemplo não adivinha
-   esse conjunto.
-3. Okta custom authorization server, audiência `lobfederation`, scope
-   `lobfederation.invoke`, aplicação de login humano e aplicação M2M com
-   `client_credentials`. As identidades são um pré-requisito gerido pelo IaC do
-   tenant; este notebook não cria usuários ou aplicações Okta.
-4. Segredo M2M no Secrets Manager da plataforma, gerido pelo IaC de identidade,
-   no formato `{"client_secret": "..."}`. A configuração do notebook contém
-   **somente o ARN**. Se usar CMK, adicionar ao IaC o acesso à chave específica.
-5. Uma Bedrock Knowledge Base ativa e já ingerida na conta Lending, com documentos
-   **sintéticos** de políticas de crédito. A implementação consulta a KB pelo
-   execution role local. Bucket, PDFs, índice vetorial e ingestão são
-   responsabilidades do IaC da fonte de dados e não são provisionados aqui.
+O IdP Okta precisa de custom authorization server, audiência `lobfederation`,
+scope `lobfederation.invoke`, aplicação de login e cliente M2M. O segredo M2M
+fica no Secrets Manager da plataforma como JSON com chave `client_secret`.
+Essas identidades e seu consentimento pertencem ao IaC do tenant.
 
-O notebook substitui React/ECS/CloudFront do artigo. A aplicação web, a criação
-da KB/OpenSearch e a configuração de avaliações contínuas não são parte desta
-adaptação; a topologia central + três MCPs, a autenticação e as consultas estão.
-
-## Preparar localmente
+Lending precisa de uma KB ativa e já ingerida com documentos sintéticos.
+A KB, seus documentos e o armazenamento vetorial são pré-requisitos sob o IaC
+da fonte. O laboratório consulta essa base, mas não a cria.
 
 ```bash
 uv sync --frozen --extra banking
-uv run --extra banking python infra/banking/generate.py
-uv run --extra banking cfn-lint infra/banking/templates/*.json
-uv run --extra banking python scripts/build_artifacts.py --banking
+uv run --frozen --extra banking python infra/banking/generate.py
+uv run --frozen cfn-lint infra/banking/templates/*.json
+uv run --frozen --extra banking python scripts/build_artifacts.py --banking
+cp config/banking.example.json config/local.banking.json
 ```
 
-Selecione `.venv/bin/python` como kernel. Copie
-[`config/banking.example.json`](../../config/banking.example.json) para
-`config/local.banking.json` e preencha os identificadores. O token humano é
-solicitado por `getpass` somente na etapa de execução; não o escreva no JSON.
+Preencha somente identificadores e ARNs no JSON. O token é solicitado em memória
+por `getpass`. O build local produz o ZIP Linux ARM64/Python 3.12 usado pelos
+Runtimes e providers.
 
-O build usa o lockfile e gera `build/banking.zip` para Python 3.12/Linux ARM64.
-O artefato serve aos Runtimes e providers; seu hash é conferido pelo pipeline.
+## Implantar por fases
 
-## Implantar pelo notebook
+No notebook, `RUN_AWS=True` habilita acesso AWS. Selecione `DEPLOY_PHASE` na ordem
+abaixo e execute novamente configuração, sessões e preparação a cada fase.
 
-Ative `RUN_AWS=True`. Use `DEPLOY_PHASE` na seguinte ordem, executando novamente
-as células de configuração, sessões e preparação a cada etapa:
+| Fase | Resultado |
+|---|---|
+| `bootstrap` | Bucket de artefatos em cada conta |
+| `platform` | Gateway, provider M2M, engine, Guardrail e logs |
+| `lobs` | Tabelas, fixtures e Runtimes das três áreas |
+| `bindings` | Targets, políticas e Registry com registros aprovados |
+| `agent` | Runtime Strands central |
 
-| Fase | Contas | Resultado |
-|---|---|---|
-| `bootstrap` | As quatro | Buckets de artefato versionados e privados. |
-| `platform` | Plataforma | Gateway, provider M2M, engine, Guardrail e logs. Ainda sem tools permitidas. |
-| `lobs` | As três LOBs | Tabelas, fixtures e Runtimes restritos ao workload do Gateway. Valida KB Lending por leitura. |
-| `bindings` | Plataforma | Targets, políticas ativas e Registry com registros aprovados. |
-| `agent` | Plataforma | Runtime Strands com acesso ao Bedrock, Registry e Guardrail. |
+A preparação lê outputs e gera parâmetros concretos. `RUN_PIPELINE=False`
+somente mostra comandos e grava arquivos locais. Com `RUN_PIPELINE=True`, o
+wrapper publica artefatos e prepara change sets; `APPLY_CHANGESET=True` aplica
+as mudanças pelo CloudFormation. Revise cada conjunto antes da aplicação.
+Ao terminar, volte `DEPLOY_PHASE=None` e execute o preflight completo.
 
-`prepare_phase` lê os outputs anteriores e escreve os parâmetros concretos em
-`config/local.banking-*.json`. Mostra o comando antes de executá-lo.
+## Verificar o aprendizado
 
-- `RUN_PIPELINE=False`: apenas mostra os comandos e grava parâmetros locais.
-- `RUN_PIPELINE=True`, `APPLY_CHANGESET=False`: publica artefato e prepara change sets.
-- `RUN_PIPELINE=True`, `APPLY_CHANGESET=True`: aplica por CloudFormation.
+Okta identifica o cliente com `cid`. Os authorizers usam `CustomClaims` para
+verificá-lo; `AllowedClients`, que verifica `client_id`, não é equivalente.
+O Gateway deve aceitar apenas os endpoints e scopes declarados. O agente
+confere os registros aprovados e não envia tokens a URLs arbitrárias.
 
-Revise os change sets no CloudFormation antes de aplicar. Para um retry, ajuste
-o template/parâmetros e use o mesmo pipeline. Não use `deploy.sh`, `cleanup.sh`,
-`setup_gateway.py`, `register_agents.py` ou seeds avulsos do upstream: parte de
-suas mutações não é gerida por CloudFormation.
-
-Após implantação, configure `DEPLOY_PHASE=None`. O preflight exige a topologia
-completa e `ENFORCE`. Só então as células de invocação são habilitadas.
-
-## O que observar no ensaio
-
-- **Identity:** Okta usa `cid`. Os authorizers verificam essa claim explicitamente
-  com `CustomClaims`; `AllowedClients` verifica `client_id` e não deve ser usado
-  como substituto de `cid`. A allowlist de headers passa `Authorization` para o
-  agente JWT, conforme a [documentação de Runtime](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-header-allowlist.html).
-- **Gateway:** três endpoints em contas distintas; todos os targets usam o mesmo
-  provider M2M e scope aprovado. Nenhum segredo M2M entra no agente.
-- **Policy:** lê o principal humano antes de obter a credencial técnica downstream.
-  Um erro MCP genérico ou erro de login não comprova uma negativa Cedar.
-- **Registry:** o agente requer as três capacidades aprovadas e só usa o endpoint
-  de Gateway configurado. Não envia bearer para URLs arbitrárias do catálogo.
-- **Dados:** DynamoDB e KB continuam nas LOBs; os resultados consultados passam
-  para a plataforma e para o contexto do modelo.
-- **M2M:** a identidade humana **não** chega às fontes neste fluxo. Para aplicar
-  grants por usuário nas fontes seria necessário um cenário OBO separado.
-
-O teste de agente exige resultados de ferramentas das três LOBs. Se o modelo não
-as consultar ou alguma chamada falhar, o notebook não declara o cenário aprovado.
-A evidência exportada contém nomes de tools/status e hash da resposta; não contém
-JWT, prompts, argumentos nem conteúdo bancário.
+Execute consultas nas três áreas, observe uma negativa Cedar específica e
+faça a pergunta ao agente hospedado. O teste exige resultados de ferramentas
+das três LOBs. Uma resposta textual sem essas chamadas não aprova o exercício.
+O resumo exportado contém ferramentas, status e hashes, sem JWT ou conteúdo
+bancário. Com `RUN_AWS=False`, as integrações permanecem `NOT_RUN`.
 
 ## Remoção
 
-Use a seção **Cleanup** do notebook ou o wrapper
-`scripts/cleanup.py --scenario banking`, conforme o [procedimento](../cleanup.md). O padrão
-somente lê o stack e mostra o plano; executar a remoção exige seu ARN exato.
+Remova `agent` → `bindings` → três LOBs → `platform` → quatro `bootstrap`, usando
+`cleanup.py --scenario banking` e o [procedimento de limpeza](../cleanup.md).
+Tabelas e buckets usam `Retain`; KB e identidades externas continuam sob seus
+respectivos proprietários.
 
-Remova pelo CloudFormation nesta ordem: `agent`, `bindings`, três stacks de LOB,
-`platform`, quatro `bootstrap`. Tabelas e buckets têm `Retain`; isso mantém os
-dados/artefatos até uma decisão explícita de remoção. A KB, as identidades Okta e o
-segredo M2M pertencem aos stacks que já os gerenciam.
+No [laboratório 12](../federation/README.md), cada área ganha sua própria Policy
+no Gateway, e comparamos negativas em duas fronteiras.
 
-## Origem
+## Referências
 
-Código e fixtures dos MCPs adaptados de
-[`sample-amazon-bedrock-agentcore-banking-mcp-multi-account`](https://github.com/aws-samples/sample-amazon-bedrock-agentcore-banking-mcp-multi-account/tree/f76491b63d005d1ad0c253396f58f67da021f94d),
-commit `f76491b63d005d1ad0c253396f58f67da021f94d`.
-Licença: [MIT-0, texto original](UPSTREAM-LICENSE). Alterações: nomes de tabelas
-prefixados, empacotamento por IaC, aplicação restrita ao Gateway, autoria de
-Registry separada de aprovação e roteiro de consultas.
-
-O IAM usa a [Service Authorization Reference de AgentCore](https://docs.aws.amazon.com/service-authorization/latest/reference/list_bedrock-agentcore.html).
-`CreateRegistry` não aceita restrição por ARN: somente essa ação do provider de
-criação usa `Resource: "*"`, limitada à região. Operações sobre registros e
-catálogos existentes usam ARNs da conta de plataforma.
+- [Artigo AWS sobre agente multi-conta](https://aws.amazon.com/blogs/machine-learning/build-a-multi-account-ai-agent-with-agentcore-gateway-and-mcp/)
+- [Autenticação de saída do Gateway](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-outbound-auth.html)
+- [Bedrock Guardrails](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html)
+- [Atribuição e adaptações dos exemplos](../../NOTICE.md)
+- [Licença original MIT-0](UPSTREAM-LICENSE)

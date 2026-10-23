@@ -15,7 +15,7 @@ def main():
         "template",
     )
     parser.add_argument(
-        "--scenario", choices=["banking", "federation", "journey"], default="banking"
+        "--scenario", choices=["banking", "federation", "journey", "rag", "registry_workflow"], default="banking"
     )
     parser.add_argument("--profile", required=True)
     parser.add_argument("--account", required=True)

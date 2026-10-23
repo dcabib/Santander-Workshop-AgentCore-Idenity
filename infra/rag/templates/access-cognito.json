@@ -1,0 +1,516 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander RAG - Cognito, AgentCore Identity and Policy, native managed KB",
+  "Parameters": {
+    "Project": {
+      "Type": "String"
+    },
+    "EngineName": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z][A-Za-z0-9_]*"
+    },
+    "KnowledgeBaseId": {
+      "Type": "String"
+    },
+    "KnowledgeBaseArn": {
+      "Type": "String"
+    },
+    "CallerPrincipalArn": {
+      "Type": "String"
+    },
+    "ModelArn": {
+      "Type": "String"
+    },
+    "UserAOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserBOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserCOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserAEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "UserBEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "UserCEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "UserPoolId": {
+      "Type": "String"
+    },
+    "LoginClientId": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "GatewayRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "aws:SourceAccount": {
+                    "Ref": "AWS::AccountId"
+                  }
+                },
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:gateway/*"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:GetKnowledgeBase",
+                    "bedrock:Retrieve"
+                  ],
+                  "Resource": {
+                    "Ref": "KnowledgeBaseArn"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetPolicyEngine"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Engine",
+                      "PolicyEngineArn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:AuthorizeAction",
+                    "bedrock-agentcore:PartiallyAuthorizeActions"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Engine",
+                        "PolicyEngineArn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:gateway/${Project}-*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Engine": {
+      "Type": "AWS::BedrockAgentCore::PolicyEngine",
+      "Properties": {
+        "Name": {
+          "Ref": "EngineName"
+        }
+      }
+    },
+    "Gateway": {
+      "Type": "AWS::BedrockAgentCore::Gateway",
+      "Properties": {
+        "Name": {
+          "Ref": "Project"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "GatewayRole",
+            "Arn"
+          ]
+        },
+        "ProtocolType": "MCP",
+        "AuthorizerType": "CUSTOM_JWT",
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Fn::Sub": "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPoolId}/.well-known/openid-configuration"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "LoginClientId"
+              }
+            ],
+            "CustomClaims": [
+              {
+                "InboundTokenClaimName": "token_use",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": "id"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "PolicyEngineConfiguration": {
+          "Arn": {
+            "Fn::GetAtt": [
+              "Engine",
+              "PolicyEngineArn"
+            ]
+          },
+          "Mode": "ENFORCE"
+        }
+      }
+    },
+    "Target": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "rag",
+        "GatewayIdentifier": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayIdentifier"
+          ]
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "GATEWAY_IAM_ROLE"
+          }
+        ],
+        "TargetConfiguration": {
+          "Mcp": {
+            "Connector": {
+              "Source": {
+                "ConnectorId": "bedrock-knowledge-bases"
+              },
+              "Enabled": [
+                "Retrieve"
+              ],
+              "Configurations": [
+                {
+                  "Name": "Retrieve",
+                  "ParameterValues": {
+                    "knowledgeBaseId": {
+                      "Ref": "KnowledgeBaseId"
+                    },
+                    "retrievalConfiguration": {
+                      "managedSearchConfiguration": {
+                        "numberOfResults": 10,
+                        "rerankingModelType": "MANAGED"
+                      }
+                    }
+                  },
+                  "ParameterOverrides": [
+                    {
+                      "Path": "$.retrievalQuery.text",
+                      "Visible": true
+                    },
+                    {
+                      "Path": "$.userContext",
+                      "Visible": true
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "AllowUserA": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "AllowUserA",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "Engine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal == AgentCore::OAuthUser::\"${UserAOid}\",\n  action == AgentCore::Action::\"rag___Retrieve\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n) when {\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPoolId}\" &&\n  principal.hasTag(\"aud\") && principal.getTag(\"aud\") == \"${LoginClientId}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"email\") && principal.getTag(\"email\") == \"${UserAEmail}\" &&\n  principal.hasTag(\"email_verified\") && principal.getTag(\"email_verified\") == \"true\" &&\n  context.input has userContext &&\n  context.input.userContext.userId == \"${UserAEmail}\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "Target"
+      ]
+    },
+    "AllowUserB": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "AllowUserB",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "Engine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal == AgentCore::OAuthUser::\"${UserBOid}\",\n  action == AgentCore::Action::\"rag___Retrieve\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n) when {\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPoolId}\" &&\n  principal.hasTag(\"aud\") && principal.getTag(\"aud\") == \"${LoginClientId}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"email\") && principal.getTag(\"email\") == \"${UserBEmail}\" &&\n  principal.hasTag(\"email_verified\") && principal.getTag(\"email_verified\") == \"true\" &&\n  context.input has userContext &&\n  context.input.userContext.userId == \"${UserBEmail}\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "Target"
+      ]
+    },
+    "AllowUserC": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "AllowUserC",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "Engine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal == AgentCore::OAuthUser::\"${UserCOid}\",\n  action == AgentCore::Action::\"rag___Retrieve\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n) when {\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPoolId}\" &&\n  principal.hasTag(\"aud\") && principal.getTag(\"aud\") == \"${LoginClientId}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"email\") && principal.getTag(\"email\") == \"${UserCEmail}\" &&\n  principal.hasTag(\"email_verified\") && principal.getTag(\"email_verified\") == \"true\" &&\n  context.input has userContext &&\n  context.input.userContext.userId == \"${UserCEmail}\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "Target"
+      ]
+    },
+    "Workload": {
+      "Type": "AWS::BedrockAgentCore::WorkloadIdentity",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-broker"
+        }
+      }
+    },
+    "CallerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Ref": "CallerPrincipalArn"
+                }
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "rag-caller",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Workload",
+                        "WorkloadIdentityArn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:InvokeModel"
+                  ],
+                  "Resource": {
+                    "Ref": "ModelArn"
+                  }
+                },
+                {
+                  "Effect": "Deny",
+                  "Action": [
+                    "bedrock:Retrieve",
+                    "bedrock:RetrieveAndGenerate",
+                    "bedrock:AgenticRetrieveStream"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "GatewayLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/vendedlogs/${Project}/gateway"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "GatewayLogSource": {
+      "Type": "AWS::Logs::DeliverySource",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "LogType": "APPLICATION_LOGS",
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayArn"
+          ]
+        }
+      }
+    },
+    "GatewayLogDestination": {
+      "Type": "AWS::Logs::DeliveryDestination",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "DestinationResourceArn": {
+          "Fn::GetAtt": [
+            "GatewayLog",
+            "Arn"
+          ]
+        },
+        "OutputFormat": "json"
+      }
+    },
+    "GatewayLogDelivery": {
+      "Type": "AWS::Logs::Delivery",
+      "Properties": {
+        "DeliverySourceName": {
+          "Ref": "GatewayLogSource"
+        },
+        "DeliveryDestinationArn": {
+          "Fn::GetAtt": [
+            "GatewayLogDestination",
+            "Arn"
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "GatewayId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayIdentifier"
+        ]
+      }
+    },
+    "GatewayArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayArn"
+        ]
+      }
+    },
+    "GatewayUrl": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayUrl"
+        ]
+      }
+    },
+    "TargetId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Target",
+          "TargetId"
+        ]
+      }
+    },
+    "PolicyEngineId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineId"
+        ]
+      }
+    },
+    "PolicyEngineArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineArn"
+        ]
+      }
+    },
+    "WorkloadName": {
+      "Value": {
+        "Fn::Sub": "${Project}-broker"
+      }
+    },
+    "CallerRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "CallerRole",
+          "Arn"
+        ]
+      }
+    },
+    "GatewayLogGroup": {
+      "Value": {
+        "Ref": "GatewayLog"
+      }
+    }
+  }
+}

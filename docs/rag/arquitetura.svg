@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Uma base. Quatro experiências de acesso.</title><desc id="desc">RAG com identidade humana e autorização antes da recuperação e da geração.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  16</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">Uma base. Quatro experiências de acesso.</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">O JWT identifica. A Policy autoriza a chamada. A ACL limita os documentos.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">LAB 16 · COGNITO + MANAGED KNOWLEDGE BASE</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">O modelo recebe apenas os trechos recuperados para a identidade autorizada.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">16 / 16</tspan>
+</text>
+<g class="node" data-x="64" data-y="265" data-w="360" data-h="180">
+<rect x="64" y="265" width="360" height="180" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="285" width="56" height="56" rx="16" fill="#EDF1F7"/>
+<g transform="translate(93 294) scale(0.7916666666666666)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="7" y="6" width="34" height="27" rx="3"/><path d="M3 40h42l-4-7H7zM18 17l-5 4 5 4m12-8 5 4-5 4"/>
+</g>
+<text class="node-text" x="158" y="319" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">Notebook do workshop</tspan>
+</text>
+<text class="node-text" x="88" y="377" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">A: Riscos · B: Fraude</tspan>
+<tspan x="88" dy="29.0">C: tudo · D: sem acesso</tspan>
+<tspan x="88" dy="29.0">Sessões independentes</tspan>
+</text>
+</g>
+<g class="node" data-x="64" data-y="565" data-w="360" data-h="155">
+<rect x="64" y="565" width="360" height="155" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="585" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(93 594) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="24" cy="14" r="8"/><path d="M8 42v-4c0-9 7-15 16-15s16 6 16 15v4"/><path d="M15 37h18"/>
+</g>
+<text class="node-text" x="158" y="619" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">Amazon Cognito</tspan>
+</text>
+<text class="node-text" x="88" y="677" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">Quatro usuários sintéticos</tspan>
+<tspan x="88" dy="29.0">JWT assinado · validade curta</tspan>
+</text>
+</g>
+<g class="node" data-x="555" data-y="265" data-w="430" data-h="180">
+<rect x="555" y="265" width="430" height="180" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="575" y="285" width="56" height="56" rx="16" fill="#FFF3E5"/>
+<g transform="translate(584 294) scale(0.7916666666666666)" fill="none" stroke="#BD650F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M17 7h14v34H17zM3 24h14m14 0h14M8 19l5 5-5 5m28-10 5 5-5 5"/><path d="M23 14h2m-2 20h2"/>
+</g>
+<text class="node-text" x="649" y="319" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="649" dy="0">Gateway + Identity</tspan>
+</text>
+<text class="node-text" x="579" y="377" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="579" dy="0">Valida emissor, audiência e JWT</tspan>
+<tspan x="579" dy="29.0">Workload identity gerenciada</tspan>
+<tspan x="579" dy="29.0">Conector nativo: Retrieve</tspan>
+</text>
+</g>
+<g class="node" data-x="555" data-y="565" data-w="430" data-h="155">
+<rect x="555" y="565" width="430" height="155" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="575" y="585" width="56" height="56" rx="16" fill="#F2EDFB"/>
+<g transform="translate(584 594) scale(0.7916666666666666)" fill="none" stroke="#7546C7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M24 3l17 7v13c0 10-8 18-17 23C15 41 7 33 7 23V10z"/><path d="M15 23l6 6 12-13"/>
+</g>
+<text class="node-text" x="649" y="619" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="649" dy="0">AgentCore Policy</tspan>
+</text>
+<text class="node-text" x="579" y="677" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="579" dy="0">Cedar em modo ENFORCE</tspan>
+<tspan x="579" dy="29.0">sub + e-mail = userContext</tspan>
+</text>
+</g>
+<g class="node" data-x="1115" data-y="265" data-w="420" data-h="180">
+<rect x="1115" y="265" width="420" height="180" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1135" y="285" width="56" height="56" rx="16" fill="#E8F7F5"/>
+<g transform="translate(1144 294) scale(0.7916666666666666)" fill="none" stroke="#087F82" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="node-text" x="1209" y="319" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1209" dy="0">Bedrock Managed KB</tspan>
+</text>
+<text class="node-text" x="1139" y="377" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1139" dy="0">Índice e embeddings gerenciados</tspan>
+<tspan x="1139" dy="29.0">ACL nativa por documento</tspan>
+<tspan x="1139" dy="29.0">Origem S3: R1/R2 e F1/F2</tspan>
+</text>
+</g>
+<g class="node" data-x="1115" data-y="565" data-w="420" data-h="155">
+<rect x="1115" y="565" width="420" height="155" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1135" y="585" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(1144 594) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="6" y="12" width="36" height="29" rx="8"/><path d="M24 12V5m-4 0h8M2 23v9m44-9v9"/><circle cx="16" cy="24" r="2.5"/><circle cx="32" cy="24" r="2.5"/><path d="M17 33h14"/>
+</g>
+<text class="node-text" x="1209" y="619" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1209" dy="0">Resposta com Bedrock</tspan>
+</text>
+<text class="node-text" x="1139" y="677" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1139" dy="0">Converse + citações</tspan>
+<tspan x="1139" dy="29.0">Sem histórico entre usuários</tspan>
+</text>
+</g>
+<path d="M 244 565 L 244 445" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="244,445 249.5,456.0 238.5,456.0" fill="#2469DD"/>
+<rect x="184.685" y="490" width="118.63000000000001" height="32" rx="8" fill="#FFFFFF"/>
+<text class="" x="244" y="510" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="600" text-anchor="middle">
+<tspan x="244" dy="0">1 · Login</tspan>
+</text>
+<path d="M 424 345 L 555 345" stroke="#2469DD" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="555,345 544.0,350.5 544.0,339.5" fill="#2469DD"/>
+<rect x="439.755" y="290" width="98.49000000000001" height="32" rx="8" fill="#FFFFFF"/>
+<text class="" x="489" y="310" fill="#2469DD" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="600" text-anchor="middle">
+<tspan x="489" dy="0">2 · JWT</tspan>
+</text>
+<path d="M 770 445 L 770 565" stroke="#7546C7" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="770,565 764.5,554.0 775.5,554.0" fill="#7546C7"/>
+<rect x="690.545" y="490" width="158.91" height="32" rx="8" fill="#FFFFFF"/>
+<text class="" x="770" y="510" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="600" text-anchor="middle">
+<tspan x="770" dy="0">3 · Autorizar</tspan>
+</text>
+<path d="M 985 345 L 1115 345" stroke="#BD650F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1115,345 1104.0,350.5 1104.0,339.5" fill="#BD650F"/>
+<rect x="1000.755" y="286" width="98.49000000000001" height="32" rx="8" fill="#FFFFFF"/>
+<text class="" x="1050" y="306" fill="#BD650F" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="600" text-anchor="middle">
+<tspan x="1050" dy="0">4 · IAM</tspan>
+</text>
+<path d="M 1325 445 L 1325 565" stroke="#087F82" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1325,565 1319.5,554.0 1330.5,554.0" fill="#087F82"/>
+<rect x="1206.06" y="491" width="237.88000000000002" height="31" rx="8" fill="#FFFFFF"/>
+<text class="" x="1325" y="510" fill="#087F82" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="600" text-anchor="middle">
+<tspan x="1325" dy="0">5 · Trechos permitidos</tspan>
+</text>
+<rect x="555" y="774" width="980" height="44" rx="22.0" fill="#F2EDFB"/>
+<text class="" x="1045.0" y="803.0" fill="#7546C7" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" text-anchor="middle">
+<tspan x="1045.0" dy="0">D é autenticado, mas sua chamada é negada antes do retrieval.</tspan>
+</text>
+</svg>

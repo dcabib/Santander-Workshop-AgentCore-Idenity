@@ -1,4 +1,4 @@
-"""Notebook 11 e diagrama: cada conta decide independentemente."""
+"""Notebook 12 e diagrama: cada conta decide independentemente."""
 
 import base64
 import shutil
@@ -9,13 +9,14 @@ import nbformat as nb
 from generate_banking_notebook import code, md
 from generate_diagrams import TINT, C, Diagram
 from notebook_cleanup import cleanup_cells
+from notebook_learning import learning_cell
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def diagram():
     page = {
-        "id": "11_gateways_por_conta_identity_policy",
+        "id": "12_gateways_por_conta_identity_policy",
         "title": "Cada conta tem sua própria porta.",
         "subtitle": "Quatro Gateways. Quatro decisões locais. O mesmo usuário em todos os saltos.",
         "status": "OBO ENTRA · ARQUITETURA AWS A VALIDAR",
@@ -91,7 +92,7 @@ def diagram():
     d.label(1070, 202, "Descoberta IAM", "registry", 15)
     path = ROOT / "docs/federation/arquitetura.svg"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(d.finish().replace("11 / 09", "LAB 11"))
+    path.write_text(d.finish().replace("11 / 09", "LAB 12"))
     renderer = shutil.which("rsvg-convert")
     if not renderer:
         raise SystemExit("Instale librsvg para gerar o PNG.")
@@ -104,7 +105,7 @@ def main():
     png = diagram()
     cells = [
         md("""
-        # 11 — Um Gateway por conta, com Identity e Policy locais
+        # 12 — Um Gateway por conta, com Identity e Policy locais
 
         **O que vamos demonstrar:** a plataforma orquestra ferramentas de três
         contas, mas cada conta decide se aceita a chamada. A pessoa é preservada
@@ -139,7 +140,7 @@ def main():
         seu próprio Identity para chamar **seu Runtime MCP**. O Runtime exige o
         workload do Gateway local. Cada Policy consulta `tid`, `oid`, `azp` e `scp`.
 
-        **Diferença para o notebook 10:** no artigo, um Gateway central chama
+        **Diferença para o notebook 11:** no artigo, um Gateway central chama
         diretamente os MCPs com M2M. Aqui os Gateways são encadeados e a delegação
         humana continua até os destinos. Os resultados retornam à plataforma.
 
@@ -196,13 +197,22 @@ def main():
         As negativas C007/C008 pertencem apenas à tool `get_profile`.
 
         Vamos executar `local_matrix()` e exibir suas decisões para comparar
-        os três clientes da tabela. A asserção final confirmará
-        `oauth_and_aws: NOT_RUN`: o resultado desta célula verifica as regras
+        os três clientes da tabela. As asserções comparam as decisões com a
+        tabela escrita, além de confirmar `oauth_and_aws: NOT_RUN`.
+        O resultado desta célula verifica as regras
         Cedar locais, enquanto os testes de identidade e dos Gateways AWS virão depois.
         """),
         code("""
         matrix = local_matrix()
         display(matrix)
+        assert [
+            (r["customer"], r["platform_policy"], r["retail_policy_isolated"], r["end_to_end_contract"])
+            for r in matrix["cases"]
+        ] == [
+            ("C003", "ALLOW", "ALLOW", "ALLOW"),
+            ("C007", "DENY", "ALLOW", "DENY"),
+            ("C008", "ALLOW", "DENY", "DENY"),
+        ], "As decisões divergem da matriz descrita"
         assert matrix["oauth_and_aws"] == "NOT_RUN"
         """),
         md("""
@@ -524,8 +534,9 @@ def main():
         user_token = None
         """),
     ]
+    cells.insert(2, learning_cell("12"))
     notebook = nb.v4.new_notebook(
-        cells=cells + cleanup_cells("11", "federation"),
+        cells=cells + cleanup_cells("12", "federation"),
         metadata={
             "kernelspec": {
                 "name": "python3",
@@ -540,7 +551,7 @@ def main():
         },
     )
     nb.validate(notebook)
-    path = ROOT / "notebooks/11_gateways_por_conta_identity_policy.ipynb"
+    path = ROOT / "notebooks/12_gateways_por_conta_identity_policy.ipynb"
     nb.write(notebook, path)
     print(path)
 

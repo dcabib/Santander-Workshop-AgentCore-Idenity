@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 11 - lending-wealth Gateway + Identity OBO + local Policy",
+  "Description": "Notebook 12 - lending-wealth Gateway + Identity OBO + local Policy",
   "Parameters": {
     "Project": {
       "Type": "String",

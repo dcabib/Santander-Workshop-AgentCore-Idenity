@@ -20,17 +20,21 @@ COMMON_NAMES = [
     "_cleanup_sys",
 ]
 LOCAL_NAMES = {
+    "07": ["flow", "packages", "keys", "package", "record", "agent_record", "rejected",
+           "rejected_key", "changed", "registry_lab", "registry_config", "review", "review_path",
+           "pipeline", "expect_denial", "result", "records", "phase", "persona", "key",
+           "kind", "record_states", "iam_rows", "RUN_AWS", "RUN_PIPELINE"],
     "00": ["versions"],
-    "01": ["names", "params", "read", "write", "session", "answer", "result"],
+    "01": ["names", "params", "read", "write", "session", "answer", "result", "payload"],
     "02": ["proof", "wrong_audience"],
     "03": ["permitted", "restricted", "before"],
     "04": ["rows", "row"],
     "05": ["cedar", "generation_id", "draft", "asset"],
     "06": ["registry", "states"],
-    "07": ["result", "local_results"],
-    "08": [],
-    "09": ["delegated", "user_jwt", "proof", "target"],
-    "10": [
+    "08": ["result", "local_results"],
+    "10": [],
+    "13": ["delegated", "user_jwt", "proof", "target"],
+    "11": [
         "schemas",
         "rows",
         "lob",
@@ -58,7 +62,7 @@ LOCAL_NAMES = {
         "evidence",
         "target",
     ],
-    "11": [
+    "12": [
         "matrix",
         "templates",
         "plans",
@@ -76,7 +80,7 @@ LOCAL_NAMES = {
         "evidence",
         "target",
     ],
-    "12": [
+    "14": [
         "matrix",
         "templates",
         "plans",
@@ -95,7 +99,66 @@ LOCAL_NAMES = {
         "case",
         "result",
     ],
-    "13": ["knowledge_report", "sources", "source", "target"],
+    "15": ["knowledge_report", "sources", "source", "target"],
+    "16": [
+        "documents",
+        "items",
+        "acl",
+        "rules",
+        "matrix",
+        "row",
+        "spoof",
+        "chunks",
+        "claims",
+        "arguments",
+        "bad_claims",
+        "tampered",
+        "model_request",
+        "templates",
+        "command",
+        "config",
+        "environment",
+        "identity_environment",
+        "authorization_boundary",
+        "admin",
+        "caller",
+        "model",
+        "identity_api",
+        "wat",
+        "issued",
+        "live_rows",
+        "live_report",
+        "started",
+        "token_a",
+        "label",
+        "expected",
+        "live_config",
+        "login_token",
+        "metadata",
+        "decision",
+        "request",
+        "source_uri",
+        "corpus",
+        "output_path",
+        "query_user",
+        "tokens",
+        "show_checks",
+        "checks",
+        "acl_checks",
+        "observed",
+        "passed",
+        "stage",
+        "injected",
+        "domain",
+        "document_id",
+        "policy_name",
+        "statement",
+        "identity_resources",
+        "data_resources",
+        "access_resources",
+        "policy_resources",
+        "EXPECTED_DOCUMENTS",
+    ],
 }
 LIVE_NAMES = [
     "sessions",
@@ -110,8 +173,34 @@ LIVE_NAMES = [
     "LIVE",
 ]
 SCENARIOS = {
+    "registry_workflow": """
+O notebook 07 tem ambiente próprio em uma conta. Remova os stacks na ordem
+**approve → submit → publish → foundation → bootstrap**, usando o prefixo do
+deploy (padrão `registry-personas`). Cada fase tem um template de mesmo nome.
+Excluir a aprovação não reverte o estado de um registro: quem remove os registros
+é o stack `publish`. Os providers ficam disponíveis até o fim de `foundation`.
+
+O bucket versionado de artefatos é preservado por `Retain`, inclusive seus custos.
+A service-linked role criada pelo serviço não é apagada pelo workshop.
+Consulte o [guia do ciclo de vida](../docs/registry/README.md#limpeza).
+""",
+    "rag": """
+O notebook 16 possui stacks próprios, em uma conta AWS. Remova na ordem:
+
+1. Template `access-cognito`, stack terminado em `-rag-access`.
+2. Template `data`, stack terminado em `-rag-data`.
+3. Template `identity`, stack terminado em `-rag-identity`.
+4. Template `bootstrap`, stack terminado em `-rag-bootstrap`.
+
+Use o prefixo escolhido no deploy e o ARN real de cada stack. A KB, sua fonte e
+o bucket de documentos usam `RetainExceptOnCreate`; o bucket de artefatos usa
+`Retain`. A remoção normal de um ambiente criado com sucesso preserva esses
+recursos e seus custos. O descarte requer uma alteração explícita no IaC.
+As quatro identidades e seus segredos são recursos exclusivos do stack
+`identity`. Consulte o [runbook do RAG](../docs/rag/README.md).
+""",
     "journey": """
-O notebook 12 possui um ambiente próprio em três contas. Remova, nesta ordem:
+O notebook 14 possui um ambiente próprio em três contas. Remova, nesta ordem:
 
 1. `origin-bindings` na origem.
 2. `riscos-agent` e `fraude-agent` na origem.
@@ -123,11 +212,11 @@ O notebook 12 possui um ambiente próprio em três contas. Remova, nesta ordem:
 Use o nome real e o ARN revisado de cada stack. O wrapper não remove os
 aplicativos Entra, a federation Databricks, tabelas, grants ou segredos
 externos. Esses recursos pertencem ao IaC dos seus proprietários.
-O notebook 13 é um exercício local; não cria recursos cloud.
+O notebook 15 é um exercício local; não cria recursos cloud.
 Consulte o [runbook integrado](../docs/journey/README.md).
 """,
     "workshop": """
-Os notebooks **00–09 compartilham o ambiente**. Remova os stacks somente
+Os notebooks **00–06, 08, 10 e 13 compartilham o ambiente**. Remova os stacks somente
 ao encerrar toda a trilha, depois de salvar as evidências.
 
 1. Atualize `origin` com `EnableRuntime=false` pelo `scripts/deploy.py`.
@@ -140,11 +229,11 @@ ao encerrar toda a trilha, depois de salvar as evidências.
 Para cada remoção, use o template correspondente e o **nome real do stack**
 implantado. Os nomes de template acima não determinam os nomes dos stacks.
 Buckets usam `Retain`; aplicações e segredos Entra seguem o Terraform que os
-gerencia. O notebook 09 não é proprietário do workspace, warehouse ou grants
+gerencia. O notebook 13 não é proprietário do workspace, warehouse ou grants
 Databricks. Consulte o [runbook da trilha](../docs/deploy.md#9-limpeza).
 """,
     "banking": """
-Ao encerrar o notebook 10, siga a ordem inversa das dependências:
+Ao encerrar o notebook 11, siga a ordem inversa das dependências:
 
 | Ordem | Templates dos stacks | Contas |
 |---|---|---|
@@ -161,7 +250,7 @@ IaC dos respectivos proprietários. Consulte o
 [runbook do cenário](../docs/banking/README.md#remoção).
 """,
     "federation": """
-Ao encerrar o notebook 11, siga a ordem inversa das dependências:
+Ao encerrar o notebook 12, siga a ordem inversa das dependências:
 
 | Ordem | Templates dos stacks | Contas |
 |---|---|---|
@@ -175,7 +264,7 @@ Ao encerrar o notebook 11, siga a ordem inversa das dependências:
 Execute uma remoção por vez e aguarde sua conclusão. Tabelas, fixtures e
 buckets têm `Retain`; identidades Entra, grants, segredos e KB são geridos
 pelos stacks de seus proprietários. Remover esta trilha não remove o
-ambiente do notebook 10. Consulte o
+ambiente do notebook 11. Consulte o
 [runbook da federação](../docs/federation/README.md) e o
 [procedimento de cleanup](../docs/cleanup.md).
 """,
@@ -187,7 +276,7 @@ def cleanup_cells(notebook_id, scenario):
     if scenario != "workshop":
         names += LIVE_NAMES
     cloud_text = f"""
-## Cleanup — recursos do laboratório
+## Limpeza — recursos do laboratório
 
 {SCENARIOS[scenario].strip()}
 
@@ -232,7 +321,7 @@ else:
 """
     names += ["_cleanup_key", "_cleanup_value"]
     local_text = """
-### Cleanup — estado local do notebook
+### Limpeza — estado local do notebook
 
 Vamos remover as variáveis de dados, tokens, clientes e configuração criadas
 por este exercício. As sessões MCP abertas com `async with` já foram encerradas

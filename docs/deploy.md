@@ -1,11 +1,27 @@
-# Implantação do laboratório
+# Implantar a bancada dos módulos 00–06, 08, 10 e 13
 
-Esta entrega foi validada **localmente**. Os comandos abaixo são o pipeline IaC
-para um sandbox identificado; não foram executados contra contas/tenant.
+Os primeiros módulos separam os conceitos para facilitar a observação local.
+Este guia permite exercitar seus equivalentes na AWS: um supervisor na conta
+A, um hub de ferramentas na conta C e um especialista Fraude na conta B.
+O Gateway central aplica Policy, Identity delega chamadas e Registry publica
+as capacidades aprovadas.
+
+Na [jornada de aprendizagem](jornada.md), a primeira implantação sugerida é o
+[laboratório 09, em uma conta](terraform/README.md). Use este ambiente quando
+quiser aprofundar os módulos iniciais e a topologia apresentada no notebook 10.
+Ele é diferente dos ambientes dos laboratórios 10, 11, 12 e 14.
+
+## Como ler o fluxo
+
+O usuário entra por uma aplicação de agente. O token destinado ao Gateway
+identifica a pessoa e a aplicação chamadora. O hub autoriza a ferramenta;
+para Graph ou Fraude, Identity obtém uma credencial destinada à API seguinte.
+A busca no Registry usa IAM/STS, enquanto a chamada de ferramenta usa JWT.
+Esses caminhos têm credenciais e responsabilidades diferentes.
 
 ## 1. Pré-requisitos
 
-Definir região com disponibilidade dos componentes, contas A/C/B, perfis AWS,
+Prepare uma região com disponibilidade dos componentes, contas A/C/B, perfis AWS,
 role do instrutor, tenant Entra e três usuários de teste: Riscos, Riscos+Fraude
 e acesso à aplicação sem grant na fonte. Os OIDs dos usuários são entradas do
 stack, sem descoberta de pessoas em diretórios produtivos.
@@ -16,11 +32,11 @@ precisa das permissões de gerenciamento de aplicações e consentimento delegad
 no tenant de teste. O helper de primeiro OBO exige `GetSecretValue` no segredo
 do agente selecionado. O Gateway só recebe acesso ao seu próprio segredo.
 
-Nenhum notebook cria recursos. Toda mudança passa pelos templates e pelo
-pipeline deste diretório. Uma falha de provider, região ou permissão deve ser
+As mudanças de infraestrutura passam pelos templates e pelo pipeline deste
+projeto. As células de exercício usam os recursos já implantados. Uma falha de provider, região ou permissão deve ser
 diagnosticada por leitura e corrigida no IaC. Não usar um SDK avulso como fallback.
 
-## 2. Identidades Entra
+## 2. Preparar as identidades Entra
 
 Use outputs do IaC existente ou o [módulo Entra](../infra/entra/README.md).
 O módulo fixa os access tokens em v2, portanto:
@@ -48,7 +64,7 @@ A asserção inicial destina-se à API do agente. O agente usa seu segredo para 
 o token do Gateway; só então `azp` representa o agente confidencial. O módulo
 não concede ao frontend público acesso delegado direto ao Gateway.
 
-## 3. Build
+## 3. Construir o artefato local
 
 ```bash
 uv sync --frozen
@@ -62,7 +78,7 @@ O build gera `build/workshop.zip` para Linux ARM64/Python 3.12 e
 `build/artifacts.json` com SHA-256. As dependências vêm do `uv.lock`.
 Lambda, providers e Runtimes usam esse artefato. Nenhum build usa AWS.
 
-## 4. Ordem dos stacks
+## 4. Entender a ordem dos stacks
 
 | Ordem | Conta | Template | Entradas e resultado |
 |---|---|---|---|
@@ -128,7 +144,7 @@ Use os outputs reais e [aws.example.json](../config/aws.example.json) para monta
 
 ## 6. Revisar e aplicar
 
-Exemplo com identificadores **a preencher**, não são comandos executados:
+Substitua os identificadores pelos valores do seu ambiente:
 
 ```bash
 uv run python scripts/deploy.py hub \
@@ -154,7 +170,7 @@ O log group Fraude é descoberto por `logs describe-log-groups` na conta B depoi
 da criação do Runtime; não inventar um nome antes de verificar. Preencha a
 configuração com o resultado.
 
-## 7. Ensaio AWS
+## 7. Executar os exercícios na AWS
 
 Defina `WORKSHOP_MODE=aws` **antes de iniciar o kernel**. Execute o preflight.
 Não execute todos os notebooks de forma não interativa em modo AWS: eles pedem
@@ -164,13 +180,21 @@ credenciais de teste em memória nos pontos de invocação.
 uv run santander-demo preflight --config config/local.json
 ```
 
-Depois siga [aceite.md](aceite.md). Uma falha de integração mantém o item pendente.
+Depois siga os [pontos de verificação](validacao.md). Compare casos permitidos
+e negados e observe a fronteira responsável. Uma falha de integração mantém
+o item pendente.
 Não trocar ENFORCE por LOG_ONLY nem remover audience/workload restrictions.
 
 ## 8. Registry: atualização, rollback e remoção
 
-CloudFormation não oferece Registry nativo na especificação consultada
-(`267.0.0`). `infra/providers/registry_handler.py` implementa:
+Esta bancada compartilhada ainda usa o namespace preview `bedrock-agentcore`
+para o Registry, com descontinuação anunciada pela AWS para 30/10/2026.
+O [laboratório 07](registry/README.md) usa o namespace atual `agent-registry`
+em um ambiente independente. Ele não migra automaticamente os catálogos desta
+bancada; consulte o [guia de migração](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/registry-faq.html).
+
+Esta implementação gerencia Registry por custom resources do CloudFormation.
+[registry_handler.py](../infra/providers/registry_handler.py) implementa:
 
 - token idempotente derivado do stack/recurso/propriedades;
 - Create e Update por substituição quando o conteúdo muda, mantendo o anterior
@@ -188,7 +212,7 @@ a propagação da busca.
 
 ## 9. Limpeza
 
-Todos os notebooks incluem cleanup de variáveis locais e uma célula de remoção
+Todos os notebooks incluem limpeza de variáveis locais e uma célula de remoção
 opcional pelo wrapper `scripts/cleanup.py`. O padrão desse wrapper é um plano
 somente leitura. Consulte [cleanup.md](cleanup.md) para preparar e executar
 uma remoção com a conta, o template e o ARN do stack conferidos.
@@ -206,3 +230,10 @@ bootstrap usam `Retain`; não esvaziar buckets/versionamento automaticamente.
 Para as aplicações/segredos de laboratório geridos pelo módulo Entra, revisar
 `terraform plan -destroy` no mesmo backend e executar pelo Terraform quando
 autorizado. Não destruir identidades ou infraestrutura compartilhada do cliente.
+
+## Aprofundar
+
+- [OBO e token exchange no Identity](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-behalf-of-token-exchange.html)
+- [Targets MCP no Gateway](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-target-MCPservers.html)
+- [Change sets do CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html)
+- [Guia de conceitos](conceitos.md)

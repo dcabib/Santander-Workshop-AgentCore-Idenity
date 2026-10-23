@@ -1,0 +1,7 @@
+{
+  "profile": "SEU_PERFIL_DE_LABORATORIO",
+  "region": "us-east-1",
+  "expected_account_id": "000000000000",
+  "project_name": "santander-tf-lab",
+  "model_id": "amazon.nova-lite-v1:0"
+}

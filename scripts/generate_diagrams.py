@@ -148,7 +148,7 @@ PAGES = [
         ],
     },
     {
-        "id": "07_registry_descoberta_execucao",
+        "id": "08_registry_descoberta_execucao",
         "pillar": "Registry",
         "title": "Encontrar uma capacidade não libera seu uso",
         "subtitle": "O supervisor descobre no Registry, valida o endpoint e invoca pelo Gateway.",
@@ -163,7 +163,7 @@ PAGES = [
         ],
     },
     {
-        "id": "08_santander_multi_conta",
+        "id": "10_santander_multi_conta",
         "pillar": "Arquitetura integrada",
         "title": "Três contas. Fronteiras explícitas.",
         "subtitle": "O supervisor está na origem; governança fica no hub; Fraude pertence a outro domínio.",
@@ -178,7 +178,7 @@ PAGES = [
         ],
     },
     {
-        "id": "09_databricks_e_evidencias",
+        "id": "13_databricks_e_evidencias",
         "pillar": "Fonte de dados",
         "title": "A fonte de dados precisa reconhecer a pessoa",
         "subtitle": "A extensão Databricks verifica identidade efetiva e grants, com uma tabela canário.",
@@ -239,7 +239,7 @@ class Diagram:
         self.text(
             64, 978, "Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos", 16, C["muted"]
         )
-        self.text(1536, 978, f"{page['id'][:2]} / 09", 16, C["muted"], anchor="end")
+        self.text(1536, 978, f"{page['id'][:2]} / 16", 16, C["muted"], anchor="end")
 
     def raw(self, text):
         self.parts.append(text)
@@ -960,10 +960,16 @@ def embed_notebooks():
 
 
 def write_gallery():
+    try:
+        from .notebook_learning import LEARNING_ORDER
+    except ImportError:
+        from notebook_learning import LEARNING_ORDER
+
     template = (ROOT / "scripts" / "templates" / "diagrams.html").read_text()
     extras = [
+        ("07_registry_personas", "registry", "Registry", "Da ideia à capacidade aprovada.", "Quatro personas acompanham um MCP e um agente.", "Separar desenvolvimento, publicação, aprovação e execução."),
         (
-            "10_blog_multi_account_gateway_mcp",
+            "11_blog_multi_account_gateway_mcp",
             "banking",
             "Gateway",
             "Um agente, três áreas, quatro contas.",
@@ -971,7 +977,7 @@ def write_gallery():
             "Comparar a identidade humana na entrada e a credencial técnica nos destinos.",
         ),
         (
-            "11_gateways_por_conta_identity_policy",
+            "12_gateways_por_conta_identity_policy",
             "federation",
             "Policy",
             "Cada conta tem sua própria porta.",
@@ -979,7 +985,7 @@ def write_gallery():
             "Entender a autonomia de autorização de cada domínio.",
         ),
         (
-            "12_cenario_santander_integrado",
+            "14_cenario_santander_integrado",
             "journey",
             "Identity",
             "Uma chamada entre áreas, até a fonte.",
@@ -987,12 +993,28 @@ def write_gallery():
             "Distinguir agentes no hub e verificar a identidade humana na fonte.",
         ),
         (
-            "13_ingestao_acl_memoria",
+            "15_ingestao_acl_memoria",
             "ingestao",
             "Registry",
             "Conhecimento compartilhado, acesso individual.",
             "Contrato local de ingestão, ACL, revogação e memória por usuário.",
             "Compartilhar o índice sem compartilhar todas as permissões.",
+        ),
+        (
+            "16_rag_managed_identity_policy",
+            "rag",
+            "Policy",
+            "Uma base, quatro experiências de acesso.",
+            "Cognito, AgentCore Identity, Policy e ACLs nativas da Managed Knowledge Base.",
+            "A vê Riscos, B vê Fraude, C vê ambos e D não acessa o RAG.",
+        ),
+        (
+            "09_terraform_runtime_gateway_identity",
+            "terraform",
+            "Gateway",
+            "A primeira implantação, em uma conta.",
+            "Terraform provisiona Runtime, Identity, Cognito, Gateway e Lambda.",
+            "Planejar, implantar e testar a identidade de aplicação antes de avançar para múltiplas contas.",
         ),
     ]
     pages = PAGES + [
@@ -1002,15 +1024,23 @@ def write_gallery():
             "title": title,
             "description": description,
             "result": result,
-            "notes": [
-                "Leia o runbook do cenário antes de habilitar a execução cloud.",
-                "Resultados locais não comprovam os serviços gerenciados.",
-            ],
+            "notes": (
+                [
+                    "Este laboratório executa somente o contrato local de documentos e memória.",
+                    "Observe a recuperação após revogar uma ACL ou excluir um documento.",
+                ]
+                if folder == "ingestao"
+                else [
+                    "Leia o guia do cenário antes de habilitar a execução na nuvem.",
+                    "Resultados locais não comprovam os serviços gerenciados.",
+                ]
+            ),
             "svg": f"../{folder}/arquitetura.svg",
-            "png": f"../{folder}/arquitetura.png",
+            "png": None if folder == "terraform" else f"../{folder}/arquitetura.png",
         }
         for name, folder, pillar, title, description, result in extras
     ]
+    pages.sort(key=lambda page: LEARNING_ORDER.index(page["id"][:2]))
     manifest = json.dumps(pages, ensure_ascii=False).replace("</", "<\\/")
     (OUT / "manifest.json").write_text(json.dumps(pages, ensure_ascii=False, indent=2) + "\n")
     (OUT / "index.html").write_text(template.replace("__DIAGRAM_MANIFEST__", manifest))

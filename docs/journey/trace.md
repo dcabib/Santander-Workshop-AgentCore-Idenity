@@ -1,66 +1,51 @@
-# Prova de ponta a ponta — procedimento de ensaio
+# Seguir uma chamada até a fonte
 
-O notebook exporta observações reais em `evidence/journey-live.json` somente
-quando executado na AWS. A versão local chama-se `journey-local.json` e declara
-`NOT_RUN`. Nenhum resultado local deve ser copiado para a evidência live.
+No [laboratório 14](README.md), quatro resultados de negócio precisam ser
+explicados: duas consultas permitidas, uma negativa na Policy e uma negativa
+na fonte. O trace conecta esses resultados aos componentes que os produziram.
 
-## Cadeia de evidências
+## O que uma resposta permite concluir
 
-| Etapa | Identificadores/evidência | O que confirma |
-|---|---|---|
-| Entrada | OID verificado convertido em `user_ref`, request UUID | Qual pessoa iniciou a chamada sem publicar seu e-mail |
-| Runtime Origem | Evento `santander_journey`, agente fixo no deployment, request UUID | Qual agente hospedado executou a orquestração |
-| OBO ao hub | JWT de saída verificado; `azp` do agente, mesmo tid/oid/claim mapeada | Delegação manteve a pessoa e identificou a aplicação |
-| Gateway central | `hub_gateway_request_ids` reais de `x-amzn-requestid` | Liga a chamada ao log do Gateway; não é request ID do Identity |
-| Conta de dados | Logs/spans com relação pai/filho ou request/trace IDs propagados | Correlaciona a fronteira B à chamada do hub |
-| MCP Databricks | `identity_query_id`, `query_id`, principal comparado exatamente | A fonte recebeu a identidade esperada e executou a query identificada |
-| Query history/audit | Registro do Databricks para o query ID, fonte, status e timestamp | Confirma a consulta na fonte e sua decisão de acesso |
+[evidence.py](../../src/santander_demo/journey/evidence.py) registra o identificador
+da requisição, usuário pseudonimizado, agente, ferramenta, hash da consulta e
+IDs HTTP ou de consulta quando disponíveis. Um ID gerado no cliente identifica
+a tentativa; sozinho, não demonstra que todos os serviços a processaram.
 
-O request ID também é enviado em `_meta` MCP. A propagação desse metadado por
-todos os serviços deve ser observada, não presumida. `gateway_log_correlation_verified`
-fica falso nos resultados automáticos. A aplicação não fabrica um trace ID
-para apresentar uma correlação que os serviços não registraram.
+| Caso | Prova necessária |
+|---|---|
+| A / Riscos | Identidade esperada na fonte e canário Riscos permitido |
+| A / Fraude | Identidade esperada na fonte e canário Fraude permitido |
+| A / Fraude → Riscos | Decisão da Policy central e ausência comprovada de execução downstream |
+| B / Riscos | Consulta de identidade permitida; canário Riscos negado por grant |
 
-Os templates entregam APPLICATION_LOGS dos três Gateways. Isso não é equivalente
-a habilitar todos os traces. Para usar spans, habilite a configuração de
-observabilidade da conta pelo seu IaC, conforme
-[AgentCore Observability](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability.html).
-O notebook não altera preferências de observabilidade da conta.
+## Correlacionar as observações
 
-## Procedimento
+1. Execute um caso e guarde o resumo sanitizado. Preserve IDs recebidos dos
+   serviços; não invente um query ID quando o MCP não o fornecer.
+2. Leia os logs dos Runtimes e dos três Gateways. Procure relações entre request
+   UUID, IDs HTTP e eventos do próximo componente. Proximidade de horário ajuda
+   a pesquisar, mas não comprova a relação sozinha.
+3. Consulte o histórico/audit do Databricks usando o ID observado. Confirme
+   usuário, consulta canário e resultado. Use o acesso de auditoria autorizado;
+   o usuário B deve continuar sem o grant que estamos testando.
+4. Para a negativa central, execute um caso permitido antes e depois. Confirme
+   que os logs chegaram e cobrem a janela completa antes de concluir que o
+   backend não foi chamado. Uma busca vazia não é prova suficiente.
+5. Registre as fontes, IDs e a conclusão por fronteira. No caso B, separe a
+   consulta de identidade da consulta ao canário: uma pode funcionar enquanto
+   a outra registra uma falha de autorização.
 
-1. Registre início/fim do teste em UTC. Execute A/Riscos e conserve a evidência
-   sanitizada. Confirme que há query ID; se o MCP omitir o ID, o trace permanece
-   incompleto e precisa de associação comprovada no audit da fonte.
-2. Consulte os logs dos três Gateways e do Runtime por APIs de leitura. Use os
-   IDs HTTP do hub e o request UUID. Busque a relação com as chamadas da conta
-   de dados; não correlacione apenas por proximidade de horário.
-3. Consulte query history/audit Databricks pelo ID observado. Confirme status,
-   usuário esperado e canário correto. Faça isso na interface/consulta aprovada
-   pelo owner; não amplie grants de B para ler logs administrativos.
-4. Guarde um registro de revisão com os IDs dos eventos/spans, query ID, fonte,
-   resultado e revisor. Redija uma conclusão com a cobertura comprovada. Não
-   edite booleans no notebook para contornar `PENDING_EVIDENCE`.
-5. Para a negativa do hub, faça positivo antes e depois. Confirme a decisão
-   específica de Policy e a ausência da chamada downstream na mesma janela,
-   com cobertura de logging completa. Uma busca vazia, sem assegurar ingestão
-   dos logs e correlação, não comprova “backend não executado”.
-6. Repita B/Riscos. Separe a consulta de identidade permitida da consulta ao
-   canário negada; a primeira deve existir no audit, a segunda pode registrar
-   falha de autorização em vez de query executada.
+## Interpretar a completude
 
-`acceptance()` é uma verificação conservadora de completude das observações
-automáticas. Ela não assina nem substitui a revisão dos logs. Até essa revisão,
-o status agregado continua **PENDING_EVIDENCE**, mesmo quando os quatro resultados
-de negócio estão corretos.
+`acceptance()` mantém `PENDING_EVIDENCE` enquanto faltam observações obrigatórias.
+Não altere os indicadores manualmente para fazer o resumo passar. Se o serviço
+não expuser um identificador necessário, registre a limitação e a cobertura
+realmente obtida.
 
-## Exportação para as ferramentas do cliente
+Ao compartilhar uma evidência, inclua horário UTC, versão do código, cenário,
+fronteira, resultado e IDs reais. Exclua JWTs, segredos, conteúdo dos documentos
+e dados de usuários. O projeto exporta resumos para revisão; não instala
+conectores para ferramentas externas de observabilidade ou governança.
 
-Contrato mínimo: request/trace/span IDs reais, timestamps UTC, conta/domínio,
-instância, agente, user_ref, tool, decisão, Policy ID quando disponível,
-query ID e identificação/versionamento da fonte.
-
-Dynatrace recebe a telemetria técnica; Watsonx.governance recebe inventário e
-evidências de controle; SanEval reutiliza os casos como avaliação contínua.
-Formato/transportes e conectores dependem das versões do cliente e não foram
-instalados neste laboratório.
+Volte ao [guia de validação](../validacao.md) para comparar evidência local,
+integração real e correlação.

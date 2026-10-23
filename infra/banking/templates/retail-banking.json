@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 10 - retail-banking MCP and synthetic DynamoDB fixtures",
+  "Description": "Notebook 11 - retail-banking MCP and synthetic DynamoDB fixtures",
   "Parameters": {
     "ArtifactBucket": {
       "Type": "String"

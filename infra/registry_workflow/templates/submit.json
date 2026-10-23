@@ -1,0 +1,51 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Registry personas - submeter para revisao",
+  "Parameters": {
+    "RegistryId": {
+      "Type": "String"
+    },
+    "PublisherProviderArn": {
+      "Type": "String"
+    },
+    "McpRecordId": {
+      "Type": "String"
+    },
+    "AgentRecordId": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "Mcp": {
+      "Type": "Custom::RegistrySubmission",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "PublisherProviderArn"
+        },
+        "Kind": "Submission",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "RecordId": {
+          "Ref": "McpRecordId"
+        }
+      }
+    },
+    "Agent": {
+      "Type": "Custom::RegistrySubmission",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "PublisherProviderArn"
+        },
+        "Kind": "Submission",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "RecordId": {
+          "Ref": "AgentRecordId"
+        }
+      }
+    }
+  },
+  "Outputs": {}
+}

@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Laboratório Santander: Identity, Policy, Gateway e Registry"
 requires-python = ">=3.12,<3.14"
 dependencies = [
-  "boto3>=1.42",
+  "boto3>=1.43.110",
   "cedarpy>=4.7",
   "httpx>=0.28",
   "jsonschema>=4.23",

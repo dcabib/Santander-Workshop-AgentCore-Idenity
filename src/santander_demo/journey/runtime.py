@@ -1,7 +1,7 @@
 """Agente determinístico hospedado: valida, descobre, delega e consulta via MCP.
 
 Não há provisionamento, SQL livre, identidade recebida como argumento ou fallback M2M.
-O modo determinístico torna a prova de segurança repetível; o lab 10 mantém Strands.
+O modo determinístico torna a prova de segurança repetível; o lab 11 mantém Strands.
 """
 
 import asyncio

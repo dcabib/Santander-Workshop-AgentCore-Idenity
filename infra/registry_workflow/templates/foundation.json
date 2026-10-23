@@ -1,0 +1,898 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Registry personas - infraestrutura, providers e permissoes separadas",
+  "Parameters": {
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    },
+    "OperatorArn": {
+      "Type": "String"
+    },
+    "RecoveryRegistryArn": {
+      "Type": "String",
+      "Default": ""
+    },
+    "Project": {
+      "Type": "String",
+      "Default": "registry-personas"
+    },
+    "RuntimeName": {
+      "Type": "String",
+      "Default": "registry_personas_demo",
+      "AllowedPattern": "[A-Za-z][A-Za-z0-9_]{0,47}"
+    }
+  },
+  "Resources": {
+    "RegistryAdminRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*:log-stream:*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "agent-registry:CreateRegistry",
+                    "agent-registry:GetRegistry",
+                    "agent-registry:DeleteRegistry"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:agent-registry:${AWS::Region}:${AWS::AccountId}:registry/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:CreateWorkloadIdentity",
+                    "bedrock-agentcore:GetWorkloadIdentity",
+                    "bedrock-agentcore:DeleteWorkloadIdentity"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:CreateServiceLinkedRole"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/agent-registry.amazonaws.com/AWSServiceRoleForAgentRegistry"
+                  },
+                  "Condition": {
+                    "StringEquals": {
+                      "iam:AWSServiceName": "agent-registry.amazonaws.com"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "RegistryProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 512,
+        "Timeout": 600,
+        "Role": {
+          "Fn::GetAtt": [
+            "RegistryAdminRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "Handler": "santander_demo.registry_workflow.provider.handler",
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KINDS": "Registry"
+          }
+        }
+      }
+    },
+    "RegistryProviderLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${RegistryProvider}"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "Registry": {
+      "Type": "Custom::Registry",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RegistryProvider",
+            "Arn"
+          ]
+        },
+        "Kind": "Registry",
+        "RecoveryArn": {
+          "Ref": "RecoveryRegistryArn"
+        }
+      },
+      "DependsOn": "RegistryProviderLog"
+    },
+    "PublisherRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            },
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Ref": "OperatorArn"
+                }
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*:log-stream:*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "agent-registry:GetRegistryRecord",
+                    "agent-registry:ListRegistryRecords"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Registry",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${Registry.Arn}/record/*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "agent-registry:CreateRegistryRecord",
+                    "agent-registry:DeleteRegistryRecord",
+                    "agent-registry:SubmitRegistryRecordForApproval"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Registry",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${Registry.Arn}/record/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ApproverRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            },
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Ref": "OperatorArn"
+                }
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*:log-stream:*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "agent-registry:GetRegistryRecord",
+                    "agent-registry:ListRegistryRecords"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Registry",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${Registry.Arn}/record/*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "agent-registry:UpdateRegistryRecordStatus"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${Registry.Arn}/record/*"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "PublisherProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 512,
+        "Timeout": 600,
+        "Role": {
+          "Fn::GetAtt": [
+            "PublisherRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "Handler": "santander_demo.registry_workflow.provider.handler",
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KINDS": "Record,Submission"
+          }
+        }
+      }
+    },
+    "PublisherProviderLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${PublisherProvider}"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "ApproverProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 512,
+        "Timeout": 600,
+        "Role": {
+          "Fn::GetAtt": [
+            "ApproverRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "Handler": "santander_demo.registry_workflow.provider.handler",
+        "Environment": {
+          "Variables": {
+            "RESOURCE_KINDS": "Approval"
+          }
+        }
+      }
+    },
+    "ApproverProviderLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${ApproverProvider}"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "ToolRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*:log-stream:*"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "RiskTool": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Role": {
+          "Fn::GetAtt": [
+            "ToolRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "Handler": "santander_demo.registry_workflow.contracts.tool_handler"
+      }
+    },
+    "RiskToolLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${RiskTool}"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "GatewayRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "lambda:InvokeFunction"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "RiskTool",
+                      "Arn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Gateway": {
+      "Type": "AWS::BedrockAgentCore::Gateway",
+      "Properties": {
+        "Name": {
+          "Ref": "Project"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "GatewayRole",
+            "Arn"
+          ]
+        },
+        "ProtocolType": "MCP",
+        "AuthorizerType": "AWS_IAM"
+      }
+    },
+    "Target": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "risco",
+        "GatewayIdentifier": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayIdentifier"
+          ]
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "GATEWAY_IAM_ROLE"
+          }
+        ],
+        "TargetConfiguration": {
+          "Mcp": {
+            "Lambda": {
+              "LambdaArn": {
+                "Fn::GetAtt": [
+                  "RiskTool",
+                  "Arn"
+                ]
+              },
+              "ToolSchema": {
+                "InlinePayload": [
+                  {
+                    "Name": "consultar_risco",
+                    "Description": "Consulta o risco sint\u00e9tico de C001 ou C002; n\u00e3o usa dados banc\u00e1rios reais.",
+                    "InputSchema": {
+                      "Type": "object",
+                      "Properties": {
+                        "customer_id": {
+                          "Type": "string"
+                        }
+                      },
+                      "Required": [
+                        "customer_id"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "RuntimeRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucket}/${ArtifactKey}"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:InvokeGateway"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Gateway",
+                      "GatewayArn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Runtime": {
+      "Type": "AWS::BedrockAgentCore::Runtime",
+      "Properties": {
+        "AgentRuntimeName": {
+          "Ref": "RuntimeName"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "RuntimeRole",
+            "Arn"
+          ]
+        },
+        "AgentRuntimeArtifact": {
+          "CodeConfiguration": {
+            "Runtime": "PYTHON_3_12",
+            "EntryPoint": [
+              "registry_runtime_main.py"
+            ],
+            "Code": {
+              "S3": {
+                "Bucket": {
+                  "Ref": "ArtifactBucket"
+                },
+                "Prefix": {
+                  "Ref": "ArtifactKey"
+                }
+              }
+            }
+          }
+        },
+        "ProtocolConfiguration": "HTTP",
+        "NetworkConfiguration": {
+          "NetworkMode": "PUBLIC"
+        },
+        "EnvironmentVariables": {
+          "GATEWAY_URL": {
+            "Fn::GetAtt": [
+              "Gateway",
+              "GatewayUrl"
+            ]
+          }
+        },
+        "LifecycleConfiguration": {
+          "IdleRuntimeSessionTimeout": 60,
+          "MaxLifetime": 600
+        }
+      },
+      "DependsOn": [
+        "Target",
+        "Registry"
+      ]
+    },
+    "DeveloperRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Ref": "OperatorArn"
+                }
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:InvokeAgentRuntime"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Runtime",
+                        "AgentRuntimeArn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${Runtime.AgentRuntimeArn}/runtime-endpoint/*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:InvokeGateway"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Gateway",
+                      "GatewayArn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "ConsumerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Ref": "OperatorArn"
+                }
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "agent-registry:ListDiscoverableRegistryRecords",
+                    "agent-registry:SearchDiscoverableRegistryRecords"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Registry",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "agent-registry:GetDiscoverableRegistryRecord"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${Registry.Arn}/record/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:InvokeAgentRuntime"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Runtime",
+                        "AgentRuntimeArn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "${Runtime.AgentRuntimeArn}/runtime-endpoint/*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "DeveloperRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "DeveloperRole",
+          "Arn"
+        ]
+      }
+    },
+    "PublisherRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "PublisherRole",
+          "Arn"
+        ]
+      }
+    },
+    "ApproverRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ApproverRole",
+          "Arn"
+        ]
+      }
+    },
+    "ConsumerRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ConsumerRole",
+          "Arn"
+        ]
+      }
+    },
+    "PublisherProviderArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "PublisherProvider",
+          "Arn"
+        ]
+      }
+    },
+    "ApproverProviderArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "ApproverProvider",
+          "Arn"
+        ]
+      }
+    },
+    "RegistryId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Registry",
+          "Id"
+        ]
+      }
+    },
+    "RegistryArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Registry",
+          "Arn"
+        ]
+      }
+    },
+    "GatewayUrl": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayUrl"
+        ]
+      }
+    },
+    "GatewayArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayArn"
+        ]
+      }
+    },
+    "RuntimeArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Runtime",
+          "AgentRuntimeArn"
+        ]
+      }
+    }
+  }
+}

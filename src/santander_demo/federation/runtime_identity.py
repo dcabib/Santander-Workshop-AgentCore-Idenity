@@ -1,4 +1,4 @@
-"""Ferramenta de evidência OBO, ativada apenas no Runtime do notebook 11."""
+"""Ferramenta de evidência OBO, ativada apenas no Runtime do notebook 12."""
 
 import os
 

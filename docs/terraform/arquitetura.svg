@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Workshop Terraform: AgentCore Runtime, Gateway e Identity</title>
+  <desc id="desc">O notebook invoca o Runtime com IAM. O Runtime obtém um token pelo AgentCore Identity e Cognito, usa esse JWT no Gateway MCP e o Gateway invoca uma Lambda com dados sintéticos. Terraform gerencia todos os recursos.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#526278"/></marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#172b44} .title{font-size:29px;font-weight:700}
+      .name{font-size:22px;font-weight:700} .body{font-size:17px} .small{font-size:15px}
+      .card{fill:#fff;stroke:#b4c7db;stroke-width:2} .line{fill:none;stroke:#526278;stroke-width:2.5;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1280" height="640" fill="#f4f7fb"/>
+  <text x="44" y="53" class="title">Uma consulta autenticada, do notebook à ferramenta</text>
+  <text x="44" y="83" class="body">Uma conta AWS · dados sintéticos · infraestrutura e artefatos gerenciados por Terraform</text>
+  <rect x="305" y="110" width="930" height="395" rx="20" fill="#e9f1f9" stroke="#d0dfed"/>
+  <text x="326" y="137" class="small">AWS — ambiente exclusivo desta turma</text>
+  <rect x="40" y="300" width="225" height="135" rx="14" class="card"/>
+  <text x="65" y="337" class="name">Jupyter Notebook</text>
+  <text x="65" y="369" class="body">Credenciais AWS</text>
+  <text x="65" y="398" class="body">Testes de acesso e consulta</text>
+  <rect x="335" y="300" width="250" height="135" rx="14" class="card"/>
+  <text x="359" y="337" class="name">AgentCore Runtime</text>
+  <text x="359" y="369" class="body">Python ARM64 · HTTP</text>
+  <text x="359" y="398" class="body">Consulta e agente com LLM</text>
+  <rect x="660" y="300" width="250" height="135" rx="14" class="card"/>
+  <text x="684" y="337" class="name">AgentCore Gateway</text>
+  <text x="684" y="369" class="body">JWT: issuer, client e scope</text>
+  <text x="684" y="398" class="body">Catálogo MCP de leitura</text>
+  <rect x="990" y="300" width="220" height="135" rx="14" class="card"/>
+  <text x="1014" y="337" class="name">Lambda bancária</text>
+  <text x="1014" y="369" class="body">C001 e C002</text>
+  <text x="1014" y="398" class="body">Dados sintéticos</text>
+  <rect x="335" y="165" width="250" height="85" rx="14" class="card"/>
+  <text x="359" y="200" class="name">AgentCore Identity</text>
+  <text x="359" y="230" class="body">Workload + OAuth2 provider</text>
+  <rect x="660" y="165" width="250" height="85" rx="14" class="card"/>
+  <text x="684" y="200" class="name">Amazon Cognito</text>
+  <text x="684" y="230" class="body">OAuth2 client_credentials</text>
+  <path d="M265 354H335" class="line"/>
+  <text x="273" y="285" class="small">1. SigV4</text>
+  <path d="M460 300V250" class="line"/>
+  <text x="472" y="281" class="small">2. WAT → token OAuth2</text>
+  <path d="M585 205H660" class="line"/>
+  <text x="601" y="185" class="small">OAuth2</text>
+  <path d="M585 354H660" class="line"/>
+  <text x="590" y="465" class="small">3. Bearer JWT + MCP</text>
+  <path d="M910 354H990" class="line"/>
+  <text x="922" y="285" class="small">4. IAM</text>
+  <text x="355" y="482" class="small">A resposta retorna pelo mesmo caminho, com IDs de execução e sem tokens.</text>
+  <rect x="40" y="545" width="1195" height="57" rx="12" fill="#172b44"/>
+  <text x="65" y="580" style="font-family:Arial,Helvetica,sans-serif;font-size:20px;fill:white">Terraform: Cognito + Identity + IAM + S3 privado + Runtime + Gateway + Lambda + CloudWatch Logs</text>
+</svg>

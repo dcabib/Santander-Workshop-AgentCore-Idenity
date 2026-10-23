@@ -1,0 +1,446 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander RAG - fully managed Knowledge Base and synthetic ACL-aware S3 corpus",
+  "Parameters": {
+    "Project": {
+      "Type": "String"
+    },
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    },
+    "UserAOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserBOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserCOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserDOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserAEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "UserBEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "UserCEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "UserDEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "CorpusDigest": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "SourceBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "VersioningConfiguration": {
+          "Status": "Enabled"
+        },
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      "DeletionPolicy": "RetainExceptOnCreate",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "SourceTLS": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "SourceBucket"
+        },
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Deny",
+              "Principal": "*",
+              "Action": "s3:*",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "SourceBucket",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Sub": "${SourceBucket.Arn}/*"
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "KnowledgeRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "aws:SourceAccount": {
+                    "Ref": "AWS::AccountId"
+                  }
+                },
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::Sub": "arn:${AWS::Partition}:bedrock:${AWS::Region}:${AWS::AccountId}:knowledge-base/*"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "SourceBucket",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${SourceBucket.Arn}/*"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "KnowledgeBase": {
+      "Type": "AWS::Bedrock::KnowledgeBase",
+      "Properties": {
+        "Name": {
+          "Ref": "Project"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "KnowledgeRole",
+            "Arn"
+          ]
+        },
+        "KnowledgeBaseConfiguration": {
+          "Type": "MANAGED",
+          "ManagedKnowledgeBaseConfiguration": {
+            "EmbeddingModelType": "MANAGED"
+          }
+        }
+      },
+      "DeletionPolicy": "RetainExceptOnCreate",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "DataSource": {
+      "Type": "AWS::Bedrock::DataSource",
+      "Properties": {
+        "Name": "synthetic-acl-corpus",
+        "KnowledgeBaseId": {
+          "Ref": "KnowledgeBase"
+        },
+        "DataDeletionPolicy": "RETAIN",
+        "DataSourceConfiguration": {
+          "Type": "MANAGED_KNOWLEDGE_BASE_CONNECTOR",
+          "ManagedKnowledgeBaseConnectorConfiguration": {
+            "ConnectorParameters": {
+              "type": "S3",
+              "version": "1",
+              "aclEnabled": true,
+              "connectionConfiguration": {
+                "bucketName": {
+                  "Ref": "SourceBucket"
+                },
+                "bucketOwnerAccountId": {
+                  "Ref": "AWS::AccountId"
+                }
+              },
+              "filterConfiguration": {
+                "inclusionPrefixes": [
+                  "documents/"
+                ]
+              },
+              "aclConfiguration": {
+                "globalAccessControlListS3Uri": {
+                  "Fn::Sub": "s3://${SourceBucket}/acl/global-acl.json"
+                }
+              }
+            }
+          }
+        },
+        "VectorIngestionConfiguration": {
+          "ParsingConfiguration": {
+            "ParsingStrategy": "SMART_PARSING"
+          }
+        }
+      },
+      "DeletionPolicy": "RetainExceptOnCreate",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "CorpusLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/lambda/${Project}-corpus"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "CorpusRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${CorpusLog.Arn}:*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:PutObject"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "${SourceBucket.Arn}/documents/*"
+                    },
+                    {
+                      "Fn::Sub": "${SourceBucket.Arn}/acl/*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:StartIngestionJob",
+                    "bedrock:GetIngestionJob",
+                    "bedrock:GetDataSource"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "KnowledgeBase",
+                      "KnowledgeBaseArn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "CorpusFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "FunctionName": {
+          "Fn::Sub": "${Project}-corpus"
+        },
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "Handler": "santander_demo.rag.seed.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "CorpusRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "Timeout": 900,
+        "MemorySize": 256,
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "CorpusLog"
+          }
+        }
+      }
+    },
+    "Corpus": {
+      "Type": "Custom::ManagedKnowledgeBaseCorpus",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CorpusFunction",
+            "Arn"
+          ]
+        },
+        "Bucket": {
+          "Ref": "SourceBucket"
+        },
+        "KnowledgeBaseId": {
+          "Ref": "KnowledgeBase"
+        },
+        "DataSourceId": {
+          "Fn::GetAtt": [
+            "DataSource",
+            "DataSourceId"
+          ]
+        },
+        "CorpusDigest": {
+          "Ref": "CorpusDigest"
+        },
+        "Users": {
+          "a": {
+            "oid": {
+              "Ref": "UserAOid"
+            },
+            "email": {
+              "Ref": "UserAEmail"
+            }
+          },
+          "b": {
+            "oid": {
+              "Ref": "UserBOid"
+            },
+            "email": {
+              "Ref": "UserBEmail"
+            }
+          },
+          "c": {
+            "oid": {
+              "Ref": "UserCOid"
+            },
+            "email": {
+              "Ref": "UserCEmail"
+            }
+          },
+          "d": {
+            "oid": {
+              "Ref": "UserDOid"
+            },
+            "email": {
+              "Ref": "UserDEmail"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "SourceBucket": {
+      "Value": {
+        "Ref": "SourceBucket"
+      }
+    },
+    "KnowledgeBaseId": {
+      "Value": {
+        "Ref": "KnowledgeBase"
+      }
+    },
+    "KnowledgeBaseArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "KnowledgeBase",
+          "KnowledgeBaseArn"
+        ]
+      }
+    },
+    "DataSourceId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "DataSource",
+          "DataSourceId"
+        ]
+      }
+    },
+    "IngestionJobId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Corpus",
+          "IngestionJobId"
+        ]
+      }
+    }
+  }
+}

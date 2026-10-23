@@ -1,4 +1,4 @@
-"""Fonte do notebook 10 e da sua arquitetura ilustrada."""
+"""Fonte do notebook 11 e da sua arquitetura ilustrada."""
 
 import base64
 import shutil
@@ -9,13 +9,14 @@ from textwrap import dedent
 import nbformat as nb
 from generate_diagrams import Diagram
 from notebook_cleanup import cleanup_cells
+from notebook_learning import learning_cell
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def diagram():
     page = {
-        "id": "10_blog_multi_account_gateway_mcp",
+        "id": "11_blog_multi_account_gateway_mcp",
         "title": "Um agente. Três áreas. Quatro contas.",
         "subtitle": "JWT do usuário até o Gateway; credencial OAuth M2M para os MCPs de cada área.",
         "status": "CENÁRIO DO ARTIGO · AWS A VALIDAR",
@@ -83,7 +84,7 @@ def diagram():
             kicker="RUNTIME MCP · WORKLOAD DO GATEWAY",
         )
     path = ROOT / "docs/banking/arquitetura.svg"
-    path.write_text(d.finish().replace("10 / 09", "LAB 10"))
+    path.write_text(d.finish().replace("10 / 09", "LAB 11"))
     renderer = shutil.which("rsvg-convert")
     if not renderer:
         raise SystemExit("Instale librsvg para regenerar a imagem PNG.")
@@ -104,7 +105,7 @@ def main():
     png = diagram()
     cells = [
         md("""
-        # 10 — Um agente central consultando três contas de negócio
+        # 11 — Um agente central consultando três contas de negócio
 
         **Implementação do cenário:** [Build a multi-account AI agent with AgentCore Gateway and MCP](https://aws.amazon.com/blogs/machine-learning/build-a-multi-account-ai-agent-with-agentcore-gateway-and-mcp/).
 
@@ -133,7 +134,7 @@ def main():
             },
         ),
         md("""
-        ## 1. Entenda a diferença para os notebooks 02 e 08
+        ## 1. Entenda a diferença para os notebooks 02 e 10
 
         | Trecho | Credencial | Identidade vista no destino |
         |---|---|---|
@@ -584,8 +585,9 @@ def main():
         [Código de referência e licença](../NOTICE.md)
         """),
     ]
+    cells.insert(2, learning_cell("11"))
     notebook = nb.v4.new_notebook(
-        cells=cells + cleanup_cells("10", "banking"),
+        cells=cells + cleanup_cells("11", "banking"),
         metadata={
             "kernelspec": {
                 "name": "python3",
@@ -600,7 +602,7 @@ def main():
         },
     )
     nb.validate(notebook)
-    target = ROOT / "notebooks/10_blog_multi_account_gateway_mcp.ipynb"
+    target = ROOT / "notebooks/11_blog_multi_account_gateway_mcp.ipynb"
     nb.write(notebook, target)
     print(target)
 

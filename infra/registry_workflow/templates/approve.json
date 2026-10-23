@@ -1,0 +1,83 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Registry personas - decisao revisada",
+  "Parameters": {
+    "RegistryId": {
+      "Type": "String"
+    },
+    "ApproverProviderArn": {
+      "Type": "String"
+    },
+    "McpRecordId": {
+      "Type": "String"
+    },
+    "AgentRecordId": {
+      "Type": "String"
+    },
+    "McpDigest": {
+      "Type": "String"
+    },
+    "McpDecision": {
+      "Type": "String",
+      "AllowedValues": [
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
+    "AgentDigest": {
+      "Type": "String"
+    },
+    "AgentDecision": {
+      "Type": "String",
+      "AllowedValues": [
+        "APPROVED",
+        "REJECTED"
+      ]
+    }
+  },
+  "Resources": {
+    "Mcp": {
+      "Type": "Custom::RegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "ApproverProviderArn"
+        },
+        "Kind": "Approval",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "RecordId": {
+          "Ref": "McpRecordId"
+        },
+        "ReviewedDigest": {
+          "Ref": "McpDigest"
+        },
+        "Decision": {
+          "Ref": "McpDecision"
+        }
+      }
+    },
+    "Agent": {
+      "Type": "Custom::RegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "ApproverProviderArn"
+        },
+        "Kind": "Approval",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "RecordId": {
+          "Ref": "AgentRecordId"
+        },
+        "ReviewedDigest": {
+          "Ref": "AgentDigest"
+        },
+        "Decision": {
+          "Ref": "AgentDecision"
+        }
+      }
+    }
+  },
+  "Outputs": {}
+}

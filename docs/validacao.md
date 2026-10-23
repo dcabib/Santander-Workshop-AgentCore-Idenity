@@ -1,156 +1,183 @@
-# Validação da implementação — 09/10/2026
+# Validar o que cada laboratório ensina
 
-**Resultado:** laboratório local executável, com material de implantação preparado.
-Não houve deploy, login Entra/Okta, inferência Bedrock, consulta Graph nem acesso Databricks.
+Uma resposta correta pode ter vindo de uma simulação, de uma ferramenta real
+ou de um modelo. Antes de concluir que a arquitetura funciona, identifique
+**qual caminho foi executado e qual afirmação foi verificada**.
+Este guia acompanha a [jornada](jornada.md) e ajuda a interpretar seus resultados.
 
-**Reexecução com cleanup:** 14/14 notebooks, 94/94 células de código e 138 testes
-passaram. As provas por notebook, ajustes e limitações estão no
-[relatório de execução](validacao-notebooks.md). A remoção de nuvem ficou
-desativada; o cleanup local passou nos quatorze notebooks.
+Calcule as expectativas a partir do requisito escrito, separadamente da
+configuração usada pela aplicação. Se implementação e teste lerem a mesma
+permissão errada, ambos podem concordar e ainda contrariar o workshop.
 
-| Verificação executada | Resultado |
+## Três níveis de evidência
+
+| Nível | O que verifica | O que ainda precisa de prova |
+|---|---|---|
+| Local | Contratos, validação de entradas, lógica de autorização, empacotamento e comportamento dos testes | IAM, emissão de tokens e integração dos serviços |
+| Integração real | Chamada autenticada, resultado esperado e erro específico nos serviços implantados | Percurso completo quando faltam logs ou IDs correlacionados |
+| Correlação | A mesma operação observada nas fronteiras relevantes, incluindo o destino | Não comprova cenários que não foram exercitados |
+
+`LOCAL_SIMULATION` identifica simulação; `NOT_RUN` identifica uma etapa pulada.
+`PENDING_EVIDENCE` exige completar uma prova. `PASS` tem o alcance do teste que
+o produziu: o sucesso de uma célula não é aprovação automática de toda a solução.
+Timeout, erro de rede e credencial expirada não são prova de bloqueio por Policy.
+
+## Executar a verificação local
+
+Na raiz do projeto:
+
+```bash
+uv sync --frozen --extra banking
+uv run --frozen --extra banking pytest -q
+uv run --frozen --extra banking python scripts/verify_notebooks.py
+```
+
+O segundo comando testa o código. O terceiro executa os 17 notebooks em kernels
+novos, com as opções de nuvem desativadas. Verifica a execução das células e a
+limpeza local. Grava `evidence/notebooks.json` e cópias em `evidence/executed/`;
+os notebooks distribuídos permanecem sem outputs.
+
+Para comparar o conteúdo com valores e efeitos observados, além da execução:
+
+```bash
+uv run --frozen --extra banking python -m scripts.audit_notebooks
+uv run --frozen --extra banking python -m scripts.audit_notebook_faults
+```
+
+Esses comandos usam expectativas independentes da configuração da aplicação.
+Uma falha injetada só aprova o controle quando a asserção correspondente a rejeita.
+Os controles incluem perda de acesso de C a Fraude, resposta MCP de outro
+cliente e permissão indevida para C008 em Retail. Uma exceção incidental de
+rede, importação ou sintaxe não aprova esses controles.
+
+`audit_notebooks` observa o catálogo, as chamadas a backends, as decisões Cedar,
+os documentos entregues ao modelo, a memória e os contadores de cotas. Os
+arquivos `evidence/notebook-audit*.json` registram esperado, observado e hash
+do notebook. Um notebook novo precisa de expectativas próprias no verificador;
+executar suas células sem erro não basta para aprovar seu conteúdo.
+
+Para validar templates após regenerá-los, use `cfn-lint` no diretório do cenário
+indicado em seu guia. No Terraform, `validate` confere a configuração e
+`terraform test` usa providers simulados, conforme o [laboratório 09](terraform/README.md).
+Nenhum desses resultados substitui o teste da implantação.
+
+## Pontos de verificação durante a jornada
+
+| Etapa | Resultado que precisa ser observado |
 |---|---|
-| `uv sync` / dependências travadas em `uv.lock` | PASS |
-| `ruff check` e formatação Python | PASS |
-| Suíte pytest completa, incluindo cleanup e cenário integrado | **138 testes passaram** |
-| Quatorze notebooks, em kernels novos, sem acesso AWS | **14/14 PASS**; 00–09 simulação local, 10–12 preparação offline, 13 contrato local de ingestão |
-| Notebook 05 após inclusão da leitura do rascunho gerenciado | PASS |
-| Seis templates CloudFormation, cfn-lint para us-east-1/us-west-2 | PASS estrutural |
-| `terraform init -backend=false` e `terraform validate` do módulo Entra | PASS estrutural |
-| CLI `santander-demo demo` e `matrix` | PASS |
-| Build original Linux ARM64/Python 3.12, registrado na revisão anterior | PASS; ZIP 30,5 MiB / extraído 67,7 MiB |
-| Notebooks distribuídos sem outputs | PASS |
-| Transcrição e conversa excluídas do pacote de execução | PASS |
-| Sete templates adicionais do notebook 10 | PASS estrutural por cfn-lint |
-| Build atualizado `banking.zip`, Linux ARM64/Python 3.12 | PASS; ZIP 33,0 MiB / extraído 76,6 MiB |
-| Diagrama do notebook 10, PNG/SVG e anexo no notebook | PASS visual e estrutural |
-| Treze templates adicionais do notebook 11 | PASS estrutural por cfn-lint |
-| Diagrama do notebook 11, PNG/SVG e anexo no notebook | PASS visual e estrutural |
-| Artefato banking atualizado com federação, `whoami` e cenário integrado | PASS; hash, entrypoint journey e todas as fontes conferem |
-| Dez templates novos do notebook 12 | PASS estrutural por cfn-lint |
-| Terraform Entra e Databricks de `infra/journey`, init sem backend e validate | PASS estrutural nos dois módulos; sem plan/apply |
-| Diagramas 12/13, PNG/SVG e anexos nos notebooks | PASS visual; bytes dos anexos conferem com as imagens |
-| Galeria com 14 notebooks em navegador headless | PASS; links, navegação 12/13, zoom e viewport móvel; sem erro JavaScript |
+| 00–01 | A ferramenta conhecida recebe a entrada esperada e retorna o contrato documentado |
+| 02–03 | Usuário e aplicação são distinguidos; audiência e assinatura são verificadas |
+| 04–05 | Casos permitidos e negados correspondem às condições Cedar; rascunho não vira política automaticamente |
+| 06–08 | Papéis, publicação e aprovação são separados; descobrir não concede execução nem permite enviar credenciais a qualquer destino |
+| 09 | O plano Terraform corresponde ao ambiente; Runtime, Identity e Gateway completam uma chamada |
+| 10 | Contas e roles correspondem à topologia; uma chamada real exige invocação e logs |
+| 11 | O agente hospedado consulta as três áreas; escrita permanece sem permissão |
+| 12 | `whoami` preserva `tid:oid`; negativas da plataforma e de Retail são distinguíveis |
+| 13 e 14 | Identidade na fonte e grant de `SELECT` são verificados separadamente |
+| 15 | Alterar ACL ou excluir um documento impede sua reutilização, inclusive pela memória local |
+| 16 | Policy vincula usuário e contexto; a KB retorna apenas documentos autorizados |
 
-Os testes cobrem assinatura/emissor/audiência/expiração, tenant, contexto delegado,
-usuário e caller, ações/recursos exatos, limite 50/51, schema, negação antes do
-backend, governança local, bloqueio de endpoints não confiáveis, protocolo MCP
-real por stdio, ausência de fallback Databricks, principal exato e erro de grant.
-Também verificam contratos SDK dos providers, idempotência/estados,
-polling limitado, separação de publicação/aprovação e geração sem publicação.
+Para uma negativa de ferramenta, execute também um caso permitido com a mesma
+infraestrutura. No cenário integrado, use o [guia de trace](journey/trace.md)
+para comprovar em qual fronteira a chamada parou.
 
-O Cedar local é avaliado por `cedarpy`, que usa o avaliador Cedar. O mapeamento
-de claims para tags é um contrato do laboratório; não é evidência de que o
-serviço gerenciado o aplicou. O teste MCP usa um processo servidor real, mas
-não passa pelo Gateway AWS.
+## Laboratório 07
 
-O build usa wheels Linux ARM64; o ZIP não foi executado em Lambda/Runtime.
-Validação CloudFormation/Terraform não verifica quota, disponibilidade da região,
-permissões efetivas, admin consent nem compatibilidade dos recursos no sandbox.
+Durante as fases IaC, confira que MCP e AGENT ficam ocultos em
+DRAFT/PENDING_APPROVAL e aparecem após a aprovação. No consumo, compare
+cliente, risco e resposta do agente com a entrada enviada. Runtime e Gateway
+devem recusar chamadas anônimas; uma sessão limitada à descoberta deve receber
+negativa ao invocar o agente.
 
-Evidências locais geradas:
+Versão rejeitada e hash alterado são exercícios locais. A matriz IAM usa
+simulação de políticas; a negativa do consumidor é uma invocação real.
+As roles de publicação e aprovação executam providers distintos, mas um
+operador do sandbox orquestra o pipeline.
 
-- `evidence/demo-local.json`
-- `evidence/matriz-local.json`
-- `evidence/notebooks.json`
-- `evidence/executed/*.ipynb`
-- `build/artifacts.json`
-- `build/banking-artifacts.json`
-- `evidence/journey-local.json`
-- `evidence/ingestao-local.json`
+```bash
+uv run --frozen --extra banking pytest tests/test_registry_workflow.py -q
+uv run --frozen --extra banking python scripts/registry_check.py --live
+```
 
-Esses arquivos são ignorados pelo Git para evitar versionar outputs de futuros
-ensaios com informações do ambiente. Os itens ainda pendentes estão em
-[aceite.md](aceite.md): OBO de dois usuários, Policy nativa, IAM Registry,
-restrição de workload do Runtime, três contas reais e Databricks Azure.
+O segundo comando verifica uma implantação já aprovada e grava
+`evidence/registry-personas.json`. O [guia do Registry](registry/README.md)
+explica como reproduzir as fases a partir de rascunhos e como limpar o ambiente.
+Para conferir estados, dados retornados, request IDs e decisões IAM do
+ambiente já aprovado, use:
 
-## Extensão do artigo multi-account — notebook 10
+```bash
+uv run --frozen --extra banking python -m scripts.audit_live_notebooks registry
+```
 
-O [novo notebook](../notebooks/10_blog_multi_account_gateway_mcp.ipynb) executou
-com `RUN_AWS=False`. Seu resultado é **OFFLINE_PREPARATION**, não uma simulação
-de respostas do artigo. Gateway, Registry, quatro contas, RAG, Policy no serviço
-e Strands/Bedrock ficaram explicitamente **NOT_RUN**.
+Essa verificação não repete publicação e aprovação. Para acompanhar essas
+transições, execute o notebook junto com as fases do IaC, conforme o guia.
 
-Os testes adicionais exercitam Cedar real (permit, negação por padrão e precedência
-de forbid), JWT RSA/JWKS, `cid` Okta, schemas dos 16 tools, protocolo MCP em processo
-real para `calculate_emi`, fixtures idempotentes, validação do endpoint do Registry,
-paginação, encaminhamento do JWT e Guardrails com doubles de SDK, classificação de
-negativas e evidência sem sucesso indevido. Doubles não comprovam integração AWS.
+## Laboratório 09
 
-O teste de MCP executou somente uma ferramenta matemática local, sem DynamoDB ou
-Bedrock. Os templates passaram no lint e o ZIP foi construído, mas ainda não foram
-executados nos serviços. Há um aviso de depreciação Pydantic emitido pela
-dependência `bedrock-agentcore`, sem falha nos testes.
+Após implantar pelo [Terraform](terraform/README.md), execute:
 
-O ensaio real deste notebook requer as quatro contas, aplicações Okta, segredo M2M gerido por IaC,
-acesso ao modelo e uma Knowledge Base ingerida em Lending, conforme o
-[runbook do cenário](banking/README.md). Evidências locais adicionais:
-`evidence/executed/10_blog_multi_account_gateway_mcp.ipynb` e
-`build/banking-artifacts.json`.
+```bash
+uv run --frozen --extra banking python scripts/terraform_check.py --llm
+uv run --frozen --extra banking python scripts/terraform_deploy.py drift
+uv run --frozen --extra banking python scripts/terraform_notebook_check.py --live
+```
 
-## Gateways por conta — notebook 11
+O verificador testa autenticação, cliente OAuth não autorizado, catálogo MCP,
+cliente sintético inexistente, consultas pelo Runtime e uso da ferramenta pelo
+modelo. O relatório `evidence/terraform-agentcore-live.json` só recebe
+`AWS_LIVE/PASS` quando todas as asserções solicitadas passam. `--live` executa uma
+cópia do notebook contra o ambiente existente, sem habilitar apply ou destroy.
 
-O [notebook 11](../notebooks/11_gateways_por_conta_identity_policy.ipynb) executou
-suas 32 células, incluindo 15 de código, com `RUN_AWS=False`, em kernel novo. São quatro Gateways,
-quatro providers Identity OBO e quatro Policy engines definidos por IaC,
-sem implantação neste ambiente.
+O caso C999 comprova **erro sem perfil retornado**, com `cause=NOT_PROVEN`:
+o erro genérico do Gateway não identifica cliente inexistente nem comprova
+uma recusa de permissão. Trate esse caso separadamente das negativas HTTP.
 
-Os 21 testes adicionais cobrem negações Cedar independentes (plataforma versus
-Retail), tenant/usuário/aplicação/scope, ausência de permissões de escrita, nomes
-com duas camadas de targets, múltiplos usuários nos templates, segredos locais à
-conta/região, audiências distintas, destinos de cada fase, proteção de workload,
-claims sanitizadas e detecção de mudança de usuário no destino.
+Para comparar os perfis com os valores esperados, conferir a resposta do
+agente e encontrar os IDs de Gateway/Lambda no CloudWatch:
 
-Um teste usa transporte HTTP MCP real em ASGI, com JWT RSA assinado/verificado
-localmente, para confirmar que `whoami` recebe Authorization pelo contexto da
-requisição e rejeita ausência de delegação. A fonte JWKS é substituída pela chave
-local de teste; isso não comprova encaminhamento de headers no Runtime AWS.
+```bash
+uv run --frozen --extra banking python -m scripts.audit_live_notebooks terraform
+```
 
-Os 13 templates passaram em `cfn-lint`; o ZIP banking atualizado também inclui
-esta trilha. Os 14 notebooks distribuídos continuam sem outputs.
-O PNG incorporado no notebook 11 corresponde à imagem
-revisada em `docs/federation/arquitetura.png`.
+Esse comando executa o notebook com AWS e LLM ativados e confere as evidências
+do ambiente existente. Provisionamento e remoção continuam desativados.
 
-Continuam **NOT_RUN**: Entra real, Gateway→Gateway, OBO em dois saltos, quatro
-Policies gerenciadas, consultas entre contas, Registry e Bedrock. A execução real
-também precisa de revisão de logs para atribuir negativas e comprovar ausência
-de chamada ao backend. Os pré-requisitos completos estão no
-[runbook da federação](federation/README.md).
+## Laboratório 16
 
-## Adequações Santander — notebooks 12/13
+Após o deploy do [RAG](rag/README.md):
 
-O notebook 12 executou dez células de código em modo **OFFLINE_PREPARATION**.
-Gerou dez templates, validou oito casos Cedar e demonstrou o contrato local
-de quotas. A evidência cloud permanece `NOT_RUN`, com aceite
-`PENDING_EVIDENCE`. Não houve login real nem consulta ao MCP Databricks.
+```bash
+uv run --frozen --extra banking python -m scripts.rag_check
+```
 
-O notebook 13 executou quatro células em modo **LOCAL_INGESTION_CONTRACT**.
-Com documentos sintéticos, confirmou visibilidade distinta por grupo,
-versionamento, revogação de ACL, exclusão e isolamento da memória por usuário.
-Não executou conectores, BDA, KB/OpenSearch ou Memory AWS.
+A/B/C devem recuperar somente documentos autorizados e gerar uma resposta com
+esse contexto. Consultas adicionais pelos títulos verificam a cobertura das ACLs
+sem chamar o modelo novamente. D deve parar antes da geração; a tentativa de A
+usar a identidade de C também precisa falhar.
 
-Os 35 testes em `test_journey.py` cobrem a configuração, os parâmetros das
-fases IaC, Cedar, JWT assinado, WAT/OBO ligados ao usuário, descoberta governada,
-comparação exata de principal e classificação conservadora de erros.
-Três testes usam o cliente MCP real sobre transporte HTTP substituto para
-exercitar o Runtime até a fronteira do hub: sucesso, negativa de Policy e
-negativa de grant na fonte. Outro usa HTTP ASGI para confirmar que o Runtime
-recebe o bearer pelo header. Esses transportes não executam serviços AWS.
+O relatório `evidence/rag-live.json` reúne as verificações e a correlação dos logs.
+Se apenas a entrega dos logs estiver pendente, `--correlate-only` repete a leitura
+sem repetir consultas ou inferências. A existência do notebook ou dos testes
+locais não significa que esse relatório AWS tenha sido produzido.
 
-A suíte completa tem 138 casos aprovados. Além dos novos casos, inclui a
-regressão das trilhas anteriores e sua limpeza. O aviso de depreciação Pydantic
-da dependência permanece sem causar falha. A execução dos notebooks também
-emitiu o aviso padrão do kernel sobre transporte TCP; foram kernels locais.
+O [guia de validação do RAG](rag/validacao.md) explica como comparar as ACLs
+no S3, os trechos recuperados e o contexto enviado ao modelo. Para executar
+essas comparações durante o notebook e conferir a decisão nativa do Policy:
 
-Os dois módulos Terraform novos passaram em `init -backend=false -input=false`
-e `validate`, usando os lockfiles dos providers. Isso valida o schema, mas
-não comprova admin consent, IAM, federation ou disponibilidade do serviço.
-O artefato ARM64 tem SHA-256
-`c1dd8f9a6a79aa4d06a1c37f432e1061968c687e3cc96fe306fd18aa2220bd22`.
-As fontes Python e o entrypoint do cenário conferem com os arquivos empacotados.
+```bash
+uv run --frozen --extra banking python -m scripts.audit_live_notebooks rag
+```
 
-O próximo passo é o [ensaio em três contas](journey/README.md), incluindo a
-habilitação AWS do token exchange público, dois usuários Databricks e a
-[correlação dos logs até a query](journey/trace.md). A matriz de
-[adequações por demanda](adequacoes-santander.md) separa implementação local,
-preparação cloud e decisões ainda necessárias.
+## Registrar e compartilhar
+
+Guarde o cenário, a versão do código, região, horário, casos executados e IDs
+reais de correlação nos relatórios locais em `evidence/`, ignorados pelo Git.
+Mantenha em `docs/` as instruções para reproduzir e interpretar a validação.
+
+Os relatórios do RAG omitem senhas, tokens e e-mails; alguns verificadores
+registram dados e respostas sintéticos. Revise outputs de células antes de
+compartilhar uma cópia executada. A evidência precisa permitir entender a
+conclusão sem expor as credenciais usadas para obtê-la.
+
+Ao terminar, siga a [limpeza](cleanup.md). Recursos retidos e ambientes ainda
+implantados continuam com seu próprio ciclo de vida e possíveis custos.

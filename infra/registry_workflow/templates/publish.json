@@ -1,0 +1,84 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Registry personas - criar rascunhos imutaveis",
+  "Parameters": {
+    "RegistryId": {
+      "Type": "String"
+    },
+    "PublisherProviderArn": {
+      "Type": "String"
+    },
+    "McpPackage": {
+      "Type": "String"
+    },
+    "AgentPackage": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "Mcp": {
+      "Type": "Custom::RegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "PublisherProviderArn"
+        },
+        "Kind": "Record",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "Package": {
+          "Ref": "McpPackage"
+        }
+      }
+    },
+    "Agent": {
+      "Type": "Custom::RegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "PublisherProviderArn"
+        },
+        "Kind": "Record",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "Package": {
+          "Ref": "AgentPackage"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "McpRecordId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Mcp",
+          "Id"
+        ]
+      }
+    },
+    "McpDigest": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Mcp",
+          "Digest"
+        ]
+      }
+    },
+    "AgentRecordId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Agent",
+          "Id"
+        ]
+      }
+    },
+    "AgentDigest": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Agent",
+          "Digest"
+        ]
+      }
+    }
+  }
+}

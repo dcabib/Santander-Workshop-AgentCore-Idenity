@@ -1,4 +1,4 @@
-"""Notebooks 12/13 e diagramas incorporados; geração inteiramente local."""
+"""Notebooks 14/15 e diagramas incorporados; geração inteiramente local."""
 
 import base64
 import subprocess
@@ -8,6 +8,7 @@ import nbformat as nb
 from generate_banking_notebook import code, md
 from generate_diagrams import TINT, C, Diagram, write_gallery
 from notebook_cleanup import cleanup_cells
+from notebook_learning import learning_cell
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -23,10 +24,10 @@ def compact(d, x, y, w, title, subtitle, tone, icon):
 def diagram(knowledge=False):
     if knowledge:
         page = {
-            "id": "13_ingestao_acl_memoria",
+            "id": "15_ingestao_acl_memoria",
             "title": "Conhecimento compartilhado. Acesso individual.",
             "subtitle": "Um contrato de ingestão; ACL revalidada no retrieval e na memória.",
-            "status": "SESSÃO 2 · EXERCÍCIO LOCAL",
+            "status": "INGESTÃO · EXERCÍCIO LOCAL",
             "takeaway": "Indexar juntos não significa conceder o mesmo acesso a todos.",
             "description": "Conectores, BDA, OpenSearch/KB e Memory AWS são a arquitetura proposta. O notebook executa o contrato local de ciclo de vida, ACL e memória.",
         }
@@ -77,7 +78,7 @@ def diagram(knowledge=False):
         folder = ROOT / "docs/ingestao"
     else:
         page = {
-            "id": "12_cenario_santander_integrado",
+            "id": "14_cenario_santander_integrado",
             "title": "Uma chamada entre áreas, até a fonte.",
             "subtitle": "Conta A → conta central → conta B → Databricks Azure, com identidade humana.",
             "status": "CENÁRIO INTEGRADO · ENSAIO CLOUD PENDENTE",
@@ -159,7 +160,7 @@ def diagram(knowledge=False):
         folder = ROOT / "docs/journey"
     folder.mkdir(parents=True, exist_ok=True)
     svg, png = folder / "arquitetura.svg", folder / "arquitetura.png"
-    svg.write_text(d.finish().replace("12 / 09", "LAB 12").replace("13 / 09", "LAB 13"))
+    svg.write_text(d.finish().replace("12 / 09", "LAB 14").replace("13 / 09", "LAB 15"))
     subprocess.run(
         ["rsvg-convert", "-w", "2400", "-h", "1500", "-o", str(png), str(svg)], check=True
     )
@@ -176,6 +177,7 @@ def picture(path, label):
 
 
 def save(name, cells, mode):
+    cells.insert(2, learning_cell(name))
     notebook = nb.v4.new_notebook(
         cells=cells,
         metadata={
@@ -195,11 +197,11 @@ def main():
     png = diagram()
     cells = [
         md("""
-        # 12 — Santander: agente de uma área → hub → outra área → Databricks
+        # 14 — Santander: agente de uma área → hub → outra área → Databricks
 
-        **Este é o notebook principal da demo de 30 minutos.** A implantação e o
-        ensaio devem ser feitos antes do workshop. O roteiro completo está em
-        [docs/roteiro.md](../docs/roteiro.md).
+        Depois de estudar Gateways por conta e identidade na fonte, vamos compor
+        esses controles numa mesma chamada. Consulte a
+        [jornada de aprendizagem](../docs/jornada.md) para retomar os pré-requisitos.
 
         Dois agentes **hospedados em Runtime na conta A** usam aplicações Entra
         diferentes. A conta central autoriza por usuário, agente e tool. A conta B
@@ -207,8 +209,8 @@ def main():
         grants reais de cada pessoa. Cada conta tem seu Gateway.
 
         O agente usa um fluxo determinístico para tornar os testes repetíveis.
-        O notebook 10 continua sendo a referência de Strands/LLM. Não há alteração
-        do K2: consulte seu [contrato externo](../docs/journey/decisoes.md).
+        O notebook 11 exercita Strands/LLM; aqui isolamos a autorização. Veja as
+        [responsabilidades de cada componente](../docs/journey/arquitetura.md).
 
         **Padrão:** local; valida Cedar e gera IaC. **Cloud:** opt-in, após os
         pré-requisitos do [runbook](../docs/journey/README.md). Resultado local
@@ -262,7 +264,9 @@ def main():
         code("""
         matrix = local_matrix()
         display(matrix)
-        assert len(matrix["cases"]) == 8
+        assert [r["decision"] for r in matrix["cases"]] == [
+            "ALLOW", "DENY", "DENY", "ALLOW", "ALLOW", "DENY", "DENY", "DENY",
+        ], "As oito decisões precisam corresponder aos casos descritos"
         """),
         md("""
         ## 3. Infraestrutura reproduzível
@@ -394,60 +398,62 @@ def main():
             "aws_oauth_databricks": "EXECUTED_REVIEW_EVIDENCE" if LIVE else "NOT_RUN",
         }
         target = ROOT / "evidence" / ("journey-live.json" if LIVE else "journey-local.json")
+        target.parent.mkdir(exist_ok=True)
         target.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\\n")
         display(report)
         """),
         md("""
-        ## 8. Rate limit e orçamento: três medições diferentes
+        ## 8. Limites de consumo e orçamento: três contadores diferentes
 
         Execute o contrato **local** de contagem por agente/tool: duas chamadas
-        permitidas, QPM negado, TPM negado e budget mensal negado. Mudar o minuto
+        permitidas, QPM negado, TPM negado e orçamento mensal negado. Mudar o minuto
         renova QPM/TPM, mas não renova orçamento.
 
         Os números são sintéticos. Este código não mede tokens de LLM nem a fatura
-        AWS. Na arquitetura proposta, Neural Trust/controles Databricks continuam
-        governando consumo. Policy temporal nativa é por sessão, tem janela máxima
-        de 24h e não propaga histórico entre contas; não equivale ao budget mensal.
-        A [matriz de decisão](../docs/journey/decisoes.md) explica responsabilidades.
+        AWS. A aplicação de cotas nos serviços depende dos controles do ambiente. Policy temporal nativa é por sessão; a documentação
+        descreve expiração após 24h de inatividade e propagação entre saltos apenas
+        na mesma conta e região. Ela não equivale ao orçamento mensal deste contrato.
+        O [guia de arquitetura](../docs/journey/arquitetura.md) explica responsabilidades.
         """),
         code("""
         quota_demo = local_quota_demo()
         display(quota_demo)
+        assert [row["decision"] for row in quota_demo] == [
+            "ALLOW", "ALLOW", "QPM_DENY", "TPM_DENY", "BUDGET_DENY",
+        ], "Os resultados precisam demonstrar as três negativas de consumo"
         assert all(row["billing_measured"] is False for row in quota_demo)
         """),
         md("""
-        ## 9. Decisão de saída
+        ## 9. Relacionar as decisões e avançar
 
-        * Complementar Databricks: AgentCore governa entrada, agentes, tools e
-          catálogo; Unity Catalog mantém os grants do dado.
-        * Comparar `legacy_sql` com `unity_dbsql`: o endpoint antigo não passa
-          pelos controles/tracing do Unity Gateway; o novo DBSQL é beta e exige
-          confirmar habilitação no ambiente.
-        * Manter a stack de governança existente; expor contratos de trace e
-          avaliação a Dynatrace, Watsonx.governance e SanEval.
-        * Migrar o K2 é uma decisão separada. O agente desta demo é um substituto
-          declarado; nenhum conector K2 real é apresentado como pronto.
+        * O Gateway central distingue o agente e autoriza a ferramenta.
+        * O Gateway de dados aplica sua própria Policy à plataforma e ao usuário.
+        * O Unity Catalog verifica o grant na fonte, mesmo depois das permissões
+          dos Gateways. Identidade válida e acesso ao dado são provas diferentes.
+        * Os registros de chamada precisam de correlação para formar um trace.
 
-        Use o notebook **13** na Sessão 2 e o
-        [roteiro Harness](../docs/harness/sessao-online.md) na sessão online.
+        No [notebook 15](15_ingestao_acl_memoria.ipynb), acompanhe o que acontece
+        com essas permissões quando um documento é ingerido, atualizado ou
+        reutilizado na memória de uma conversa.
         """),
-        *cleanup_cells("12", "journey"),
+        *cleanup_cells("14", "journey"),
     ]
-    save("12_cenario_santander_integrado", cells, "OFFLINE_PREPARATION")
+    save("14_cenario_santander_integrado", cells, "OFFLINE_PREPARATION")
     cells = [
         md("""
-        # 13 — Sessão 2: ingestão, ACL e memória
+        # 15 — Ingestão, ACL e memória por usuário
 
         Exercício executável do **contrato local** de um indexador comum. Não
         chama SharePoint, BDA, OpenSearch, Bedrock Knowledge Bases ou Memory AWS.
         O objetivo é demonstrar o que cada conector precisa preservar antes de
-        conectarmos os serviços reais. Veja a [agenda e dependências](../docs/ingestao/sessao-2.md).
+        conectarmos os serviços reais. Veja o [guia do ciclo de vida documental](../docs/ingestao/README.md).
         """),
         picture(diagram(True), "Ingestão comum, ACL por usuário e memória isolada"),
         md("""
         ## 1. Contratos de fonte
 
-        A célula lista as quatro origens do HTML. O conteúdo de exercício é
+        A célula lista quatro contratos de origem: SharePoint, Databricks Silver/Gold,
+        SQL local e APIs AWS. O conteúdo de exercício é
         Markdown sintético, representando a saída normalizada de um conector/BDA.
         Nenhuma credencial de fonte é necessária.
         """),
@@ -463,16 +469,17 @@ def main():
         display(sources)
         """),
         md("""
-        ## 2. Register → retrieve → update de ACL → delete
+        ## 2. Registrar → recuperar → atualizar ACL → excluir
 
-        Dois documentos compartilham o mesmo índice, mas usuários Riscos e Fraude
+        Dois documentos compartilham o mesmo catálogo em memória, mas usuários Riscos e Fraude
         enxergam conjuntos diferentes. O usuário Ambos vê os dois. O exercício
         grava referências na memória, troca a ACL e verifica que a referência
         antiga deixa de revelar o documento. Reusar o mesmo ID de sessão com
         outro usuário também não dá acesso à memória.
 
-        A célula executa as operações e suas asserções. `version` e hash permitem
-        detectar atualizações; exclusão elimina o documento do retrieval.
+        A célula executa as operações e suas asserções. `version` exige uma sequência
+        de atualização válida; o hash registra o conteúdo na auditoria.
+        A exclusão elimina o documento dos resultados da recuperação.
         """),
         code("""
         knowledge_report = local_knowledge_demo()
@@ -481,6 +488,7 @@ def main():
         assert knowledge_report["visibility_before"]["user-fraude"] == ["F1"]
         assert knowledge_report["revoked_acl_in_memory"] == "DENIED"
         target = ROOT / "evidence/ingestao-local.json"
+        target.parent.mkdir(exist_ok=True)
         target.write_text(json.dumps(knowledge_report, ensure_ascii=False, indent=2) + "\\n")
         """),
         md("""
@@ -493,15 +501,17 @@ def main():
         autoridade dos dados Databricks.
 
         BDA normaliza conteúdo; não concede acesso. Agent Registry cataloga
-        capacidades; não substitui D2K. “AWS Context” e Neptune ficam como itens
-        de confirmação de produto/necessidade, sem status comercial inferido.
+        capacidades, enquanto a ingestão administra documentos e metadados.
+        Este exercício não chama esses serviços: usa textos sintéticos e busca
+        local para tornar atualização, revogação e exclusão observáveis.
 
-        O próximo ensaio real é um conector escolhido, dois usuários, uma revogação
-        e uma exclusão, pelo pipeline IaC do proprietário.
+        No [notebook 16](16_rag_managed_identity_policy.ipynb), implantaremos
+        uma Managed Knowledge Base com ACL nativa, Gateway e Policy. O modelo
+        receberá somente o contexto autorizado para a consulta.
         """),
-        *cleanup_cells("13", "journey"),
+        *cleanup_cells("15", "journey"),
     ]
-    save("13_ingestao_acl_memoria", cells, "LOCAL_INGESTION_CONTRACT")
+    save("15_ingestao_acl_memoria", cells, "LOCAL_INGESTION_CONTRACT")
     write_gallery()
 
 

@@ -1,4 +1,4 @@
-"""IaC do notebook 11: quatro Gateways, quatro Identity providers e quatro engines."""
+"""IaC do notebook 12: quatro Gateways, quatro Identity providers e quatro engines."""
 
 import json
 import sys
@@ -52,7 +52,7 @@ def authorizer(audience):
 
 def gateway(account):
     t = banking.platform()
-    t["Description"] = "Notebook 11 - " + account + " Gateway + Identity OBO + local Policy"
+    t["Description"] = "Notebook 12 - " + account + " Gateway + Identity OBO + local Policy"
     t["Parameters"] = {
         "Project": param("santander-fed"),
         "TenantId": param(AllowedPattern=UUID),
@@ -90,7 +90,7 @@ def gateway(account):
 
 def backend(lob):
     t = banking.lob(lob)
-    t["Description"] = "Notebook 11 - " + lob + " MCP accessible through its own Gateway"
+    t["Description"] = "Notebook 12 - " + lob + " MCP accessible through its own Gateway"
     for key in ("DiscoveryUrl", "Audience", "M2MClientId"):
         del t["Parameters"][key]
     t["Parameters"].update(
@@ -137,7 +137,7 @@ def binding(account):
         prefix = PREFIXES[lob].title()
         params[prefix + "Endpoint"] = param()
         params[prefix + "Scope"] = param()
-    t = template("Notebook 11 - " + account + " targets OBO and independent Cedar", params)
+    t = template("Notebook 12 - " + account + " targets OBO and independent Cedar", params)
     targets = []
     for lob in destinations:
         prefix = PREFIXES[lob].title()
@@ -212,7 +212,7 @@ def binding(account):
 def registry():
     # Reutiliza apenas o provider CloudFormation; targets/policies são stacks independentes.
     t = banking.bindings()
-    t["Description"] = "Notebook 11 - approved metadata for the federated platform entry point"
+    t["Description"] = "Notebook 12 - approved metadata for the federated platform entry point"
     t["Parameters"] = {
         **banking.artifact_params(),
         "Project": param("santander-fed"),

@@ -1,0 +1,20 @@
+{
+  "project": "santander-rag",
+  "auth_provider": "entra",
+  "region": "us-east-1",
+  "account_id": "111111111111",
+  "profile": "default",
+  "caller_principal_arn": "arn:aws:iam::111111111111:role/REPLACE_NOTEBOOK_ROLE",
+  "tenant_id": "REPLACE_TENANT_UUID",
+  "login_client_id": "REPLACE_LOGIN_UUID",
+  "broker_client_id": "REPLACE_BROKER_UUID",
+  "gateway_client_id": "REPLACE_GATEWAY_UUID",
+  "broker_secret_arn": "arn:aws:secretsmanager:us-east-1:111111111111:secret:REPLACE_BROKER",
+  "model_arn": "arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-lite-v1:0",
+  "users": {
+    "a": {"oid": "REPLACE_USER_A_UUID", "email": "a@example.invalid"},
+    "b": {"oid": "REPLACE_USER_B_UUID", "email": "b@example.invalid"},
+    "c": {"oid": "REPLACE_USER_C_UUID", "email": "c@example.invalid"},
+    "d": {"oid": "REPLACE_USER_D_UUID", "email": "d@example.invalid"}
+  }
+}

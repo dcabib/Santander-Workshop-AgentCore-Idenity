@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 11 - platform Gateway + Identity OBO + local Policy",
+  "Description": "Notebook 12 - platform Gateway + Identity OBO + local Policy",
   "Parameters": {
     "Project": {
       "Type": "String",
@@ -246,7 +246,7 @@
         "GuardrailIdentifier": {
           "Ref": "Guardrail"
         },
-        "Description": "Notebook 10 - synthetic banking"
+        "Description": "Notebook 11 - synthetic banking"
       }
     },
     "GatewayLog": {

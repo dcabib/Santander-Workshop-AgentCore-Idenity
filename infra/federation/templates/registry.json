@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 11 - approved metadata for the federated platform entry point",
+  "Description": "Notebook 12 - approved metadata for the federated platform entry point",
   "Parameters": {
     "ArtifactBucket": {
       "Type": "String"

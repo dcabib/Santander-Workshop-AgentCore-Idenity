@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Como políticas e acessos são criados</title><desc id="desc">Código de ACLs e Cedar, templates, change set e quatro fases CloudFormation.</desc>
+<defs>
+            <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+              <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#172B46" flood-opacity=".06"/>
+            </filter>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#DDE5EF"/>
+            </pattern>
+            </defs>
+<rect x="0" y="0" width="1600" height="1000" rx="0" fill="#F4F7FB"/>
+<rect x="0" y="190" width="1600" height="650" fill="url(#dots)" opacity=".5"/>
+<rect x="0" y="0" width="1600" height="190" rx="0" fill="#FFFFFF"/>
+<rect x="64" y="41" width="6" height="28" rx="3" fill="#D52E3F"/>
+<text class="" x="86" y="61" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="700" text-anchor="start" letter-spacing="1.8">
+<tspan x="86" dy="0">WORKSHOP SANTANDER  /  AGENTCORE  /  16</tspan>
+</text>
+<text class="" x="64" y="122" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="42" font-weight="700" text-anchor="start">
+<tspan x="64" dy="0">Como políticas e acessos são criados</tspan>
+</text>
+<text class="" x="64" y="163" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">As regras viram templates; o pipeline aplica cada fase pelo CloudFormation.</tspan>
+</text>
+<rect x="1120" y="39" width="416" height="34" rx="17.0" fill="#EDF1F7"/>
+<text class="" x="1328.0" y="60.55" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="middle">
+<tspan x="1328.0" dy="0">PROVISIONAMENTO · SOMENTE POR IaC</tspan>
+</text>
+<rect x="64" y="850" width="1472" height="96" rx="20" fill="#172B46"/>
+<g transform="translate(88 875) scale(0.9166666666666666)" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M15 29c-11-11-4-25 9-25s20 14 9 25l-3 6H18zM18 40h12m-9 5h6M24 12v10m-5-5h10"/>
+</g>
+<text class="" x="153" y="881" fill="#AFBED2" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="700" text-anchor="start" letter-spacing="1.4">
+<tspan x="153" dy="0">O QUE ESTE NOTEBOOK ENSINA</tspan>
+</text>
+<text class="" x="153" y="918" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="600" text-anchor="start">
+<tspan x="153" dy="0">ACLs novas precisam de ingestão. Policies são aplicadas no stack de acesso.</tspan>
+</text>
+<text class="" x="64" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="start">
+<tspan x="64" dy="0">Santander  ·  Amazon Bedrock AgentCore  ·  Dados sintéticos</tspan>
+</text>
+<text class="" x="1536" y="978" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="16" font-weight="400" text-anchor="end">
+<tspan x="1536" dy="0">16 / 16</tspan>
+</text>
+<g class="node" data-x="64" data-y="245" data-w="420" data-h="160">
+<rect x="64" y="245" width="420" height="160" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="265" width="56" height="56" rx="16" fill="#EDF1F7"/>
+<g transform="translate(93 274) scale(0.7916666666666666)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<rect x="3" y="7" width="42" height="34" rx="5"/><path d="M3 16h42M9 11h1m5 0h1m5 0h1M16 23l-5 5 5 5m16-10 5 5-5 5m-6-12-5 14"/>
+</g>
+<text class="node-text" x="158" y="299" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">1 · Código versionado</tspan>
+</text>
+<text class="node-text" x="88" y="357" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">contract.py: matriz de acesso</tspan>
+<tspan x="88" dy="29.0">cognito.py: regras Cedar</tspan>
+</text>
+</g>
+<g class="node" data-x="590" data-y="245" data-w="420" data-h="160">
+<rect x="590" y="245" width="420" height="160" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="610" y="265" width="56" height="56" rx="16" fill="#EDF1F7"/>
+<g transform="translate(619 274) scale(0.7916666666666666)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M10 3h19l10 10v32H10zM29 3v11h10M17 23h15m-15 7h15m-15 7h10"/>
+</g>
+<text class="node-text" x="684" y="299" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="684" dy="0">2 · Templates</tspan>
+</text>
+<text class="node-text" x="614" y="357" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="614" dy="0">identity.json · data.json</tspan>
+<tspan x="614" dy="29.0">access-cognito.json</tspan>
+</text>
+</g>
+<g class="node" data-x="1116" data-y="245" data-w="420" data-h="160">
+<rect x="1116" y="245" width="420" height="160" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1136" y="265" width="56" height="56" rx="16" fill="#FFF3E5"/>
+<g transform="translate(1145 274) scale(0.7916666666666666)" fill="none" stroke="#BD650F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M7 33v11h34V33M24 34V4M13 15 24 4l11 11"/>
+</g>
+<text class="node-text" x="1210" y="299" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1210" dy="0">3 · Revisar e aplicar</tspan>
+</text>
+<text class="node-text" x="1140" y="357" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1140" dy="0">scripts.rag_deploy</tspan>
+<tspan x="1140" dy="29.0">Change set → CloudFormation</tspan>
+</text>
+</g>
+<path d="M 484 325 L 590 325" stroke="#415571" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="590,325 579.0,330.5 579.0,319.5" fill="#415571"/>
+<path d="M 1010 325 L 1116 325" stroke="#BD650F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1116,325 1105.0,330.5 1105.0,319.5" fill="#BD650F"/>
+<path d="M 1326 405 L 1326 475 L 224 475 L 224 550" stroke="#BD650F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="224,550 218.5,539.0 229.5,539.0" fill="#BD650F"/>
+<rect x="519.145" y="458" width="561.71" height="32" rx="8" fill="#FFFFFF"/>
+<text class="" x="800" y="478" fill="#BD650F" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="600" text-anchor="middle">
+<tspan x="800" dy="0">Aplicar uma fase por vez, respeitando as dependências</tspan>
+</text>
+<g class="node" data-x="64" data-y="550" data-w="320" data-h="200">
+<rect x="64" y="550" width="320" height="200" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="84" y="570" width="56" height="56" rx="16" fill="#EDF1F7"/>
+<g transform="translate(93 579) scale(0.7916666666666666)" fill="none" stroke="#415571" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M12 38h24c14 0 13-20 1-21C35 2 14 2 12 18 1 17-3 36 12 38z"/>
+</g>
+<text class="node-text" x="158" y="604" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="158" dy="0">bootstrap</tspan>
+</text>
+<text class="node-text" x="88" y="662" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="88" dy="0">Bucket privado de artefatos</tspan>
+<tspan x="88" dy="29.0">ZIP das funções</tspan>
+</text>
+</g>
+<path d="M 384 650 L 448 650" stroke="#BD650F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="448,650 437.0,655.5 437.0,644.5" fill="#BD650F"/>
+<g class="node" data-x="448" data-y="550" data-w="320" data-h="200">
+<rect x="448" y="550" width="320" height="200" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="468" y="570" width="56" height="56" rx="16" fill="#ECF3FF"/>
+<g transform="translate(477 579) scale(0.7916666666666666)" fill="none" stroke="#2469DD" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="24" cy="14" r="8"/><path d="M8 42v-4c0-9 7-15 16-15s16 6 16 15v4"/><path d="M15 37h18"/>
+</g>
+<text class="node-text" x="542" y="604" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="542" dy="0">identity</tspan>
+</text>
+<text class="node-text" x="472" y="662" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="472" dy="0">Cognito + quatro usuários</tspan>
+<tspan x="472" dy="29.0">Senhas no Secrets Manager</tspan>
+<tspan x="472" dy="29.0">Outputs: subjects e e-mails</tspan>
+</text>
+</g>
+<path d="M 768 650 L 832 650" stroke="#BD650F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="832,650 821.0,655.5 821.0,644.5" fill="#BD650F"/>
+<g class="node" data-x="832" data-y="550" data-w="320" data-h="200">
+<rect x="832" y="550" width="320" height="200" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="852" y="570" width="56" height="56" rx="16" fill="#E8F7F5"/>
+<g transform="translate(861 579) scale(0.7916666666666666)" fill="none" stroke="#087F82" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<ellipse cx="24" cy="10" rx="17" ry="7"/><path d="M7 10v27c0 9 34 9 34 0V10M7 23c0 9 34 9 34 0"/>
+</g>
+<text class="node-text" x="926" y="604" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="926" dy="0">data</tspan>
+</text>
+<text class="node-text" x="856" y="662" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="856" dy="0">Managed KB + fonte S3</tspan>
+<tspan x="856" dy="29.0">Documentos e ACLs nativas</tspan>
+<tspan x="856" dy="29.0">Custom resource: ingestão</tspan>
+</text>
+</g>
+<path d="M 1152 650 L 1216 650" stroke="#BD650F" fill="none" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="1216,650 1205.0,655.5 1205.0,644.5" fill="#BD650F"/>
+<g class="node" data-x="1216" data-y="550" data-w="320" data-h="200">
+<rect x="1216" y="550" width="320" height="200" rx="18" fill="#FFFFFF" stroke="#DAE3EE" stroke-width="1.6" filter="url(#shadow)"/>
+<rect x="1236" y="570" width="56" height="56" rx="16" fill="#F2EDFB"/>
+<g transform="translate(1245 579) scale(0.7916666666666666)" fill="none" stroke="#7546C7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<path d="M24 3l17 7v13c0 10-8 18-17 23C15 41 7 33 7 23V10z"/><path d="M15 23l6 6 12-13"/>
+</g>
+<text class="node-text" x="1310" y="604" fill="#172B46" font-family="Arial,Helvetica,sans-serif" font-size="23" font-weight="700" text-anchor="start">
+<tspan x="1310" dy="0">access</tspan>
+</text>
+<text class="node-text" x="1240" y="662" fill="#52657C" font-family="Arial,Helvetica,sans-serif" font-size="21" font-weight="400" text-anchor="start">
+<tspan x="1240" dy="0">Gateway + 3 permits Cedar</tspan>
+<tspan x="1240" dy="29.0">Role IAM + Identity + logs</tspan>
+<tspan x="1240" dy="29.0">Policy em modo ENFORCE</tspan>
+</text>
+</g>
+<rect x="64" y="784" width="1472" height="42" rx="21.0" fill="#EDF1F7"/>
+<text class="" x="800.0" y="812.0" fill="#415571" font-family="Arial,Helvetica,sans-serif" font-size="20" font-weight="700" text-anchor="middle">
+<tspan x="800.0" dy="0">Os custom resources publicam o corpus e disparam a ingestão como parte do stack.</tspan>
+</text>
+</svg>

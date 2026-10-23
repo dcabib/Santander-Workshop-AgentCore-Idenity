@@ -1,0 +1,624 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander RAG - Identity OBO, native managed KB connector and principal-bound Policy",
+  "Parameters": {
+    "Project": {
+      "Type": "String"
+    },
+    "EngineName": {
+      "Type": "String",
+      "AllowedPattern": "[A-Za-z][A-Za-z0-9_]*"
+    },
+    "TenantId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "BrokerClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "GatewayClientId": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "BrokerSecretArn": {
+      "Type": "String"
+    },
+    "KnowledgeBaseId": {
+      "Type": "String"
+    },
+    "KnowledgeBaseArn": {
+      "Type": "String"
+    },
+    "CallerPrincipalArn": {
+      "Type": "String"
+    },
+    "ModelArn": {
+      "Type": "String"
+    },
+    "UserAOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserBOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserCOid": {
+      "Type": "String",
+      "AllowedPattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+    },
+    "UserAEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "UserBEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    },
+    "UserCEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}"
+    }
+  },
+  "Resources": {
+    "GatewayRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "aws:SourceAccount": {
+                    "Ref": "AWS::AccountId"
+                  }
+                },
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:gateway/*"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:GetKnowledgeBase",
+                    "bedrock:Retrieve"
+                  ],
+                  "Resource": {
+                    "Ref": "KnowledgeBaseArn"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetPolicyEngine"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Engine",
+                      "PolicyEngineArn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:AuthorizeAction",
+                    "bedrock-agentcore:PartiallyAuthorizeActions"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Engine",
+                        "PolicyEngineArn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:gateway/${Project}-*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Engine": {
+      "Type": "AWS::BedrockAgentCore::PolicyEngine",
+      "Properties": {
+        "Name": {
+          "Ref": "EngineName"
+        }
+      }
+    },
+    "Gateway": {
+      "Type": "AWS::BedrockAgentCore::Gateway",
+      "Properties": {
+        "Name": {
+          "Ref": "Project"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "GatewayRole",
+            "Arn"
+          ]
+        },
+        "ProtocolType": "MCP",
+        "AuthorizerType": "CUSTOM_JWT",
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Fn::Sub": "https://login.microsoftonline.com/${TenantId}/v2.0/.well-known/openid-configuration"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "GatewayClientId"
+              }
+            ],
+            "CustomClaims": [
+              {
+                "InboundTokenClaimName": "tid",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "TenantId"
+                    }
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "azp",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": {
+                      "Ref": "BrokerClientId"
+                    }
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "ver",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": "2.0"
+                  }
+                }
+              },
+              {
+                "InboundTokenClaimName": "scp",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": "access_as_user"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "PolicyEngineConfiguration": {
+          "Arn": {
+            "Fn::GetAtt": [
+              "Engine",
+              "PolicyEngineArn"
+            ]
+          },
+          "Mode": "ENFORCE"
+        }
+      }
+    },
+    "Target": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "rag",
+        "GatewayIdentifier": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayIdentifier"
+          ]
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "GATEWAY_IAM_ROLE"
+          }
+        ],
+        "TargetConfiguration": {
+          "Mcp": {
+            "Connector": {
+              "Source": {
+                "ConnectorId": "bedrock-knowledge-bases"
+              },
+              "Enabled": [
+                "Retrieve"
+              ],
+              "Configurations": [
+                {
+                  "Name": "Retrieve",
+                  "ParameterValues": {
+                    "knowledgeBaseId": {
+                      "Ref": "KnowledgeBaseId"
+                    },
+                    "retrievalConfiguration": {
+                      "managedSearchConfiguration": {
+                        "numberOfResults": 10,
+                        "rerankingModelType": "MANAGED"
+                      }
+                    }
+                  },
+                  "ParameterOverrides": [
+                    {
+                      "Path": "$.retrievalQuery.text",
+                      "Visible": true
+                    },
+                    {
+                      "Path": "$.userContext",
+                      "Visible": true
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "AllowUserA": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "AllowUserA",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "Engine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal is AgentCore::OAuthUser,\n  action == AgentCore::Action::\"rag___Retrieve\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${BrokerClientId}\" &&\n  principal.hasTag(\"ver\") && principal.getTag(\"ver\") == \"2.0\" &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\" &&\n  principal.hasTag(\"oid\") && principal.getTag(\"oid\") == \"${UserAOid}\" &&\n  principal.hasTag(\"email\") && principal.getTag(\"email\") == \"${UserAEmail}\" &&\n  context.input has userContext &&\n  context.input.userContext.userId == \"${UserAEmail}\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "Target"
+      ]
+    },
+    "AllowUserB": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "AllowUserB",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "Engine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal is AgentCore::OAuthUser,\n  action == AgentCore::Action::\"rag___Retrieve\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${BrokerClientId}\" &&\n  principal.hasTag(\"ver\") && principal.getTag(\"ver\") == \"2.0\" &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\" &&\n  principal.hasTag(\"oid\") && principal.getTag(\"oid\") == \"${UserBOid}\" &&\n  principal.hasTag(\"email\") && principal.getTag(\"email\") == \"${UserBEmail}\" &&\n  context.input has userContext &&\n  context.input.userContext.userId == \"${UserBEmail}\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "Target"
+      ]
+    },
+    "AllowUserC": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "AllowUserC",
+        "PolicyEngineId": {
+          "Fn::GetAtt": [
+            "Engine",
+            "PolicyEngineId"
+          ]
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(\n  principal is AgentCore::OAuthUser,\n  action == AgentCore::Action::\"rag___Retrieve\",\n  resource == AgentCore::Gateway::\"${Gateway.GatewayArn}\"\n)\nwhen {\n  principal.hasTag(\"tid\") && principal.getTag(\"tid\") == \"${TenantId}\" &&\n  principal.hasTag(\"azp\") && principal.getTag(\"azp\") == \"${BrokerClientId}\" &&\n  principal.hasTag(\"ver\") && principal.getTag(\"ver\") == \"2.0\" &&\n  principal.hasTag(\"scp\") && principal.getTag(\"scp\") == \"access_as_user\" &&\n  principal.hasTag(\"oid\") && principal.getTag(\"oid\") == \"${UserCOid}\" &&\n  principal.hasTag(\"email\") && principal.getTag(\"email\") == \"${UserCEmail}\" &&\n  context.input has userContext &&\n  context.input.userContext.userId == \"${UserCEmail}\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "Target"
+      ]
+    },
+    "Workload": {
+      "Type": "AWS::BedrockAgentCore::WorkloadIdentity",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-broker"
+        }
+      }
+    },
+    "OAuth": {
+      "Type": "AWS::BedrockAgentCore::OAuth2CredentialProvider",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-obo"
+        },
+        "CredentialProviderVendor": "CustomOauth2",
+        "Oauth2ProviderConfigInput": {
+          "CustomOauth2ProviderConfig": {
+            "OauthDiscovery": {
+              "DiscoveryUrl": {
+                "Fn::Sub": "https://login.microsoftonline.com/${TenantId}/v2.0/.well-known/openid-configuration"
+              }
+            },
+            "ClientId": {
+              "Ref": "BrokerClientId"
+            },
+            "ClientSecretSource": "EXTERNAL",
+            "ClientSecretConfig": {
+              "SecretId": {
+                "Ref": "BrokerSecretArn"
+              },
+              "JsonKey": "client_secret"
+            },
+            "ClientAuthenticationMethod": "CLIENT_SECRET_POST",
+            "OnBehalfOfTokenExchangeConfig": {
+              "GrantType": "JWT_AUTHORIZATION_GRANT"
+            }
+          }
+        }
+      }
+    },
+    "CallerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Ref": "CallerPrincipalArn"
+                }
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "rag-caller",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Workload",
+                        "WorkloadIdentityArn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:workload-identity-directory/default"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetResourceOauth2Token"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Workload",
+                        "WorkloadIdentityArn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "OAuth",
+                        "CredentialProviderArn"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:InvokeModel"
+                  ],
+                  "Resource": {
+                    "Ref": "ModelArn"
+                  }
+                },
+                {
+                  "Effect": "Deny",
+                  "Action": [
+                    "bedrock:Retrieve",
+                    "bedrock:RetrieveAndGenerate",
+                    "bedrock:AgenticRetrieveStream"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "GatewayLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/vendedlogs/${Project}/gateway"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "GatewayLogSource": {
+      "Type": "AWS::Logs::DeliverySource",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "LogType": "APPLICATION_LOGS",
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayArn"
+          ]
+        }
+      }
+    },
+    "GatewayLogDestination": {
+      "Type": "AWS::Logs::DeliveryDestination",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "DestinationResourceArn": {
+          "Fn::GetAtt": [
+            "GatewayLog",
+            "Arn"
+          ]
+        },
+        "OutputFormat": "json"
+      }
+    },
+    "GatewayLogDelivery": {
+      "Type": "AWS::Logs::Delivery",
+      "Properties": {
+        "DeliverySourceName": {
+          "Ref": "GatewayLogSource"
+        },
+        "DeliveryDestinationArn": {
+          "Fn::GetAtt": [
+            "GatewayLogDestination",
+            "Arn"
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "GatewayId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayIdentifier"
+        ]
+      }
+    },
+    "GatewayArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayArn"
+        ]
+      }
+    },
+    "GatewayUrl": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayUrl"
+        ]
+      }
+    },
+    "TargetId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Target",
+          "TargetId"
+        ]
+      }
+    },
+    "PolicyEngineId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineId"
+        ]
+      }
+    },
+    "PolicyEngineArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineArn"
+        ]
+      }
+    },
+    "OAuthProviderName": {
+      "Value": {
+        "Fn::Sub": "${Project}-obo"
+      }
+    },
+    "OAuthProviderArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "OAuth",
+          "CredentialProviderArn"
+        ]
+      }
+    },
+    "WorkloadName": {
+      "Value": {
+        "Fn::Sub": "${Project}-broker"
+      }
+    },
+    "CallerRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "CallerRole",
+          "Arn"
+        ]
+      }
+    },
+    "GatewayLogGroup": {
+      "Value": {
+        "Ref": "GatewayLog"
+      }
+    }
+  }
+}

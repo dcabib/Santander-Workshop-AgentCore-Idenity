@@ -128,7 +128,7 @@ def test_local_cleanup_is_repeatable_preserves_files_and_unrelated_state(
 def test_runner_rejects_enabled_cloud_cleanup_before_starting_kernel():
     import nbformat as nb
 
-    notebook = nb.v4.new_notebook(cells=cleanup_cells("10", "banking"))
+    notebook = nb.v4.new_notebook(cells=cleanup_cells("11", "banking"))
     check_offline_defaults(notebook)
     notebook.cells[1].source = notebook.cells[1].source.replace(
         "CLEANUP_EXECUTE = False", "CLEANUP_EXECUTE = True"

@@ -12,6 +12,8 @@ TEMPLATE_DIRS = {
     "banking": ROOT / "infra/banking/templates",
     "federation": ROOT / "infra/federation/templates",
     "journey": ROOT / "infra/journey/templates",
+    "rag": ROOT / "infra/rag/templates",
+    "registry_workflow": ROOT / "infra/registry_workflow/templates",
 }
 STABLE_STATES = {
     "CREATE_COMPLETE",

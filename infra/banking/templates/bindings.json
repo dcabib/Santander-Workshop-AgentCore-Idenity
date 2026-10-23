@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 10 - targets M2M, active Cedar, governed Registry",
+  "Description": "Notebook 11 - targets M2M, active Cedar, governed Registry",
   "Parameters": {
     "ArtifactBucket": {
       "Type": "String"

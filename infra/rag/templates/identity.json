@@ -1,0 +1,412 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Santander RAG - isolated Cognito test identities",
+  "Parameters": {
+    "Project": {
+      "Type": "String"
+    },
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "Pool": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "UserPoolName": {
+          "Ref": "Project"
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true
+        },
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 24,
+            "RequireLowercase": true,
+            "RequireUppercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true
+          }
+        },
+        "Schema": [
+          {
+            "Name": "email",
+            "AttributeDataType": "String",
+            "Required": true,
+            "Mutable": false
+          }
+        ]
+      }
+    },
+    "Client": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "ClientName": "workshop-notebook",
+        "UserPoolId": {
+          "Ref": "Pool"
+        },
+        "GenerateSecret": false,
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH"
+        ],
+        "PreventUserExistenceErrors": "ENABLED",
+        "ReadAttributes": [
+          "email",
+          "email_verified"
+        ],
+        "IdTokenValidity": 15,
+        "AccessTokenValidity": 15,
+        "TokenValidityUnits": {
+          "IdToken": "minutes",
+          "AccessToken": "minutes"
+        }
+      }
+    },
+    "UserA": {
+      "Type": "AWS::Cognito::UserPoolUser",
+      "Properties": {
+        "UserPoolId": {
+          "Ref": "Pool"
+        },
+        "Username": "usuario-a",
+        "MessageAction": "SUPPRESS",
+        "UserAttributes": [
+          {
+            "Name": "email",
+            "Value": "a@santander-rag.example.invalid"
+          },
+          {
+            "Name": "email_verified",
+            "Value": "true"
+          }
+        ]
+      }
+    },
+    "SecretA": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Description": "Synthetic workshop credential; not a real person",
+        "GenerateSecretString": {
+          "SecretStringTemplate": "{\"username\":\"usuario-a\"}",
+          "GenerateStringKey": "password",
+          "PasswordLength": 32,
+          "RequireEachIncludedType": true
+        }
+      }
+    },
+    "UserB": {
+      "Type": "AWS::Cognito::UserPoolUser",
+      "Properties": {
+        "UserPoolId": {
+          "Ref": "Pool"
+        },
+        "Username": "usuario-b",
+        "MessageAction": "SUPPRESS",
+        "UserAttributes": [
+          {
+            "Name": "email",
+            "Value": "b@santander-rag.example.invalid"
+          },
+          {
+            "Name": "email_verified",
+            "Value": "true"
+          }
+        ]
+      }
+    },
+    "SecretB": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Description": "Synthetic workshop credential; not a real person",
+        "GenerateSecretString": {
+          "SecretStringTemplate": "{\"username\":\"usuario-b\"}",
+          "GenerateStringKey": "password",
+          "PasswordLength": 32,
+          "RequireEachIncludedType": true
+        }
+      }
+    },
+    "UserC": {
+      "Type": "AWS::Cognito::UserPoolUser",
+      "Properties": {
+        "UserPoolId": {
+          "Ref": "Pool"
+        },
+        "Username": "usuario-c",
+        "MessageAction": "SUPPRESS",
+        "UserAttributes": [
+          {
+            "Name": "email",
+            "Value": "c@santander-rag.example.invalid"
+          },
+          {
+            "Name": "email_verified",
+            "Value": "true"
+          }
+        ]
+      }
+    },
+    "SecretC": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Description": "Synthetic workshop credential; not a real person",
+        "GenerateSecretString": {
+          "SecretStringTemplate": "{\"username\":\"usuario-c\"}",
+          "GenerateStringKey": "password",
+          "PasswordLength": 32,
+          "RequireEachIncludedType": true
+        }
+      }
+    },
+    "UserD": {
+      "Type": "AWS::Cognito::UserPoolUser",
+      "Properties": {
+        "UserPoolId": {
+          "Ref": "Pool"
+        },
+        "Username": "usuario-d",
+        "MessageAction": "SUPPRESS",
+        "UserAttributes": [
+          {
+            "Name": "email",
+            "Value": "d@santander-rag.example.invalid"
+          },
+          {
+            "Name": "email_verified",
+            "Value": "true"
+          }
+        ]
+      }
+    },
+    "SecretD": {
+      "Type": "AWS::SecretsManager::Secret",
+      "Properties": {
+        "Description": "Synthetic workshop credential; not a real person",
+        "GenerateSecretString": {
+          "SecretStringTemplate": "{\"username\":\"usuario-d\"}",
+          "GenerateStringKey": "password",
+          "PasswordLength": 32,
+          "RequireEachIncludedType": true
+        }
+      }
+    },
+    "Log": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 7
+      }
+    },
+    "Role": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${Log.Arn}:*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cognito-idp:AdminSetUserPassword",
+                    "cognito-idp:AdminGetUser"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Pool",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "secretsmanager:GetSecretValue"
+                  ],
+                  "Resource": [
+                    {
+                      "Ref": "SecretA"
+                    },
+                    {
+                      "Ref": "SecretB"
+                    },
+                    {
+                      "Ref": "SecretC"
+                    },
+                    {
+                      "Ref": "SecretD"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Function": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "Handler": "santander_demo.rag.cognito_seed.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "Role",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "Timeout": 120,
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "Log"
+          }
+        }
+      }
+    },
+    "UsersReady": {
+      "Type": "Custom::RagTestCredentials",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "Function",
+            "Arn"
+          ]
+        },
+        "UserPoolId": {
+          "Ref": "Pool"
+        },
+        "UserASecretArn": {
+          "Ref": "SecretA"
+        },
+        "UserBSecretArn": {
+          "Ref": "SecretB"
+        },
+        "UserCSecretArn": {
+          "Ref": "SecretC"
+        },
+        "UserDSecretArn": {
+          "Ref": "SecretD"
+        }
+      },
+      "DependsOn": [
+        "UserA",
+        "UserB",
+        "UserC",
+        "UserD"
+      ]
+    }
+  },
+  "Outputs": {
+    "UserASecretArn": {
+      "Value": {
+        "Ref": "SecretA"
+      }
+    },
+    "UserAEmail": {
+      "Value": "a@santander-rag.example.invalid"
+    },
+    "UserBSecretArn": {
+      "Value": {
+        "Ref": "SecretB"
+      }
+    },
+    "UserBEmail": {
+      "Value": "b@santander-rag.example.invalid"
+    },
+    "UserCSecretArn": {
+      "Value": {
+        "Ref": "SecretC"
+      }
+    },
+    "UserCEmail": {
+      "Value": "c@santander-rag.example.invalid"
+    },
+    "UserDSecretArn": {
+      "Value": {
+        "Ref": "SecretD"
+      }
+    },
+    "UserDEmail": {
+      "Value": "d@santander-rag.example.invalid"
+    },
+    "UserAOid": {
+      "Value": {
+        "Fn::GetAtt": [
+          "UsersReady",
+          "UserAOid"
+        ]
+      }
+    },
+    "UserBOid": {
+      "Value": {
+        "Fn::GetAtt": [
+          "UsersReady",
+          "UserBOid"
+        ]
+      }
+    },
+    "UserCOid": {
+      "Value": {
+        "Fn::GetAtt": [
+          "UsersReady",
+          "UserCOid"
+        ]
+      }
+    },
+    "UserDOid": {
+      "Value": {
+        "Fn::GetAtt": [
+          "UsersReady",
+          "UserDOid"
+        ]
+      }
+    },
+    "UserPoolId": {
+      "Value": {
+        "Ref": "Pool"
+      }
+    },
+    "LoginClientId": {
+      "Value": {
+        "Ref": "Client"
+      }
+    }
+  }
+}

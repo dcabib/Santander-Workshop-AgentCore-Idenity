@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 10 - platform Gateway, OAuth M2M, Policy engine, Guardrail",
+  "Description": "Notebook 11 - platform Gateway, OAuth M2M, Policy engine, Guardrail",
   "Parameters": {
     "Project": {
       "Type": "String",
@@ -206,7 +206,7 @@
         "GuardrailIdentifier": {
           "Ref": "Guardrail"
         },
-        "Description": "Notebook 10 - synthetic banking"
+        "Description": "Notebook 11 - synthetic banking"
       }
     },
     "GatewayLog": {

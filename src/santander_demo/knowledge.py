@@ -1,4 +1,4 @@
-"""Sessão 2: contrato LOCAL de indexação comum, ACL, ciclo D2K e memória isolada."""
+"""Contrato local de ingestão, ACL, ciclo de vida documental e memória isolada."""
 
 import hashlib
 from dataclasses import dataclass

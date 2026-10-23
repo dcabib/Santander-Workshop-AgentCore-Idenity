@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Notebook 11 - transaction-banking targets OBO and independent Cedar",
+  "Description": "Notebook 12 - transaction-banking targets OBO and independent Cedar",
   "Parameters": {
     "GatewayId": {
       "Type": "String"

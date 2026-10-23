@@ -105,7 +105,20 @@
     ]
   },
   {
-    "id": "07_registry_descoberta_execucao",
+    "id": "07_registry_personas",
+    "pillar": "Registry",
+    "title": "Da ideia à capacidade aprovada.",
+    "description": "Quatro personas acompanham um MCP e um agente.",
+    "result": "Separar desenvolvimento, publicação, aprovação e execução.",
+    "notes": [
+      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
+      "Resultados locais não comprovam os serviços gerenciados."
+    ],
+    "svg": "../registry/arquitetura.svg",
+    "png": "../registry/arquitetura.png"
+  },
+  {
+    "id": "08_registry_descoberta_execucao",
     "pillar": "Registry",
     "title": "Encontrar uma capacidade não libera seu uso",
     "subtitle": "O supervisor descobre no Registry, valida o endpoint e invoca pelo Gateway.",
@@ -120,7 +133,20 @@
     ]
   },
   {
-    "id": "08_santander_multi_conta",
+    "id": "09_terraform_runtime_gateway_identity",
+    "pillar": "Gateway",
+    "title": "A primeira implantação, em uma conta.",
+    "description": "Terraform provisiona Runtime, Identity, Cognito, Gateway e Lambda.",
+    "result": "Planejar, implantar e testar a identidade de aplicação antes de avançar para múltiplas contas.",
+    "notes": [
+      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
+      "Resultados locais não comprovam os serviços gerenciados."
+    ],
+    "svg": "../terraform/arquitetura.svg",
+    "png": null
+  },
+  {
+    "id": "10_santander_multi_conta",
     "pillar": "Arquitetura integrada",
     "title": "Três contas. Fronteiras explícitas.",
     "subtitle": "O supervisor está na origem; governança fica no hub; Fraude pertence a outro domínio.",
@@ -135,7 +161,33 @@
     ]
   },
   {
-    "id": "09_databricks_e_evidencias",
+    "id": "11_blog_multi_account_gateway_mcp",
+    "pillar": "Gateway",
+    "title": "Um agente, três áreas, quatro contas.",
+    "description": "Referência do artigo AWS com Strands e M2M nas ferramentas.",
+    "result": "Comparar a identidade humana na entrada e a credencial técnica nos destinos.",
+    "notes": [
+      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
+      "Resultados locais não comprovam os serviços gerenciados."
+    ],
+    "svg": "../banking/arquitetura.svg",
+    "png": "../banking/arquitetura.png"
+  },
+  {
+    "id": "12_gateways_por_conta_identity_policy",
+    "pillar": "Policy",
+    "title": "Cada conta tem sua própria porta.",
+    "description": "Gateway, Identity OBO e Policy independentes em quatro contas.",
+    "result": "Entender a autonomia de autorização de cada domínio.",
+    "notes": [
+      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
+      "Resultados locais não comprovam os serviços gerenciados."
+    ],
+    "svg": "../federation/arquitetura.svg",
+    "png": "../federation/arquitetura.png"
+  },
+  {
+    "id": "13_databricks_e_evidencias",
     "pillar": "Fonte de dados",
     "title": "A fonte de dados precisa reconhecer a pessoa",
     "subtitle": "A extensão Databricks verifica identidade efetiva e grants, com uma tabela canário.",
@@ -150,55 +202,42 @@
     ]
   },
   {
-    "id": "10_blog_multi_account_gateway_mcp",
-    "pillar": "Gateway",
-    "title": "Um agente, três áreas, quatro contas.",
-    "description": "Referência do artigo AWS com Strands e M2M nas ferramentas.",
-    "result": "Comparar a identidade humana na entrada e a credencial técnica nos destinos.",
-    "notes": [
-      "Leia o runbook do cenário antes de habilitar a execução cloud.",
-      "Resultados locais não comprovam os serviços gerenciados."
-    ],
-    "svg": "../banking/arquitetura.svg",
-    "png": "../banking/arquitetura.png"
-  },
-  {
-    "id": "11_gateways_por_conta_identity_policy",
-    "pillar": "Policy",
-    "title": "Cada conta tem sua própria porta.",
-    "description": "Gateway, Identity OBO e Policy independentes em quatro contas.",
-    "result": "Entender a autonomia de autorização de cada domínio.",
-    "notes": [
-      "Leia o runbook do cenário antes de habilitar a execução cloud.",
-      "Resultados locais não comprovam os serviços gerenciados."
-    ],
-    "svg": "../federation/arquitetura.svg",
-    "png": "../federation/arquitetura.png"
-  },
-  {
-    "id": "12_cenario_santander_integrado",
+    "id": "14_cenario_santander_integrado",
     "pillar": "Identity",
     "title": "Uma chamada entre áreas, até a fonte.",
     "description": "Agentes na conta A → hub → Gateway da conta B → MCP Databricks.",
     "result": "Distinguir agentes no hub e verificar a identidade humana na fonte.",
     "notes": [
-      "Leia o runbook do cenário antes de habilitar a execução cloud.",
+      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
       "Resultados locais não comprovam os serviços gerenciados."
     ],
     "svg": "../journey/arquitetura.svg",
     "png": "../journey/arquitetura.png"
   },
   {
-    "id": "13_ingestao_acl_memoria",
+    "id": "15_ingestao_acl_memoria",
     "pillar": "Registry",
     "title": "Conhecimento compartilhado, acesso individual.",
     "description": "Contrato local de ingestão, ACL, revogação e memória por usuário.",
     "result": "Compartilhar o índice sem compartilhar todas as permissões.",
     "notes": [
-      "Leia o runbook do cenário antes de habilitar a execução cloud.",
-      "Resultados locais não comprovam os serviços gerenciados."
+      "Este laboratório executa somente o contrato local de documentos e memória.",
+      "Observe a recuperação após revogar uma ACL ou excluir um documento."
     ],
     "svg": "../ingestao/arquitetura.svg",
     "png": "../ingestao/arquitetura.png"
+  },
+  {
+    "id": "16_rag_managed_identity_policy",
+    "pillar": "Policy",
+    "title": "Uma base, quatro experiências de acesso.",
+    "description": "Cognito, AgentCore Identity, Policy e ACLs nativas da Managed Knowledge Base.",
+    "result": "A vê Riscos, B vê Fraude, C vê ambos e D não acessa o RAG.",
+    "notes": [
+      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
+      "Resultados locais não comprovam os serviços gerenciados."
+    ],
+    "svg": "../rag/arquitetura.svg",
+    "png": "../rag/arquitetura.png"
   }
 ]

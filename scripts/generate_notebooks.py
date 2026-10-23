@@ -6,6 +6,7 @@ from textwrap import dedent
 import nbformat as nb
 from generate_diagrams import PAGES, image_cell
 from notebook_cleanup import cleanup_cells
+from notebook_learning import learning_cell
 
 ROOT = Path(__file__).resolve().parents[1]
 SETUP_TEXT = """
@@ -79,16 +80,16 @@ def main(only=None):
     modules = [
         (
             "00_preflight",
-            "Preflight e contrato da demo",
-            "10 minutos • Referências I5, P1/P3, R1/R2",
+            "Primeira execução e componentes",
+            "10 minutos",
             [
                 md("""
             O modo **local** usa um emissor JWT efêmero e o avaliador Cedar real. Gateway,
             Registry, contas e fontes são simulados. O modo **aws** faz chamadas reais,
             requer `config/local.json` e os stacks do [runbook](../docs/deploy.md).
 
-            Objetivo: conhecer o ambiente antes de apresentar. Nenhuma célula provisiona recursos.
-            Não execute os exemplos AWS originais de criação/limpeza diretamente.
+            Objetivo: observar uma chamada local e reconhecer os componentes antes de
+            estudar suas responsabilidades. A infraestrutura usa o pipeline do projeto.
             """),
                 md(SETUP_TEXT),
                 code(SETUP),
@@ -130,7 +131,7 @@ def main(only=None):
         (
             "01_gateway_targets",
             "Gateway: Lambda e servidor MCP",
-            "20 minutos • Referências G1, G2, G8",
+            "20 minutos",
             [
                 md("""
             As tools de Riscos/K2 são Lambda; Fraude é um especialista MCP hospedado em Runtime.
@@ -176,14 +177,17 @@ def main(only=None):
             No modo local, vamos iniciar o servidor MCP de Fraude em um processo
             Python, concluir o handshake pelo transporte `stdio` e chamar
             `consultar_fraude` para o cliente sintético, com limite de dez registros.
-            Esperamos uma resposta sem erro e `backend_mcp_protocol: PASS`.
+            Conferiremos o cliente, a ferramenta e os indícios sintéticos
+            retornados. Uma resposta sem erro, mas vazia ou de outro cliente,
+            precisa falhar; `isError=False` sozinho não comprova o resultado.
 
             No modo AWS, o ramo executado será outro: chamaremos a ferramenta
-            Lambda de Riscos pelo Gateway e verificaremos a marca `synthetic`
-            no retorno. O teste local comprova o protocolo do backend; o retorno
+            Lambda de Riscos pelo Gateway e verificaremos o cliente, a ferramenta,
+            a marca `synthetic` e os valores da fixture. O teste local comprova o protocolo do backend; o retorno
             `lambda_via_gateway: PASS` depende da chamada real em AWS.
             """),
                 code("""
+            import json
             import sys
             from mcp import ClientSession, StdioServerParameters
             from mcp.client.stdio import stdio_client
@@ -196,11 +200,24 @@ def main(only=None):
                         answer = await session.call_tool("consultar_fraude",
                             {"cliente_id": CLIENTE, "max_registros": 10})
                         assert not answer.isError
+                        payload = answer.structuredContent
+                        if payload is None:
+                            payload = json.loads(next(c.text for c in answer.content if c.type == "text"))
+                        assert payload == {
+                            "cliente_id": CLIENTE, "synthetic": True,
+                            "tool": "fraude___consultar_fraude",
+                            "dados": [{"indicios": ["dispositivo_novo"], "revisao": "manual"}],
+                        }, "O conteúdo MCP diverge da consulta descrita"
+                        print(payload)
                         print({"backend_mcp_protocol": "PASS", "gateway_aws": "NOT_RUN"})
             else:
                 result = await cloud.call(token, "riscos___consultar_risco",
                                           {"cliente_id": CLIENTE, "max_registros": 10})
                 assert result["synthetic"] is True
+                assert result["cliente_id"] == CLIENTE
+                assert result["tool"] == "riscos___consultar_risco"
+                assert result["dados"] == [{"rating": "B", "score": 720, "exposicao_brl": 125000}]
+                print(result)
                 print({"lambda_via_gateway": "PASS"})
             """),
                 md("""
@@ -213,7 +230,7 @@ def main(only=None):
         (
             "02_identity_entra_obo",
             "Identity: usuário, M2M e OBO",
-            "30 minutos • Referências I1–I3, I5",
+            "30 minutos",
             [
                 md("""
             No cenário principal, o Gateway valida o token para sua API e o Identity troca
@@ -271,15 +288,14 @@ def main(only=None):
         (
             "03_identity_agente_mcp",
             "Identidade técnica e contexto delegado",
-            "25 minutos • Referência I4",
+            "25 minutos",
             [
                 md("""
             O contrato implantado usa OBO nativo no Gateway também para o Runtime Fraude.
             O Runtime valida sua própria audiência, a aplicação do Gateway e a restrição de
-            workload. É uma adaptação de I4: o agente não recebe nem manipula um token Graph.
-
-            O modelo alternativo de I4 (M2M para MCP + token Graph em header separado) é
-            material de comparação; não está implantado por este projeto.
+            workload. A pessoa permanece no contexto delegado, enquanto a aplicação
+            chamadora identifica qual agente atua por ela. Vamos comparar essas
+            identidades e observar seu efeito na autorização.
             """),
                 md(SETUP_TEXT),
                 code(SETUP),
@@ -326,7 +342,7 @@ def main(only=None):
         (
             "04_policy_cedar",
             "Policy: autorização por identidade, tool e entrada",
-            "35 minutos • Referências P1, P3",
+            "35 minutos",
             [
                 md(SETUP_TEXT),
                 code(SETUP),
@@ -379,7 +395,7 @@ def main(only=None):
             Se o modo for `aws`, vamos consultar o ambiente para confirmar o
             vínculo do Gateway com a engine e o modo `ENFORCE`, além dos demais
             requisitos do preflight. A saída também indicará o roteiro da
-            matriz live em `docs/aceite.md`.
+            matriz live em `docs/validacao.md`.
 
             Esta consulta não executa a matriz no serviço nem modifica a engine.
             No modo local, a saída será `aws_preflight: NOT_RUN`.
@@ -388,7 +404,7 @@ def main(only=None):
             if MODE == "aws":
                 # Verifica vínculo e modo efetivo, sem modificar a engine.
                 print(cloud.preflight())
-                print("Execute a matriz live descrita em docs/aceite.md; registre a evidência nativa.")
+                print("Execute a matriz live descrita em docs/validacao.md; registre a evidência nativa.")
             else:
                 print({"aws_preflight": "NOT_RUN", "aws_policy_matrix": "NOT_RUN"})
             """),
@@ -465,7 +481,7 @@ def main(only=None):
             2. A ação e o recurso são exatos?
             3. O limite está no mesmo `permit` das condições de identidade?
             4. Há testes de usuário, chamador, claim ausente e nomes semelhantes?
-            5. O change set usa `FAIL_ON_ANY_FINDINGS`?
+            5. Os recursos de Policy no template usam `FAIL_ON_ANY_FINDINGS`?
 
             Altere a fonte em `src/santander_demo/policy.py`, gere os templates, execute os
             testes e revise o change set antes do deploy pelo pipeline do projeto.
@@ -475,7 +491,7 @@ def main(only=None):
         (
             "06_registry_governanca",
             "Registry: publicação, aprovação e consumo",
-            "25 minutos • Referências R1, R2, R5",
+            "25 minutos",
             [
                 md(SETUP_TEXT),
                 code(SETUP),
@@ -548,9 +564,9 @@ def main(only=None):
             ],
         ),
         (
-            "07_registry_descoberta_execucao",
+            "08_registry_descoberta_execucao",
             "Descoberta em runtime e execução autorizada",
-            "20 minutos • Referências R3, R4",
+            "20 minutos",
             [
                 md(SETUP_TEXT),
                 code(SETUP),
@@ -582,8 +598,9 @@ def main(only=None):
             print(result)
             """),
                 md("""
-            O supervisor determinístico busca no catálogo, valida estado/endpoint/schema,
-            conecta ao Gateway e recebe a decisão de Policy. Em AWS a busca é semântica;
+            O supervisor determinístico busca registros aprovados, confere endpoints e
+            nomes conhecidos e confirma se a tool é anunciada pelo Gateway. O Gateway
+            valida a entrada e aplica a Policy. Em AWS a busca é semântica;
             localmente é lexical. Não há LLM nesta trilha para manter a prova reproduzível.
 
             **Exercício:** compare os resultados de Riscos e Riscos+Fraude. A capacidade
@@ -594,9 +611,9 @@ def main(only=None):
             ],
         ),
         (
-            "08_santander_multi_conta",
+            "10_santander_multi_conta",
             "Composição A → C → B",
-            "25 minutos • Referências G5, I4/I5, P3, R3",
+            "25 minutos",
             [
                 md(SETUP_TEXT),
                 code(SETUP),
@@ -631,7 +648,7 @@ def main(only=None):
             Para a prova, use `invoke_supervisor` em `santander_demo.live` com token em memória,
             depois registre Gateway/Runtime request IDs e logs por fronteira. O resultado
             deve conter as tools de Riscos e Fraude. O helper recusa chamar “multi-conta”
-            quando A, B e C são a mesma conta. Veja o [aceite](../docs/aceite.md).
+            quando A, B e C são a mesma conta. Veja o [aceite](../docs/validacao.md).
 
             **Limite:** essa composição demonstra as ferramentas sintéticas. Não demonstra
             automaticamente o produto K2 nem grants de uma fonte real.
@@ -639,15 +656,15 @@ def main(only=None):
             ],
         ),
         (
-            "09_databricks_e_evidencias",
+            "13_databricks_e_evidencias",
             "Delegação na fonte e fechamento das evidências",
-            "10 minutos + extensão • Referências D1, D2, G6",
+            "10 minutos + extensão",
             [
                 md(SETUP_TEXT),
                 code(SETUP),
                 md("""
             Esta é uma prova isolada por SQL REST. O fluxo integrado Gateway → MCP DBSQL
-            está no [notebook 12](12_cenario_santander_integrado.ipynb).
+            está no [notebook 14](14_cenario_santander_integrado.ipynb).
 
             Esta extensão exige federation de usuários no nível da conta Databricks,
             token exchange, um warehouse Azure e uma tabela canário sintética com grants distintos.
@@ -717,7 +734,7 @@ def main(only=None):
                 md("""
             Repita a prova Databricks com usuário sem grant e `expect_grant=False`. O helper
             exige erro de permissão, não aceita erro SQL genérico como evidência.
-            Para fechar: complete `docs/aceite.md`, separe PASS local de PASS AWS e remova
+            Para fechar: complete `docs/validacao.md`, separe PASS local de PASS AWS e remova
             outputs de notebooks interativos que possam conter informações do ambiente.
             """),
             ],
@@ -735,11 +752,11 @@ def main(only=None):
             cells=[
                 md(
                     f"# {title}\n\n{timing}\n\n"
-                    "Referências: [catálogo e links fixados](../referencias-notebooks-agentcore.md).\n"
+                    "[Objetivos e sequência de aprendizagem](../docs/jornada.md).\n"
                     "Execute com o kernel Python de `.venv`."
                 )
             ]
-            + [diagram]
+            + [diagram, learning_cell(filename)]
             + cells
             + cleanup_cells(filename, "workshop"),
             metadata={

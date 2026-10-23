@@ -1,35 +1,58 @@
-Módulo opcional para um **tenant Entra de laboratório**. Cria APIs Gateway/Fraude,
-três agentes confidenciais, um frontend público de login, grants delegados e
-segredos dos middle tiers no Secrets Manager da conta hub. A permissão Graph é somente `User.Read`.
-Não cria usuários, grupos, BDAGs nem integra o tenant de produção do Santander.
+# Identidades Entra para a bancada 00–09
 
-O frontend recebe uma asserção destinada à API do agente. O agente usa seu segredo
-para OBO até a API do Gateway; esse segundo token tem o `azp` do agente confidencial.
-O Gateway faz outro OBO via AgentCore Identity até Graph/Fraude. Não use um
-`client_id` de cliente público como prova de identidade técnica de um agente.
+Este módulo prepara um tenant Entra de laboratório para estudar usuário,
+aplicação e delegação nos notebooks iniciais. Ele pertence ao
+[guia de implantação da bancada](../../docs/deploy.md#2-preparar-as-identidades-entra);
+os cenários 11 e 12 têm topologias de identidade próprias.
 
-O helper `login_confidential_agent` executa o primeiro OBO no host do instrutor,
-com leitura temporária do segredo pelo perfil AWS. Em produção, essa etapa deve
-residir no workload do agente, usando seu role e armazenamento aprovado.
+## Entender as duas trocas
 
-Use um backend Terraform protegido já aprovado pela equipe antes de `apply`.
-O estado contém o valor do segredo, mesmo que outputs sejam ocultos. Não
-versione state, `.tfvars`, planos binários ou arquivos de credenciais.
+O frontend público autentica a pessoa e recebe uma asserção destinada à API do
+agente. O agente confidencial usa seu segredo para fazer OBO até a API do Gateway.
+O novo token identifica esse agente em `azp`. AgentCore Identity faz a próxima
+troca em nome do Gateway para Graph ou Fraude.
+
+O módulo cria APIs Gateway/Fraude, três agentes confidenciais, o frontend,
+grants delegados e segredos dos middle tiers no Secrets Manager da conta hub.
+A permissão Graph é `User.Read`. Usuários e grupos de teste já devem existir;
+o módulo não concede acesso a fontes de dados.
+
+No exercício, `login_confidential_agent` executa o primeiro OBO no host do
+instrutor com leitura temporária do segredo. Numa aplicação hospedada, essa
+operação pertence à workload do agente e à sua role. O client ID do frontend
+público não é prova da identidade técnica de um agente confidencial.
+
+## Configurar e aplicar
+
+Preencha `tenant_id`, `aws_profile`, `aws_region`, `hub_account_id` e
+`secret_expiration` (ISO 8601) em `config/local.entra.tfvars`. A autenticação usa
+a cadeia do provider AzureAD; não coloque senhas em argumentos. Os OIDs dos
+usuários entram depois nos parâmetros do hub.
+
+Configure o backend protegido antes de aplicar: o state contém os segredos,
+mesmo que os outputs os ocultem. Não compartilhe state, tfvars, planos ou
+credenciais. Se as aplicações já forem geridas por outro IaC, use seus outputs
+em vez de criar outro conjunto.
 
 ```bash
 terraform -chdir=infra/entra init
 terraform -chdir=infra/entra validate
+mkdir -p build
 terraform -chdir=infra/entra plan -var-file=../../config/local.entra.tfvars -out=../../build/entra.tfplan
-# Após revisão do plano e com o tenant/conta corretos:
 terraform -chdir=infra/entra apply ../../build/entra.tfplan
 terraform -chdir=infra/entra output -json hub_identity_parameters
 ```
 
-Variáveis: `tenant_id`, `aws_profile`, `aws_region`, `hub_account_id` e
-`secret_expiration` (ISO8601). A autenticação AzureAD usa a cadeia normal do
-provider; não coloque senhas em argumentos. Os OIDs de três usuários de teste
-existentes entram posteriormente nos parâmetros do stack hub.
+Revise tenant, conta e alterações entre `plan` e `apply`. Admin consent, MFA e
+acesso condicional precisam permitir o fluxo escolhido; o módulo não desativa
+esses controles. Use os outputs como entrada do CloudFormation da bancada.
 
-Se já houver aplicações geridas pelo IaC do cliente, use seus outputs e não
-aplique este módulo. Admin consent, políticas de acesso condicional e MFA devem
-ser compatíveis com o fluxo de login escolhido; o código não os altera.
+Para encerrar, revise `plan -destroy` no mesmo backend e aplique pelo Terraform
+somente aos recursos exclusivos desse laboratório. A [limpeza](../../docs/cleanup.md)
+explica a ordem das dependências AWS.
+
+## Aprofundar
+
+- [Fluxo OBO no Entra](https://learn.microsoft.com/pt-br/entra/identity-platform/v2-oauth2-on-behalf-of-flow)
+- [Claims dos access tokens](https://learn.microsoft.com/pt-br/entra/identity-platform/access-token-claims-reference)
+- [Conceitos de identidade do workshop](../../docs/conceitos.md)

@@ -1,0 +1,17 @@
+{
+  "project": "santander-rag",
+  "auth_provider": "cognito",
+  "region": "us-east-1",
+  "account_id": "111111111111",
+  "profile": "default",
+  "caller_principal_arn": "arn:aws:iam::111111111111:role/REPLACE_NOTEBOOK_ROLE",
+  "user_pool_id": "us-east-1_REPLACE_POOL",
+  "login_client_id": "REPLACE_COGNITO_CLIENT",
+  "model_arn": "arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-lite-v1:0",
+  "users": {
+    "a": {"oid": "REPLACE_USER_A_SUB", "email": "a@santander-rag.example.invalid"},
+    "b": {"oid": "REPLACE_USER_B_SUB", "email": "b@santander-rag.example.invalid"},
+    "c": {"oid": "REPLACE_USER_C_SUB", "email": "c@santander-rag.example.invalid"},
+    "d": {"oid": "REPLACE_USER_D_SUB", "email": "d@santander-rag.example.invalid"}
+  }
+}
