@@ -1,83 +1,59 @@
-# Preparar o ambiente
+# Preparação
 
-O primeiro exercício é [00 — Preflight](../notebooks/00_preflight.ipynb).
-Você pode começar sem conta AWS ou tenant Microsoft: o padrão dos notebooks
-executa somente os contratos locais.
+A **jornada completa e o runner CodeBuild atual** exigem quatro contas AWS
+distintas em `us-east-1`. **Não execute 10–14 em uma conta única.**
+Leia primeiro a [matriz de contas e aulas](contas-e-elegibilidade.md), incluindo
+a diferença entre as três contas do fluxo da aula 14 e as quatro exigidas
+pela implantação atual. Para uma turma sem esse ambiente, selecione os
+fundamentos e reserve 10–14 para demonstração do instrutor.
 
-## Instalar e abrir
+Copie
+`config/workshop.example.json` para `config/aws.workshop.json` e preencha IDs e
+perfis. Arquivos `config/aws.*.json` são ignorados pelo Git. Use referências ao
+Secrets Manager; não inclua senhas, tokens ou chaves AWS.
 
-Use Python 3.12 ou 3.13, [uv](https://docs.astral.sh/uv/getting-started/installation/)
-e um editor compatível com Jupyter, como VS Code com a extensão Jupyter.
-Na raiz do repositório:
+Os nomes abaixo são os perfis usados no ambiente de referência; não vêm
+pré-configurados na conta de outro participante.
+
+| Domínio | Perfil do operador neste ambiente |
+|---|---|
+| Plataforma | `default` |
+| Retail / agentes de origem | `containers` |
+| Transaction / fonte | `cognito` |
+| Lending | `serverless` |
+
+O STS deve retornar o ID configurado em cada domínio. Contas duplicadas são
+rejeitadas nos exercícios entre contas. No CodeBuild, perfis são substituídos
+por roles de execução e roles observer declaradas no CloudFormation.
+
+Antes de implantar ou iniciar a turma, confira a configuração:
 
 ```bash
-uv sync --frozen --extra banking
-uv run santander-demo demo
-uv run santander-demo matrix
+uv run python scripts/workshop_prerequisites.py --runner
 ```
 
-O extra `banking` instala os SDKs usados também pelos laboratórios avançados.
-Abra o notebook 00 e selecione `.venv/bin/python` como kernel. Execute as células
-na ordem; o notebook reutiliza o pacote Python do repositório. Mantenha notebooks,
-`src/`, `config/` e `docs/` na mesma estrutura de pastas.
+Esse comando não chama AWS. Antes da execução, use também `--check-aws` para
+consultar STS e as dependências declaradas. Confirme permissões IAM/SCP, trust
+das roles, disponibilidade dos serviços/modelos e quotas na região. Ter uma
+conta e credenciais válidas, por si só, não prepara o workshop.
 
-Uma célula final limpa as variáveis do exercício. Para repetir o laboratório,
-recomece pela preparação. As imagens estão incorporadas nos notebooks.
+A autenticação da jornada utiliza Cognito, dois app clients confidenciais e
+quatro usuários sintéticos. Senhas e segredos dos clients ficam no Secrets
+Manager e são provisionados por custom resources do CloudFormation. Login de
+workshop usa USER_PASSWORD_AUTH com SECRET_HASH. Para aplicações de usuários
+finais, o fluxo indicado no material é authorization code com PKCE.
 
-## Entender os controles
+Os cenários Registry, Terraform e RAG possuem seus próprios stacks ou state.
+`integrations` aponta para suas configurações e outputs. O preflight não cria
+recursos e não escolhe recursos por aproximação de nome.
 
-| Controle | Onde aparece | Efeito |
-|---|---|---|
-| `WORKSHOP_MODE=local` | 00–06, 08, 10 e 13 | Bancada local; é o padrão |
-| `WORKSHOP_MODE=aws` | 00–06, 08, 10 e 13 | Usa `config/local.json`; defina antes de iniciar o kernel |
-| `RUN_AWS=False` | 07, 09, 11, 12, 14 e 16 | Mantém as chamadas AWS desativadas |
-| `DEPLOY_PHASE` | Cenários CloudFormation | Seleciona uma fase; siga a tabela do guia daquele cenário |
-| `RUN_PIPELINE=False` | Cenários com deploy no notebook | Não executa o wrapper IaC |
-| `APPLY_CHANGESET=False` | Cenários com deploy no notebook | Mantém a aplicação do plano desativada |
-| `RUN_AGENT=False` | 12 e 09 | Mantém a etapa opcional com modelo desativada |
-| `RUN_BUILD=False` | 09 | Não reconstrói os ZIPs |
-| `CLEANUP_EXECUTE=False` | Limpeza | Não remove recursos cloud |
+Use Python 3.12, `uv`, AWS CLI e, para a aula 09, Terraform compatível com
+`infra/terraform_agentcore/versions.tf`. Execute `uv sync --frozen --extra banking`
+no ambiente de desenvolvimento para preparar os comandos do pipeline.
+A execução das aulas acontece no [runner AWS](deploy.md).
 
-Depois de alterar controles, reexecute a célula que os define e as etapas
-dependentes. `Run All` com os padrões não implanta nada. O notebook 15 é local.
-No 16, `DEPLOY_PHASE` escolhe o provisionamento; depois mantenha `RUN_PIPELINE=False`
-para executar consultas. Nos 11, 12 e 14, `DEPLOY_PHASE=None` libera o ensaio.
-
-## Escolher um ambiente AWS
-
-O [laboratório 09](terraform/README.md) é a primeira implantação recomendada:
-uma conta, Cognito, Runtime, Gateway, Identity e Lambda. O exemplo usa `us-east-1`;
-o perfil e o ID esperado da conta são preenchidos na configuração local.
-Os testes de referência desse laboratório usaram `default` nessa região.
-
-Cada cenário tem configuração e ciclo de vida próprios:
-
-| Laboratórios | Arquivo local | Guia |
-|---|---|---|
-| 00–06, 08, 10 e 13 | `config/local.json` | [Integração dos fundamentos](deploy.md) |
-| 07 | `config/local.registry.json`, gerado pelo pipeline | [Quatro personas](registry/README.md) |
-| 09 | `config/local.terraform.json` | [Terraform](terraform/README.md) |
-| 11 | `config/local.banking.json` | [Agente central](banking/README.md) |
-| 12 | `config/local.federation.json` | [Gateways federados](federation/README.md) |
-| 14 | `config/local.journey.json` | [Fonte Databricks integrada](journey/README.md) |
-| 16 | `config/local.rag.json`, gerado pelo pipeline | [RAG](rag/README.md) |
-
-Use nomes de projeto e state separados para ambientes diferentes. Um perfil AWS
-autentica o operador; ele não substitui os tokens de usuário Entra/Okta/Cognito.
-Verifique disponibilidade dos serviços e do modelo na região antes do deploy.
-Os guias multi-conta indicam quantas contas e quais identidades são necessárias.
-
-Configurações locais contêm identificadores, endpoints e ARNs. Tokens e senhas
-não devem ser copiados para células ou JSONs. O Terraform pode guardar segredos
-no state e no plano binário: mantenha esses arquivos protegidos e fora do Git.
-
-## Construir, aplicar e encerrar
-
-O build é local. O deploy passa pelo wrapper Terraform ou CloudFormation do
-cenário, com revisão do plano. Providers e custom resources declarados no IaC
-administram seus recursos; não use ajustes manuais para resolver divergências.
-Serviços implantados e inferência têm custos.
-
-Consulte [validação](validacao.md) para conferir resultados e
-[limpeza](cleanup.md) para remover o ambiente correto e identificar retenções.
-Continue pela [jornada](jornada.md).
+O simulador de Databricks integra a jornada obrigatória. Para substituí-lo por
+Databricks real na AWS seria necessário adaptar o IaC e implementar/testar o
+conector e a delegação; alterar apenas `source_kind` é rejeitado. Analogamente,
+o provedor Entra exige adaptar authorizers, claims, políticas e OAuth; o pipeline
+atual implementa Cognito e não faz uma substituição silenciosa de provedores.

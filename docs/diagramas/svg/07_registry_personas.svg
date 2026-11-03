@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">Registry: quatro personas e IAM</title><desc id="desc">Sessões STS e políticas IAM separam as quatro responsabilidades.</desc>
+<rect width="1600" height="1000" fill="#f4f7fb"/>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#64748b"/></marker></defs>
+<g font-family="Arial,Helvetica,sans-serif" fill="#172b46">
+<rect x="64" y="66" width="7" height="40" rx="3" fill="#d52e3f"/>
+<text x="91" y="95" font-size="24" font-weight="700">SANTANDER · AGENTCORE · AULA 07</text>
+<text x="64" y="151" font-size="18" fill="#52657c">Serviços e agentes implantados na AWS</text>
+<text x="64" y="219" font-size="40" font-weight="700">Registry: quatro personas e IAM</text>
+<rect x="64" y="352" width="330" height="188" rx="18" fill="white" stroke="#dae3ee" stroke-width="2"/>
+<rect x="64" y="352" width="330" height="7" rx="3" fill="#2469dd"/>
+<text x="88" y="397" font-size="18" fill="#2469dd">ETAPA 1</text>
+<text x="88" y="448" font-size="25" font-weight="700">Developer</text>
+<path d="M399,446 H431" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="443" y="352" width="330" height="188" rx="18" fill="white" stroke="#dae3ee" stroke-width="2"/>
+<rect x="443" y="352" width="330" height="7" rx="3" fill="#7546c7"/>
+<text x="467" y="397" font-size="18" fill="#7546c7">ETAPA 2</text>
+<text x="467" y="448" font-size="25" font-weight="700">Publisher</text>
+<path d="M778,446 H810" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="822" y="352" width="330" height="188" rx="18" fill="white" stroke="#dae3ee" stroke-width="2"/>
+<rect x="822" y="352" width="330" height="7" rx="3" fill="#bd650f"/>
+<text x="846" y="397" font-size="18" fill="#bd650f">ETAPA 3</text>
+<text x="846" y="448" font-size="25" font-weight="700">Approver</text>
+<path d="M1157,446 H1189" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="1201" y="352" width="330" height="188" rx="18" fill="white" stroke="#dae3ee" stroke-width="2"/>
+<rect x="1201" y="352" width="330" height="7" rx="3" fill="#087f82"/>
+<text x="1225" y="397" font-size="18" fill="#087f82">ETAPA 4</text>
+<text x="1225" y="448" font-size="25" font-weight="700">Consumer</text>
+<rect x="64" y="600" width="1472" height="180" rx="18" fill="#e8eff8"/>
+<text x="91" y="645" font-size="20" font-weight="700">O QUE ESTA FRONTEIRA ENSINA</text>
+<text x="91" y="693" font-size="25">Sessões STS e políticas IAM separam as quatro responsabilidades.</text>
+<text x="64" y="850" font-size="22">Código → IaC → chamadas AWS → asserções e evidências</text>
+<text x="64" y="916" font-size="18" fill="#52657c">Dados sintéticos · JWT e Cedar · Sem tokens ou senhas nas evidências</text>
+</g></svg>

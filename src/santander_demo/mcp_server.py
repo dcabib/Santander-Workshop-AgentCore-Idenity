@@ -1,6 +1,5 @@
-"""Especialista de fraude MCP. stdio local; HTTP apenas atrás do Runtime autenticado."""
+"""Especialista de fraude MCP via HTTP atrás do AgentCore Runtime autenticado."""
 
-import argparse
 import json
 import logging
 
@@ -26,14 +25,3 @@ def consultar_fraude(cliente_id: str, max_registros: int) -> dict:
         )
     )
     return result
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--transport", choices=["stdio", "streamable-http"], default="stdio")
-    args = parser.parse_args()
-    mcp.run(transport=args.transport)
-
-
-if __name__ == "__main__":
-    main()

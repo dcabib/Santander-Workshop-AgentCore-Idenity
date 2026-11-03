@@ -7,6 +7,7 @@ import urllib.request
 
 import boto3
 
+from santander_demo.aws_workshop.lifecycle import stage
 from santander_demo.rag.corpus import corpus_digest, objects
 
 
@@ -16,9 +17,15 @@ def provision(event, s3, bedrock, *, sleep=time.sleep, monotonic=time.monotonic)
     if event["RequestType"] == "Delete":
         # Fonte e KB são retidas; não apagamos documentos nem desabilitamos proteções.
         return physical, {"Retained": True}
-    if props["CorpusDigest"] != corpus_digest(props["Users"]):
+    current_stage = stage(props.get("LifecycleStage", "baseline"))
+    if props["CorpusDigest"] != corpus_digest(props["Users"], current_stage):
         raise ValueError("CORPUS_DIGEST_MISMATCH")
-    for key, content in objects(props["Bucket"], props["Users"]).items():
+    # Somente F1 pertence à exclusão didática. Versionamento S3 preserva as
+    # versões anteriores; não apagamos versões nem objetos alheios ao corpus.
+    if current_stage == "deleted":
+        for key in ["documents/fraude/F1.txt", "documents/fraude/F1.txt.metadata.json"]:
+            s3.delete_object(Bucket=props["Bucket"], Key=key)
+    for key, content in objects(props["Bucket"], props["Users"], current_stage).items():
         s3.put_object(
             Bucket=props["Bucket"],
             Key=key,
@@ -43,7 +50,9 @@ def provision(event, s3, bedrock, *, sleep=time.sleep, monotonic=time.monotonic)
         if current["status"] == "COMPLETE":
             if current.get("statistics", {}).get("numberOfDocumentsFailed", 0):
                 raise RuntimeError("INGESTION_HAS_FAILED_DOCUMENTS")
-            return physical, {"IngestionJobId": job["ingestionJobId"]}
+            return physical, {
+                "IngestionJobId": job["ingestionJobId"], "LifecycleStage": current_stage,
+            }
         if current["status"] in {"FAILED", "STOPPED"}:
             raise RuntimeError("INGESTION_" + current["status"])
         if monotonic() >= deadline:

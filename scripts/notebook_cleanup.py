@@ -200,7 +200,10 @@ As quatro identidades e seus segredos são recursos exclusivos do stack
 `identity`. Consulte o [runbook do RAG](../docs/rag/README.md).
 """,
     "journey": """
-O notebook 14 possui um ambiente próprio em três contas. Remova, nesta ordem:
+Este roteiro de três contas pertence ao cenário legado. A aula 14 da jornada
+AWS atual usa a implantação compartilhada de quatro contas; sua limpeza está
+em `docs/cleanup.md`, com os pré-requisitos em `docs/contas-e-elegibilidade.md`.
+Somente para os stacks legados listados abaixo, remova nesta ordem:
 
 1. `origin-bindings` na origem.
 2. `riscos-agent` e `fraude-agent` na origem.

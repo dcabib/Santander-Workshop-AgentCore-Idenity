@@ -201,7 +201,3 @@ def demo():
     spoof = lab.call("a", forged_email=LOCAL_USERS["c"]["email"])
     assert spoof["policy"] == "DENY" and spoof["retrieval_calls"] == 0
     return {"mode": "LOCAL_CONTRACT", "users": rows, "spoof_a_as_c": spoof}
-
-
-if __name__ == "__main__":
-    print(json.dumps(demo(), indent=2, ensure_ascii=False))

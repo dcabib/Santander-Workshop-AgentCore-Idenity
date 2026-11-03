@@ -29,6 +29,9 @@ def human_role(statements, service=None):
     trust.append(
         {"Effect": "Allow", "Principal": {"AWS": ref("OperatorArn")}, "Action": "sts:AssumeRole"}
     )
+    trust.append({"Fn::If": ["HasRunner", {
+        "Effect": "Allow", "Principal": {"AWS": ref("RunnerArn")}, "Action": "sts:AssumeRole",
+    }, ref("AWS::NoValue")]})
     return r
 
 
@@ -61,6 +64,7 @@ def foundation():
         {
             **artifact_params(),
             "OperatorArn": param(),
+            "RunnerArn": param(""),
             "RecoveryRegistryArn": param(""),
             "Project": param("registry-personas"),
             "RuntimeName": param(
@@ -69,6 +73,7 @@ def foundation():
         },
     )
     r = t["Resources"]
+    t["Conditions"] = {"HasRunner": {"Fn::Not": [{"Fn::Equals": [ref("RunnerArn"), ""]}]}}
     logs = statement(
         ["logs:CreateLogStream", "logs:PutLogEvents"],
         sub(
@@ -248,17 +253,16 @@ def foundation():
     return t
 
 
-def publish():
+def publish(names=("Mcp", "Agent")):
     t = template(
         "Registry personas - criar rascunhos imutaveis",
         {
             "RegistryId": param(),
             "PublisherProviderArn": param(),
-            "McpPackage": param(),
-            "AgentPackage": param(),
+            **{name + "Package": param() for name in names},
         },
     )
-    for name in ("Mcp", "Agent"):
+    for name in names:
         t["Resources"][name] = resource(
             "Custom::RegistryRecord",
             {
@@ -273,7 +277,7 @@ def publish():
     return t
 
 
-def transition(approve=False):
+def transition(approve=False, names=("Mcp", "Agent")):
     actor = "Approver" if approve else "Publisher"
     t = template(
         "Registry personas - decisao revisada"
@@ -282,8 +286,7 @@ def transition(approve=False):
         {
             "RegistryId": param(),
             actor + "ProviderArn": param(),
-            "McpRecordId": param(),
-            "AgentRecordId": param(),
+            **{name + "RecordId": param() for name in names},
             **(
                 {
                     name + suffix: param(
@@ -293,7 +296,7 @@ def transition(approve=False):
                             else {}
                         )
                     )
-                    for name in ("Mcp", "Agent")
+                    for name in names
                     for suffix in ("Digest", "Decision")
                 }
                 if approve
@@ -301,7 +304,7 @@ def transition(approve=False):
             ),
         },
     )
-    for name in ("Mcp", "Agent"):
+    for name in names:
         t["Resources"][name] = resource(
             "Custom::RegistryApproval" if approve else "Custom::RegistrySubmission",
             {
@@ -327,6 +330,9 @@ def main():
         "publish": publish(),
         "submit": transition(),
         "approve": transition(True),
+        "origin-publish": publish(("Riscos", "Fraude")),
+        "origin-submit": transition(names=("Riscos", "Fraude")),
+        "origin-approve": transition(True, names=("Riscos", "Fraude")),
     }.items():
         (ROOT / "templates" / (name + ".json")).write_text(json.dumps(value, indent=2) + "\n")
 

@@ -43,7 +43,8 @@ def prepare_phase(root, config, session, phase):
     elif phase == "data":
         params.update(
             ArtifactBucket=outputs(session, config, "bootstrap")["ArtifactBucket"],
-            CorpusDigest=corpus_digest(config["users"]),
+            CorpusDigest=corpus_digest(config["users"], config.get("lifecycle_stage", "baseline")),
+            LifecycleStage=config.get("lifecycle_stage", "baseline"),
         )
     elif phase == "access":
         del params["UserDEmail"]
@@ -67,7 +68,7 @@ def prepare_phase(root, config, session, phase):
                 GatewayClientId=config["gateway_client_id"],
                 BrokerSecretArn=config["broker_secret_arn"],
             )
-    path = Path(root) / "config" / f"local.rag-{phase}.json"
+    path = Path(root) / "config" / f"aws.rag-{phase}.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(params, indent=2) + "\n")
     path.chmod(0o600)
@@ -83,8 +84,7 @@ def prepare_phase(root, config, session, phase):
         else phase,
         "--scenario",
         "rag",
-        "--profile",
-        config["profile"],
+        *(["--profile", config["profile"]] if config.get("profile") else []),
         "--account",
         config["account_id"],
         "--region",

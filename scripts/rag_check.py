@@ -68,7 +68,7 @@ async def run(config):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", default="config/local.rag.json")
+    parser.add_argument("--config", default="config/aws.rag.json")
     parser.add_argument("--correlate-only", action="store_true")
     args = parser.parse_args()
     config = client.load_config(args.config)

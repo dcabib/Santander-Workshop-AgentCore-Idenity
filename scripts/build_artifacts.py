@@ -70,6 +70,9 @@ def main():
     )
     shutil.copy(ROOT / "infra/runtime_main.py", target / "runtime_main.py")
     if args.banking:
+        shutil.copy(ROOT / "infra/workshop/runtime_main.py", target / "workshop_runtime_main.py")
+        shutil.copy(ROOT / "infra/workshop/agent_main.py", target / "workshop_agent_main.py")
+        shutil.copy(ROOT / "infra/workshop/rag_main.py", target / "workshop_rag_main.py")
         shutil.copy(ROOT / "infra/registry_workflow/runtime_main.py", target / "registry_runtime_main.py")
         shutil.copy(ROOT / "infra/banking/runtime_main.py", target / "banking_runtime_main.py")
         shutil.copy(ROOT / "infra/journey/runtime_main.py", target / "journey_runtime_main.py")

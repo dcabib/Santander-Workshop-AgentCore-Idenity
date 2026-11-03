@@ -9,6 +9,7 @@ import boto3
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_DIRS = {
     "workshop": ROOT / "infra/templates",
+    "aws_workshop": ROOT / "infra/workshop/templates",
     "banking": ROOT / "infra/banking/templates",
     "federation": ROOT / "infra/federation/templates",
     "journey": ROOT / "infra/journey/templates",

@@ -1,0 +1,83 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Registry personas - decisao revisada",
+  "Parameters": {
+    "RegistryId": {
+      "Type": "String"
+    },
+    "ApproverProviderArn": {
+      "Type": "String"
+    },
+    "RiscosRecordId": {
+      "Type": "String"
+    },
+    "FraudeRecordId": {
+      "Type": "String"
+    },
+    "RiscosDigest": {
+      "Type": "String"
+    },
+    "RiscosDecision": {
+      "Type": "String",
+      "AllowedValues": [
+        "APPROVED",
+        "REJECTED"
+      ]
+    },
+    "FraudeDigest": {
+      "Type": "String"
+    },
+    "FraudeDecision": {
+      "Type": "String",
+      "AllowedValues": [
+        "APPROVED",
+        "REJECTED"
+      ]
+    }
+  },
+  "Resources": {
+    "Riscos": {
+      "Type": "Custom::RegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "ApproverProviderArn"
+        },
+        "Kind": "Approval",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "RecordId": {
+          "Ref": "RiscosRecordId"
+        },
+        "ReviewedDigest": {
+          "Ref": "RiscosDigest"
+        },
+        "Decision": {
+          "Ref": "RiscosDecision"
+        }
+      }
+    },
+    "Fraude": {
+      "Type": "Custom::RegistryApproval",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "ApproverProviderArn"
+        },
+        "Kind": "Approval",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "RecordId": {
+          "Ref": "FraudeRecordId"
+        },
+        "ReviewedDigest": {
+          "Ref": "FraudeDigest"
+        },
+        "Decision": {
+          "Ref": "FraudeDecision"
+        }
+      }
+    }
+  },
+  "Outputs": {}
+}

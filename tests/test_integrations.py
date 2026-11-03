@@ -12,7 +12,10 @@ from santander_demo.databricks import DelegatedDatabricks
 
 
 async def test_actual_mcp_protocol_over_stdio():
-    params = StdioServerParameters(command=sys.executable, args=["-m", "santander_demo.mcp_server"])
+    # Transporte exclusivo desta fixture; a entrada do workshop oferece apenas HTTP no Runtime.
+    params = StdioServerParameters(command=sys.executable, args=[
+        "-c", "from santander_demo.mcp_server import mcp; mcp.run(transport='stdio')",
+    ])
     async with stdio_client(params) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()

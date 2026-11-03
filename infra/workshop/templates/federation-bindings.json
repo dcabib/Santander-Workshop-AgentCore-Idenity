@@ -1,0 +1,423 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Workshop AWS - platform Gateway federating three account Gateways",
+  "Parameters": {
+    "Issuer": {
+      "Type": "String"
+    },
+    "SupervisorClientId": {
+      "Type": "String"
+    },
+    "RiscosClientId": {
+      "Type": "String"
+    },
+    "GatewayId": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "PolicyEngineId": {
+      "Type": "String"
+    },
+    "UserAOid": {
+      "Type": "String"
+    },
+    "UserBOid": {
+      "Type": "String"
+    },
+    "UserCOid": {
+      "Type": "String"
+    },
+    "RetailUrl": {
+      "Type": "String"
+    },
+    "TransactionUrl": {
+      "Type": "String"
+    },
+    "LendingUrl": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "RetailTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "retail",
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "RetailUrl"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"riscos___consultar_risco\", \"description\": \"Consulta o risco sint\\u00e9tico por cliente, via Lambda.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\"}, \"max_registros\": {\"type\": \"integer\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"cliente_id\", \"max_registros\", \"request_id\"]}}, {\"name\": \"especialista___consultar_fraude\", \"description\": \"Consulta sinais sint\\u00e9ticos de fraude autorizados para a pessoa.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\"}, \"max_registros\": {\"type\": \"integer\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"cliente_id\", \"max_registros\", \"request_id\"]}}, {\"name\": \"especialista___consultar_tabela\", \"description\": \"Consulta uma tabela no simulador AWS de Databricks, com ACL na fonte.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"tabela\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"tabela\", \"request_id\"]}}, {\"name\": \"especialista___identidade_fonte\", \"description\": \"Identidade verificada no simulador AWS; equivalente did\\u00e1tico a current_user().\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"request_id\"]}}, {\"name\": \"especialista___memorizar_referencia\", \"description\": \"Grava somente uma refer\\u00eancia autorizada no AgentCore Memory.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"tabela\": {\"type\": \"string\"}, \"session_id\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"tabela\", \"session_id\", \"request_id\"]}}, {\"name\": \"especialista___recuperar_memoria\", \"description\": \"L\\u00ea refer\\u00eancias da pr\\u00f3pria pessoa e revalida a ACL antes de buscar conte\\u00fado.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"session_id\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"session_id\", \"request_id\"]}}]}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "RetailAllowRisk": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "RetailAllowRisk",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"retail___riscos___consultar_risco\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.cliente_id == \"C001\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 10\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget"
+      ]
+    },
+    "RetailAllowFraud": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "RetailAllowFraud",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"retail___especialista___consultar_fraude\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.cliente_id == \"C001\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 10\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget"
+      ]
+    },
+    "RetailAllowIdentityMemory": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "RetailAllowIdentityMemory",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"retail___especialista___identidade_fonte\", AgentCore::Action::\"retail___especialista___recuperar_memoria\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\"))\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget"
+      ]
+    },
+    "RetailAllowRiskTables": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "RetailAllowRiskTables",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"retail___especialista___consultar_tabela\", AgentCore::Action::\"retail___especialista___memorizar_referencia\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\")) &&\n  [\"riscos\", \"k2\"].contains(context.input.tabela)\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget"
+      ]
+    },
+    "RetailAllowFraudTable": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "RetailAllowFraudTable",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"retail___especialista___consultar_tabela\", AgentCore::Action::\"retail___especialista___memorizar_referencia\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.tabela == \"fraude\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "RetailTarget"
+      ]
+    },
+    "TransactionTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "transaction",
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "TransactionUrl"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"riscos___consultar_risco\", \"description\": \"Consulta o risco sint\\u00e9tico por cliente, via Lambda.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\"}, \"max_registros\": {\"type\": \"integer\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"cliente_id\", \"max_registros\", \"request_id\"]}}, {\"name\": \"especialista___consultar_fraude\", \"description\": \"Consulta sinais sint\\u00e9ticos de fraude autorizados para a pessoa.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\"}, \"max_registros\": {\"type\": \"integer\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"cliente_id\", \"max_registros\", \"request_id\"]}}, {\"name\": \"especialista___consultar_tabela\", \"description\": \"Consulta uma tabela no simulador AWS de Databricks, com ACL na fonte.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"tabela\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"tabela\", \"request_id\"]}}, {\"name\": \"especialista___identidade_fonte\", \"description\": \"Identidade verificada no simulador AWS; equivalente did\\u00e1tico a current_user().\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"request_id\"]}}, {\"name\": \"especialista___memorizar_referencia\", \"description\": \"Grava somente uma refer\\u00eancia autorizada no AgentCore Memory.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"tabela\": {\"type\": \"string\"}, \"session_id\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"tabela\", \"session_id\", \"request_id\"]}}, {\"name\": \"especialista___recuperar_memoria\", \"description\": \"L\\u00ea refer\\u00eancias da pr\\u00f3pria pessoa e revalida a ACL antes de buscar conte\\u00fado.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"session_id\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"session_id\", \"request_id\"]}}]}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "TransactionAllowRisk": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "TransactionAllowRisk",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"transaction___riscos___consultar_risco\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.cliente_id == \"C001\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 10\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "TransactionTarget"
+      ]
+    },
+    "TransactionAllowFraud": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "TransactionAllowFraud",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"transaction___especialista___consultar_fraude\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.cliente_id == \"C001\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 10\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "TransactionTarget"
+      ]
+    },
+    "TransactionAllowIdentityMemory": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "TransactionAllowIdentityMemory",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"transaction___especialista___identidade_fonte\", AgentCore::Action::\"transaction___especialista___recuperar_memoria\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\"))\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "TransactionTarget"
+      ]
+    },
+    "TransactionAllowRiskTables": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "TransactionAllowRiskTables",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"transaction___especialista___consultar_tabela\", AgentCore::Action::\"transaction___especialista___memorizar_referencia\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\")) &&\n  [\"riscos\", \"k2\"].contains(context.input.tabela)\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "TransactionTarget"
+      ]
+    },
+    "TransactionAllowFraudTable": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "TransactionAllowFraudTable",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"transaction___especialista___consultar_tabela\", AgentCore::Action::\"transaction___especialista___memorizar_referencia\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.tabela == \"fraude\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "TransactionTarget"
+      ]
+    },
+    "LendingTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "lending",
+        "GatewayIdentifier": {
+          "Ref": "GatewayId"
+        },
+        "TargetConfiguration": {
+          "Mcp": {
+            "McpServer": {
+              "Endpoint": {
+                "Ref": "LendingUrl"
+              },
+              "McpToolSchema": {
+                "InlinePayload": "{\"tools\": [{\"name\": \"riscos___consultar_risco\", \"description\": \"Consulta o risco sint\\u00e9tico por cliente, via Lambda.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\"}, \"max_registros\": {\"type\": \"integer\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"cliente_id\", \"max_registros\", \"request_id\"]}}, {\"name\": \"especialista___consultar_fraude\", \"description\": \"Consulta sinais sint\\u00e9ticos de fraude autorizados para a pessoa.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"cliente_id\": {\"type\": \"string\"}, \"max_registros\": {\"type\": \"integer\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"cliente_id\", \"max_registros\", \"request_id\"]}}, {\"name\": \"especialista___consultar_tabela\", \"description\": \"Consulta uma tabela no simulador AWS de Databricks, com ACL na fonte.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"tabela\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"tabela\", \"request_id\"]}}, {\"name\": \"especialista___identidade_fonte\", \"description\": \"Identidade verificada no simulador AWS; equivalente did\\u00e1tico a current_user().\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"request_id\"]}}, {\"name\": \"especialista___memorizar_referencia\", \"description\": \"Grava somente uma refer\\u00eancia autorizada no AgentCore Memory.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"tabela\": {\"type\": \"string\"}, \"session_id\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"tabela\", \"session_id\", \"request_id\"]}}, {\"name\": \"especialista___recuperar_memoria\", \"description\": \"L\\u00ea refer\\u00eancias da pr\\u00f3pria pessoa e revalida a ACL antes de buscar conte\\u00fado.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"session_id\": {\"type\": \"string\"}, \"request_id\": {\"type\": \"string\", \"description\": \"UUID da execu\\u00e7\\u00e3o para correla\\u00e7\\u00e3o nos logs, sem dados pessoais.\"}}, \"required\": [\"session_id\", \"request_id\"]}}]}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "LendingAllowRisk": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "LendingAllowRisk",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"lending___riscos___consultar_risco\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.cliente_id == \"C001\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 10\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "LendingTarget"
+      ]
+    },
+    "LendingAllowFraud": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "LendingAllowFraud",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"lending___especialista___consultar_fraude\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.cliente_id == \"C001\" &&\n  context.input.max_registros >= 1 &&\n  context.input.max_registros <= 10\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "LendingTarget"
+      ]
+    },
+    "LendingAllowIdentityMemory": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "LendingAllowIdentityMemory",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"lending___especialista___identidade_fonte\", AgentCore::Action::\"lending___especialista___recuperar_memoria\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\"))\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "LendingTarget"
+      ]
+    },
+    "LendingAllowRiskTables": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "LendingAllowRiskTables",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"lending___especialista___consultar_tabela\", AgentCore::Action::\"lending___especialista___memorizar_referencia\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserAOid}\", AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\", \"${RiscosClientId}\"].contains(principal.getTag(\"aud\")) &&\n  [\"riscos\", \"k2\"].contains(context.input.tabela)\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "LendingTarget"
+      ]
+    },
+    "LendingAllowFraudTable": {
+      "Type": "AWS::BedrockAgentCore::Policy",
+      "Properties": {
+        "Name": "LendingAllowFraudTable",
+        "PolicyEngineId": {
+          "Ref": "PolicyEngineId"
+        },
+        "Definition": {
+          "Cedar": {
+            "Statement": {
+              "Fn::Sub": "permit(principal is AgentCore::OAuthUser, action in [AgentCore::Action::\"lending___especialista___consultar_tabela\", AgentCore::Action::\"lending___especialista___memorizar_referencia\"], resource == AgentCore::Gateway::\"${GatewayArn}\") when {\n  [AgentCore::OAuthUser::\"${UserBOid}\", AgentCore::OAuthUser::\"${UserCOid}\"].contains(principal) &&\n  principal.hasTag(\"iss\") && principal.getTag(\"iss\") == \"${Issuer}\" &&\n  principal.hasTag(\"token_use\") && principal.getTag(\"token_use\") == \"id\" &&\n  principal.hasTag(\"aud\") && [\"${SupervisorClientId}\"].contains(principal.getTag(\"aud\")) &&\n  context.input.tabela == \"fraude\"\n};"
+            }
+          }
+        },
+        "ValidationMode": "FAIL_ON_ANY_FINDINGS",
+        "EnforcementMode": "ACTIVE"
+      },
+      "DependsOn": [
+        "LendingTarget"
+      ]
+    }
+  },
+  "Outputs": {}
+}

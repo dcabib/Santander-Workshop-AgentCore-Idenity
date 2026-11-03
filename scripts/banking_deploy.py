@@ -15,9 +15,9 @@ def main():
         "template",
     )
     parser.add_argument(
-        "--scenario", choices=["banking", "federation", "journey", "rag", "registry_workflow"], default="banking"
+        "--scenario", choices=["banking", "federation", "journey", "rag", "registry_workflow", "workshop"], default="banking"
     )
-    parser.add_argument("--profile", required=True)
+    parser.add_argument("--profile", help="Omitir quando o ambiente AWS usa a role de execução")
     parser.add_argument("--account", required=True)
     parser.add_argument("--region", required=True)
     parser.add_argument("--stack", required=True)
@@ -29,7 +29,7 @@ def main():
         parser.error("Os parâmetros devem ser um objeto JSON de strings")
     if any("REPLACE" in v for v in params.values()):
         parser.error("Preencha os identificadores do sandbox")
-    if any("secret" in k.lower() and not k.endswith("Arn") for k in params):
+    if any("secret" in k.lower() and not k.endswith(("Arn", "Arns")) for k in params):
         parser.error("Aceita apenas ARN de segredo, nunca o valor")
     directory = ROOT / "infra" / args.scenario / "templates"
     if args.template not in {p.stem for p in directory.glob("*.json")}:
@@ -44,7 +44,7 @@ def main():
     )
     if unknown or missing:
         parser.error(f"Parâmetros desconhecidos={sorted(unknown)}, ausentes={sorted(missing)}")
-    aws = ["aws", "--profile", args.profile, "--region", args.region]
+    aws = ["aws", "--region", args.region, *(["--profile", args.profile] if args.profile else [])]
     caller = json.loads(subprocess.check_output(aws + ["sts", "get-caller-identity"]))
     if caller["Account"] != args.account:
         parser.error("Perfil aponta para outra conta")
@@ -65,7 +65,7 @@ def main():
             check=True,
         )
         params["ArtifactKey"] = manifest["key"]
-    target = ROOT / "build" / f"{args.scenario}-{args.template}-parameters.json"
+    target = ROOT / "build" / f"{args.stack}-parameters.json"
     target.parent.mkdir(exist_ok=True)
     target.write_text(
         json.dumps([{"ParameterKey": k, "ParameterValue": v} for k, v in params.items()])
@@ -82,7 +82,7 @@ def main():
             "--parameter-overrides",
             "file://" + str(target),
             "--capabilities",
-            "CAPABILITY_NAMED_IAM" if args.scenario == "journey" else "CAPABILITY_IAM",
+            "CAPABILITY_NAMED_IAM" if args.scenario in {"journey", "workshop"} else "CAPABILITY_IAM",
             "--no-fail-on-empty-changeset",
             *([] if args.execute else ["--no-execute-changeset"]),
         ],

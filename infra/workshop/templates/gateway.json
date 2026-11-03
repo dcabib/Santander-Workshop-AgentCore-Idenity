@@ -1,0 +1,563 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Workshop AWS - Gateway with Cognito and enforced Cedar",
+  "Parameters": {
+    "Project": {
+      "Type": "String"
+    },
+    "EngineName": {
+      "Type": "String"
+    },
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    },
+    "Issuer": {
+      "Type": "String"
+    },
+    "SupervisorClientId": {
+      "Type": "String"
+    },
+    "RiscosClientId": {
+      "Type": "String"
+    },
+    "KnownGatewayArn": {
+      "Type": "String",
+      "Default": ""
+    }
+  },
+  "Resources": {
+    "Engine": {
+      "Type": "AWS::BedrockAgentCore::PolicyEngine",
+      "Properties": {
+        "Name": {
+          "Ref": "EngineName"
+        }
+      }
+    },
+    "RiskLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 7
+      }
+    },
+    "RiskRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${RiskLog.Arn}:*"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Risk": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "Timeout": 30,
+        "Role": {
+          "Fn::GetAtt": [
+            "RiskRole",
+            "Arn"
+          ]
+        },
+        "Handler": "santander_demo.aws_workshop.backend.risk",
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "RiskLog"
+          }
+        }
+      }
+    },
+    "InterceptorLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 7
+      }
+    },
+    "InterceptorRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${InterceptorLog.Arn}:*"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Interceptor": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "Timeout": 30,
+        "Role": {
+          "Fn::GetAtt": [
+            "InterceptorRole",
+            "Arn"
+          ]
+        },
+        "Handler": "santander_demo.aws_workshop.interceptor.handler",
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "InterceptorLog"
+          }
+        },
+        "Environment": {
+          "Variables": {
+            "WORKSHOP_AUTH": {
+              "Fn::Sub": "{\"issuer\": \"${Issuer}\", \"clients\": [\"${SupervisorClientId}\", \"${RiscosClientId}\"]}"
+            }
+          }
+        }
+      }
+    },
+    "GatewayRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "aws:SourceAccount": {
+                    "Ref": "AWS::AccountId"
+                  }
+                },
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::If": [
+                      "HasKnownGateway",
+                      {
+                        "Ref": "KnownGatewayArn"
+                      },
+                      {
+                        "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:gateway/${Project}-*"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "lambda:InvokeFunction"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Risk",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "Interceptor",
+                        "Arn"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetPolicyEngine"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Engine",
+                      "PolicyEngineArn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:AuthorizeAction",
+                    "bedrock-agentcore:PartiallyAuthorizeActions"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "Engine",
+                        "PolicyEngineArn"
+                      ]
+                    },
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:gateway/${Project}-*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Gateway": {
+      "Type": "AWS::BedrockAgentCore::Gateway",
+      "Properties": {
+        "Name": {
+          "Ref": "Project"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "GatewayRole",
+            "Arn"
+          ]
+        },
+        "ProtocolType": "MCP",
+        "AuthorizerType": "CUSTOM_JWT",
+        "AuthorizerConfiguration": {
+          "CustomJWTAuthorizer": {
+            "DiscoveryUrl": {
+              "Fn::Sub": "${Issuer}/.well-known/openid-configuration"
+            },
+            "AllowedAudience": [
+              {
+                "Ref": "SupervisorClientId"
+              },
+              {
+                "Ref": "RiscosClientId"
+              }
+            ],
+            "CustomClaims": [
+              {
+                "InboundTokenClaimName": "token_use",
+                "InboundTokenClaimValueType": "STRING",
+                "AuthorizingClaimMatchValue": {
+                  "ClaimMatchOperator": "EQUALS",
+                  "ClaimMatchValue": {
+                    "MatchValueString": "id"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "PolicyEngineConfiguration": {
+          "Arn": {
+            "Fn::GetAtt": [
+              "Engine",
+              "PolicyEngineArn"
+            ]
+          },
+          "Mode": "ENFORCE"
+        },
+        "InterceptorConfigurations": [
+          {
+            "InterceptionPoints": [
+              "REQUEST"
+            ],
+            "Interceptor": {
+              "Lambda": {
+                "Arn": {
+                  "Fn::GetAtt": [
+                    "Interceptor",
+                    "Arn"
+                  ]
+                }
+              }
+            },
+            "InputConfiguration": {
+              "PassRequestHeaders": true
+            }
+          }
+        ]
+      }
+    },
+    "RiskTarget": {
+      "Type": "AWS::BedrockAgentCore::GatewayTarget",
+      "Properties": {
+        "Name": "riscos",
+        "GatewayIdentifier": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayIdentifier"
+          ]
+        },
+        "CredentialProviderConfigurations": [
+          {
+            "CredentialProviderType": "GATEWAY_IAM_ROLE"
+          }
+        ],
+        "TargetConfiguration": {
+          "Mcp": {
+            "Lambda": {
+              "LambdaArn": {
+                "Fn::GetAtt": [
+                  "Risk",
+                  "Arn"
+                ]
+              },
+              "ToolSchema": {
+                "InlinePayload": [
+                  {
+                    "Name": "consultar_risco",
+                    "Description": "Consulta o risco sint\u00e9tico por cliente, via Lambda.",
+                    "InputSchema": {
+                      "Type": "object",
+                      "Properties": {
+                        "cliente_id": {
+                          "Type": "string"
+                        },
+                        "max_registros": {
+                          "Type": "integer"
+                        },
+                        "request_id": {
+                          "Type": "string",
+                          "Description": "UUID da execu\u00e7\u00e3o para correla\u00e7\u00e3o nos logs, sem dados pessoais."
+                        }
+                      },
+                      "Required": [
+                        "cliente_id",
+                        "max_registros",
+                        "request_id"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "GatewayLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Sub": "/aws/vendedlogs/${Project}/gateway"
+        },
+        "RetentionInDays": 7
+      }
+    },
+    "GatewayLogSource": {
+      "Type": "AWS::Logs::DeliverySource",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "LogType": "APPLICATION_LOGS",
+        "ResourceArn": {
+          "Fn::GetAtt": [
+            "Gateway",
+            "GatewayArn"
+          ]
+        }
+      }
+    },
+    "GatewayLogDestination": {
+      "Type": "AWS::Logs::DeliveryDestination",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${Project}-gateway"
+        },
+        "DestinationResourceArn": {
+          "Fn::GetAtt": [
+            "GatewayLog",
+            "Arn"
+          ]
+        },
+        "OutputFormat": "json"
+      }
+    },
+    "GatewayLogDelivery": {
+      "Type": "AWS::Logs::Delivery",
+      "Properties": {
+        "DeliverySourceName": {
+          "Ref": "GatewayLogSource"
+        },
+        "DeliveryDestinationArn": {
+          "Fn::GetAtt": [
+            "GatewayLogDestination",
+            "Arn"
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "GatewayId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayIdentifier"
+        ]
+      }
+    },
+    "GatewayArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayArn"
+        ]
+      }
+    },
+    "GatewayUrl": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Gateway",
+          "GatewayUrl"
+        ]
+      }
+    },
+    "PolicyEngineId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineId"
+        ]
+      }
+    },
+    "PolicyEngineArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Engine",
+          "PolicyEngineArn"
+        ]
+      }
+    },
+    "RiskLogGroup": {
+      "Value": {
+        "Ref": "RiskLog"
+      }
+    },
+    "GatewayLogGroup": {
+      "Value": {
+        "Ref": "GatewayLog"
+      }
+    },
+    "InterceptorArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Interceptor",
+          "Arn"
+        ]
+      }
+    },
+    "GatewayRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "GatewayRole",
+          "Arn"
+        ]
+      }
+    },
+    "GatewayRoleName": {
+      "Value": {
+        "Ref": "GatewayRole"
+      }
+    },
+    "PropagationMode": {
+      "Value": "SIGV4_WITH_VERIFIED_USER_JWT"
+    }
+  },
+  "Conditions": {
+    "HasKnownGateway": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "KnownGatewayArn"
+            },
+            ""
+          ]
+        }
+      ]
+    }
+  }
+}

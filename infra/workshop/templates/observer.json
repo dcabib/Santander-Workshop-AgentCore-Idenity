@@ -1,0 +1,84 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Workshop AWS - cross-account observer for notebook acceptance",
+  "Parameters": {
+    "Project": {
+      "Type": "String"
+    },
+    "RunnerArn": {
+      "Type": "String"
+    },
+    "ControlArns": {
+      "Type": "CommaDelimitedList"
+    }
+  },
+  "Resources": {
+    "Role": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": {
+          "Fn::Sub": "${Project}-observer"
+        },
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "sts:AssumeRole",
+              "Principal": {
+                "AWS": {
+                  "Ref": "RunnerArn"
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop-read",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cloudformation:DescribeStacks"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${Project}-*/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:GetGateway",
+                    "bedrock-agentcore:GetGatewayTarget",
+                    "bedrock-agentcore:ListGatewayTargets",
+                    "bedrock-agentcore:GetAgentRuntime",
+                    "bedrock-agentcore:GetMemory",
+                    "bedrock-agentcore:GetPolicyEngine",
+                    "bedrock-agentcore:GetResourcePolicy",
+                    "iam:GetRole"
+                  ],
+                  "Resource": {
+                    "Ref": "ControlArns"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "RoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Role",
+          "Arn"
+        ]
+      }
+    }
+  }
+}

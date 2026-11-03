@@ -6,7 +6,7 @@ import pytest
 
 from scripts import cleanup
 from scripts.notebook_cleanup import LOCAL_NAMES, cleanup_cells
-from scripts.verify_notebooks import check_offline_defaults
+from scripts.verify_notebooks import validate_notebook
 
 ACCOUNT = "123456789012"
 REGION = "us-east-1"
@@ -125,16 +125,17 @@ def test_local_cleanup_is_repeatable_preserves_files_and_unrelated_state(
     assert json.loads(capsys.readouterr().out)["removed_variables"] == 0
 
 
-def test_runner_rejects_enabled_cloud_cleanup_before_starting_kernel():
+def test_runner_rejects_execution_fallback_before_starting_kernel():
     import nbformat as nb
 
-    notebook = nb.v4.new_notebook(cells=cleanup_cells("11", "banking"))
-    check_offline_defaults(notebook)
-    notebook.cells[1].source = notebook.cells[1].source.replace(
-        "CLEANUP_EXECUTE = False", "CLEANUP_EXECUTE = True"
-    )
-    with pytest.raises(ValueError, match="CLEANUP_EXECUTE"):
-        check_offline_defaults(notebook)
+    notebook = nb.v4.new_notebook(cells=[
+        nb.v4.new_markdown_cell("Consultar o serviço AWS."),
+        nb.v4.new_code_cell("print('AWS')"),
+    ], metadata={"workshop": {"execution": "AWS"}})
+    validate_notebook(notebook)
+    notebook.cells[1].source = 'WORKSHOP_MODE = "local"'
+    with pytest.raises(ValueError, match="EXECUTION_FALLBACK_FORBIDDEN"):
+        validate_notebook(notebook)
 
 
 def test_template_lookup_rejects_unowned_paths():

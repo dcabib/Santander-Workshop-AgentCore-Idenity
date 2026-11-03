@@ -7,11 +7,11 @@ __pycache__/
 build/
 dist/
 config/local.*
+config/aws.*.json
 .env
 .env.*
 !.env.example
-evidence/*.json
-evidence/executed/
+evidence/
 *.db
 *.db-*
 *.pem

@@ -67,6 +67,34 @@ def log_event(event_id, request_id, body):
     }
 
 
+def test_rag_log_correlation_follows_empty_pages():
+    session = MagicMock()
+    session.client.return_value.filter_log_events.side_effect = [
+        {"events": [], "nextToken": "next"},
+        {"events": [
+            log_event("tool", "native", {"tool": "rag___Retrieve"}),
+            log_event("policy", "native", {"policy": {"decision": "ALLOW"}}),
+        ]},
+    ]
+    rows = [{"case": "a", "gateway_request_ids": ["native"]}]
+    transport.correlate(session, {"GatewayLogGroup": "fixture"}, rows, 1000)
+    assert rows[0]["gateway_log_correlation_verified"]
+    assert session.client.return_value.filter_log_events.call_args.kwargs["nextToken"] == "next"
+
+
+def test_generated_evidence_matches_the_context_given_to_bedrock():
+    model = MagicMock()
+    model.converse.return_value = {
+        "output": {"message": {"content": [{"text": "Resposta [R1]"}]}},
+        "ResponseMetadata": {"RequestId": "bedrock-native"},
+    }
+    chunks = [{"id": "R1", "domain": "riscos", "text": "trecho autorizado"}]
+    result = client.generate_answer(model, "model", "pergunta", chunks)
+    sent = json.loads(model.converse.call_args.kwargs["messages"][0]["content"][0]["text"])
+    assert sent["trechos_autorizados"] == chunks
+    assert result["citations"] == ["R1"] and result["model_request_id"] == "bedrock-native"
+
+
 @pytest.mark.parametrize("case,expected", [("a", "ALLOW"), ("d", "DENY"), ("spoof", "DENY")])
 def test_log_correlation_requires_exact_request_tool_and_native_policy(case, expected):
     session = MagicMock()

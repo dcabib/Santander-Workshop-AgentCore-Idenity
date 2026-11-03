@@ -91,15 +91,24 @@ def correlate(session, environment, rows, since_ms):
         decisions = {}
         expected = "DENY" if row.get("case") in {"d", "spoof"} else "ALLOW"
         for request_id in ids:
-            response = logs.filter_log_events(
-                logGroupName=environment["GatewayLogGroup"],
-                startTime=since_ms,
-                filterPattern=f'"{request_id}"',
-                limit=100,
-            )
+            arguments = {
+                "logGroupName": environment["GatewayLogGroup"], "startTime": since_ms,
+                "filterPattern": f'"{request_id}"', "limit": 100,
+            }
+            events, seen = [], set()
+            while True:
+                response = logs.filter_log_events(**arguments)
+                events.extend(response.get("events", []))
+                cursor = response.get("nextToken")
+                if not cursor:
+                    break
+                if cursor in seen:
+                    raise ValueError("LOG_PAGINATION_LOOP")
+                seen.add(cursor)
+                arguments["nextToken"] = cursor
             tool_seen = False
             policy_decisions = set()
-            for event in response.get("events", []):
+            for event in events:
                 try:
                     record = json.loads(event["message"])
                 except (ValueError, TypeError):

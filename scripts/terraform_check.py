@@ -14,7 +14,7 @@ from santander_demo.terraform_lab.client import verify_cloud
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", default="config/local.terraform.json")
+    parser.add_argument("--config", default="config/aws.terraform.json")
     parser.add_argument("--llm", action="store_true")
     args = parser.parse_args()
     os.umask(0o077)

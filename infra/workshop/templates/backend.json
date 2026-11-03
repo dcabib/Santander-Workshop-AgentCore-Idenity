@@ -1,0 +1,643 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Workshop AWS - MCP Runtime, source ACLs and native AgentCore Memory",
+  "Parameters": {
+    "RuntimeName": {
+      "Type": "String"
+    },
+    "GatewayArn": {
+      "Type": "String"
+    },
+    "GatewayRoleArn": {
+      "Type": "String"
+    },
+    "ArtifactBucket": {
+      "Type": "String"
+    },
+    "ArtifactKey": {
+      "Type": "String"
+    },
+    "Issuer": {
+      "Type": "String"
+    },
+    "SupervisorClientId": {
+      "Type": "String"
+    },
+    "RiscosClientId": {
+      "Type": "String"
+    },
+    "UserAOid": {
+      "Type": "String"
+    },
+    "UserBOid": {
+      "Type": "String"
+    },
+    "UserCOid": {
+      "Type": "String"
+    },
+    "UserDOid": {
+      "Type": "String"
+    },
+    "Grants": {
+      "Type": "String",
+      "Default": "{\"a\": [\"riscos\", \"k2\"], \"b\": [\"fraude\", \"k2\"], \"c\": [\"riscos\", \"fraude\", \"k2\"], \"d\": []}"
+    },
+    "LifecycleStage": {
+      "Type": "String",
+      "Default": "baseline",
+      "AllowedValues": [
+        "baseline",
+        "updated",
+        "revoked",
+        "deleted",
+        "reingested"
+      ]
+    }
+  },
+  "Resources": {
+    "Table": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "BillingMode": "PAY_PER_REQUEST",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "pk",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "sk",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "pk",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "sk",
+            "KeyType": "RANGE"
+          }
+        ],
+        "SSESpecification": {
+          "SSEEnabled": true
+        },
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        }
+      }
+    },
+    "SeedLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 7
+      }
+    },
+    "SeedRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${SeedLog.Arn}:*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:BatchWriteItem"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Table",
+                      "Arn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "SeedFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "Timeout": 120,
+        "Handler": "santander_demo.aws_workshop.seed.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "SeedRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "SeedLog"
+          }
+        }
+      }
+    },
+    "Seed": {
+      "Type": "Custom::WorkshopSyntheticSource",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "SeedFunction",
+            "Arn"
+          ]
+        },
+        "Table": {
+          "Ref": "Table"
+        },
+        "Users": {
+          "a": {
+            "Ref": "UserAOid"
+          },
+          "b": {
+            "Ref": "UserBOid"
+          },
+          "c": {
+            "Ref": "UserCOid"
+          },
+          "d": {
+            "Ref": "UserDOid"
+          }
+        },
+        "GrantsJson": {
+          "Ref": "Grants"
+        },
+        "LifecycleStage": {
+          "Ref": "LifecycleStage"
+        }
+      }
+    },
+    "Memory": {
+      "Type": "AWS::BedrockAgentCore::Memory",
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${RuntimeName}_memory"
+        },
+        "EventExpiryDuration": 7,
+        "Description": "References only; issuer/sub isolation and fresh source ACL validation"
+      }
+    },
+    "RuntimeRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock-agentcore.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:s3:::${ArtifactBucket}/${ArtifactKey}"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:DescribeLogStreams",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetItem"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Table",
+                      "Arn"
+                    ]
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:CreateEvent",
+                    "bedrock-agentcore:ListEvents"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Memory",
+                      "MemoryArn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "Runtime": {
+      "Type": "AWS::BedrockAgentCore::Runtime",
+      "Properties": {
+        "AgentRuntimeName": {
+          "Ref": "RuntimeName"
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "RuntimeRole",
+            "Arn"
+          ]
+        },
+        "AgentRuntimeArtifact": {
+          "CodeConfiguration": {
+            "Runtime": "PYTHON_3_12",
+            "EntryPoint": [
+              "workshop_runtime_main.py"
+            ],
+            "Code": {
+              "S3": {
+                "Bucket": {
+                  "Ref": "ArtifactBucket"
+                },
+                "Prefix": {
+                  "Ref": "ArtifactKey"
+                }
+              }
+            }
+          }
+        },
+        "ProtocolConfiguration": "MCP",
+        "NetworkConfiguration": {
+          "NetworkMode": "PUBLIC"
+        },
+        "RequestHeaderConfiguration": {
+          "RequestHeaderAllowlist": [
+            "X-Amzn-Bedrock-AgentCore-Runtime-Custom-User-Authorization"
+          ]
+        },
+        "EnvironmentVariables": {
+          "WORKSHOP_BACKEND": {
+            "Fn::Sub": "{\"issuer\": \"${Issuer}\", \"clients\": [\"${SupervisorClientId}\", \"${RiscosClientId}\"], \"table\": \"${Table}\", \"memory_id\": \"${Memory.MemoryId}\"}"
+          }
+        },
+        "LifecycleConfiguration": {
+          "IdleRuntimeSessionTimeout": 60,
+          "MaxLifetime": 900
+        }
+      },
+      "DependsOn": [
+        "Seed"
+      ]
+    },
+    "BoundaryLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 7
+      }
+    },
+    "BoundaryRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${BoundaryLog.Arn}:*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock-agentcore:PutResourcePolicy",
+                    "bedrock-agentcore:GetResourcePolicy"
+                  ],
+                  "Resource": {
+                    "Fn::GetAtt": [
+                      "Runtime",
+                      "AgentRuntimeArn"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "BoundaryProvider": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "Timeout": 120,
+        "Handler": "santander_demo.aws_workshop.runtime_boundary.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "BoundaryRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "BoundaryLog"
+          }
+        }
+      }
+    },
+    "RuntimeBoundary": {
+      "Type": "Custom::WorkshopRuntimeBoundary",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "BoundaryProvider",
+            "Arn"
+          ]
+        },
+        "RuntimeArn": {
+          "Fn::GetAtt": [
+            "Runtime",
+            "AgentRuntimeArn"
+          ]
+        },
+        "GatewayRoleArn": {
+          "Ref": "GatewayRoleArn"
+        }
+      }
+    },
+    "RetentionLog": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "RetentionInDays": 7
+      }
+    },
+    "RetentionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "workshop",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "${RetentionLog.Arn}:*"
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:DescribeLogGroups"
+                  ],
+                  "Resource": "*",
+                  "Condition": {
+                    "StringEquals": {
+                      "aws:RequestedRegion": {
+                        "Ref": "AWS::Region"
+                      }
+                    }
+                  }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutRetentionPolicy"
+                  ],
+                  "Resource": {
+                    "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/bedrock-agentcore/runtimes/${Runtime.AgentRuntimeId}-DEFAULT:*"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "RetentionFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Runtime": "python3.12",
+        "Architectures": [
+          "arm64"
+        ],
+        "Timeout": 120,
+        "Role": {
+          "Fn::GetAtt": [
+            "RetentionRole",
+            "Arn"
+          ]
+        },
+        "Handler": "santander_demo.aws_workshop.log_retention.handler",
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ArtifactBucket"
+          },
+          "S3Key": {
+            "Ref": "ArtifactKey"
+          }
+        },
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "RetentionLog"
+          }
+        }
+      }
+    },
+    "RuntimeLogRetention": {
+      "Type": "Custom::RuntimeLogRetention",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "RetentionFunction",
+            "Arn"
+          ]
+        },
+        "LogGroup": {
+          "Fn::Sub": "/aws/bedrock-agentcore/runtimes/${Runtime.AgentRuntimeId}-DEFAULT"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "RuntimeArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Runtime",
+          "AgentRuntimeArn"
+        ]
+      }
+    },
+    "RuntimeId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Runtime",
+          "AgentRuntimeId"
+        ]
+      }
+    },
+    "RuntimeLogGroup": {
+      "Value": {
+        "Fn::Sub": "/aws/bedrock-agentcore/runtimes/${Runtime.AgentRuntimeId}-DEFAULT"
+      }
+    },
+    "TableName": {
+      "Value": {
+        "Ref": "Table"
+      }
+    },
+    "MemoryId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Memory",
+          "MemoryId"
+        ]
+      }
+    },
+    "MemoryArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Memory",
+          "MemoryArn"
+        ]
+      }
+    },
+    "SourceKind": {
+      "Value": "AWS_SIMULATED_DATABRICKS"
+    },
+    "LifecycleStage": {
+      "Value": {
+        "Ref": "LifecycleStage"
+      }
+    },
+    "RuntimeBoundary": {
+      "Value": {
+        "Fn::GetAtt": [
+          "RuntimeBoundary",
+          "Boundary"
+        ]
+      }
+    },
+    "GatewayIngressArn": {
+      "Value": {
+        "Ref": "GatewayArn"
+      }
+    },
+    "RuntimeUrl": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            {
+              "Fn::Sub": "https://bedrock-agentcore.${AWS::Region}.amazonaws.com/runtimes/"
+            },
+            {
+              "Fn::Sub": "arn%3A${AWS::Partition}%3Abedrock-agentcore%3A${AWS::Region}%3A${AWS::AccountId}%3Aruntime%2F${Runtime.AgentRuntimeId}"
+            },
+            "/invocations?qualifier=DEFAULT"
+          ]
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Registry personas - criar rascunhos imutaveis",
+  "Parameters": {
+    "RegistryId": {
+      "Type": "String"
+    },
+    "PublisherProviderArn": {
+      "Type": "String"
+    },
+    "RiscosPackage": {
+      "Type": "String"
+    },
+    "FraudePackage": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "Riscos": {
+      "Type": "Custom::RegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "PublisherProviderArn"
+        },
+        "Kind": "Record",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "Package": {
+          "Ref": "RiscosPackage"
+        }
+      }
+    },
+    "Fraude": {
+      "Type": "Custom::RegistryRecord",
+      "Properties": {
+        "ServiceToken": {
+          "Ref": "PublisherProviderArn"
+        },
+        "Kind": "Record",
+        "RegistryId": {
+          "Ref": "RegistryId"
+        },
+        "Package": {
+          "Ref": "FraudePackage"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "RiscosRecordId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Riscos",
+          "Id"
+        ]
+      }
+    },
+    "RiscosDigest": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Riscos",
+          "Digest"
+        ]
+      }
+    },
+    "FraudeRecordId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Fraude",
+          "Id"
+        ]
+      }
+    },
+    "FraudeDigest": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Fraude",
+          "Digest"
+        ]
+      }
+    }
+  }
+}

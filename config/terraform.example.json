@@ -3,5 +3,9 @@
   "region": "us-east-1",
   "expected_account_id": "000000000000",
   "project_name": "santander-tf-lab",
-  "model_id": "amazon.nova-lite-v1:0"
+  "model_id": "amazon.nova-lite-v1:0",
+  "backend": {
+    "stack": "santander-workshop-core-bootstrap",
+    "key": "terraform/state/santander-tf-lab.tfstate"
+  }
 }

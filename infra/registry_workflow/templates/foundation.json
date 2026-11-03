@@ -11,6 +11,10 @@
     "OperatorArn": {
       "Type": "String"
     },
+    "RunnerArn": {
+      "Type": "String",
+      "Default": ""
+    },
     "RecoveryRegistryArn": {
       "Type": "String",
       "Default": ""
@@ -176,6 +180,23 @@
                 }
               },
               "Action": "sts:AssumeRole"
+            },
+            {
+              "Fn::If": [
+                "HasRunner",
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "AWS": {
+                      "Ref": "RunnerArn"
+                    }
+                  },
+                  "Action": "sts:AssumeRole"
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
             }
           ]
         },
@@ -259,6 +280,23 @@
                 }
               },
               "Action": "sts:AssumeRole"
+            },
+            {
+              "Fn::If": [
+                "HasRunner",
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "AWS": {
+                      "Ref": "RunnerArn"
+                    }
+                  },
+                  "Action": "sts:AssumeRole"
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
             }
           ]
         },
@@ -692,6 +730,23 @@
                 }
               },
               "Action": "sts:AssumeRole"
+            },
+            {
+              "Fn::If": [
+                "HasRunner",
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "AWS": {
+                      "Ref": "RunnerArn"
+                    }
+                  },
+                  "Action": "sts:AssumeRole"
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
             }
           ]
         },
@@ -750,6 +805,23 @@
                 }
               },
               "Action": "sts:AssumeRole"
+            },
+            {
+              "Fn::If": [
+                "HasRunner",
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "AWS": {
+                      "Ref": "RunnerArn"
+                    }
+                  },
+                  "Action": "sts:AssumeRole"
+                },
+                {
+                  "Ref": "AWS::NoValue"
+                }
+              ]
             }
           ]
         },
@@ -893,6 +965,20 @@
           "AgentRuntimeArn"
         ]
       }
+    }
+  },
+  "Conditions": {
+    "HasRunner": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "RunnerArn"
+            },
+            ""
+          ]
+        }
+      ]
     }
   }
 }

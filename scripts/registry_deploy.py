@@ -32,10 +32,12 @@ def operator_arn(session, caller):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("phase", choices=["bootstrap", "foundation", "publish", "submit", "approve"])
-    p.add_argument("--profile", default="default")
+    p.add_argument("--profile", help="Perfil do operador; omitir para role de execução AWS")
     p.add_argument("--region", choices=["us-east-1"], default="us-east-1")
     p.add_argument("--prefix", default="registry-personas")
     p.add_argument("--execute", action="store_true")
+    p.add_argument("--runner-arn", default=None, help="Role do runner AWS; preservada quando omitida")
+    p.add_argument("--config-output", default="config/aws.registry.json")
     p.add_argument("--recover-registry", default="", help="Uso pelo wrapper de recuperação do IaC")
     p.add_argument(
         "--review", help="JSON com digests conferidos e decisões; obrigatório em approve"
@@ -49,6 +51,8 @@ def main():
     params = {}
     if args.phase == "foundation":
         recovered = args.recover_registry
+        runner_arn = args.runner_arn
+        existing = None
         if not recovered:
             try:
                 existing = session.client("cloudformation").describe_stacks(StackName=prefix + "-foundation")["Stacks"][0]
@@ -58,8 +62,12 @@ def main():
             else:
                 recovered = next((v["ParameterValue"] for v in existing.get("Parameters", [])
                                   if v["ParameterKey"] == "RecoveryRegistryArn"), "")
+        if runner_arn is None and existing:
+            runner_arn = next((v["ParameterValue"] for v in existing.get("Parameters", [])
+                               if v["ParameterKey"] == "RunnerArn"), "")
         params = {
             "RecoveryRegistryArn": recovered,
+            "RunnerArn": runner_arn or "",
             "ArtifactBucket": outputs(session, prefix + "-bootstrap")["ArtifactBucket"],
             "OperatorArn": operator_arn(session, caller),
             "Project": prefix,
@@ -116,8 +124,7 @@ def main():
             args.phase,
             "--scenario",
             "registry_workflow",
-            "--profile",
-            args.profile,
+            *(["--profile", args.profile] if args.profile else []),
             "--region",
             args.region,
             "--account",
@@ -132,7 +139,12 @@ def main():
         cwd=ROOT,
     )
     if args.execute and args.phase != "bootstrap":
+        target = ROOT / args.config_output
+        previous = json.loads(target.read_text()) if target.exists() else {}
+        if previous.get("prefix") != prefix or previous.get("account") != caller["Account"]:
+            previous = {}
         config = {
+            **previous,
             "profile": args.profile,
             "region": args.region,
             "prefix": prefix,
@@ -141,7 +153,8 @@ def main():
         }
         if args.phase in {"publish", "submit", "approve"}:
             config.update(outputs(session, prefix + "-publish"))
-        (ROOT / "config/local.registry.json").write_text(json.dumps(config, indent=2) + "\n")
+        target.write_text(json.dumps(config, indent=2) + "\n")
+        target.chmod(0o600)
 
 
 if __name__ == "__main__":

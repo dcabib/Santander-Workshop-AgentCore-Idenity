@@ -1,5 +1,6 @@
-"""Executa notebooks localmente e registra execução e cleanup por notebook."""
+"""Valida o material e executa as aulas contra serviços AWS, sem fallback."""
 
+import argparse
 import ast
 import hashlib
 import json
@@ -11,96 +12,105 @@ from pathlib import Path
 import nbformat
 from nbclient import NotebookClient
 
+from santander_demo.aws_workshop.config import load
+from santander_demo.aws_workshop.manifest import LABS, account_plan, check_selection
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def check_offline_defaults(notebook):
-    """Recusa controles live/deploy/cleanup ativados antes de iniciar um kernel."""
-    false_flags = {"RUN_AWS", "RUN_PIPELINE", "APPLY_CHANGESET", "RUN_AGENT", "CLEANUP_EXECUTE"}
+def validate_notebook(notebook):
+    if notebook.metadata.get("workshop", {}).get("execution") != "AWS":
+        raise ValueError("AWS_NOTEBOOK_REQUIRED")
+    forbidden = {"WORKSHOP_MODE", "RUN_AWS", "LocalLifecycle", "LocalCognitoRagLab", "Workshop"}
     for index, cell in enumerate(notebook.cells):
         if cell.cell_type != "code":
             continue
         if index == 0 or notebook.cells[index - 1].cell_type != "markdown":
-            raise ValueError(f"Célula {index + 1} sem explicação anterior")
-        for node in ast.walk(ast.parse(cell.source)):
-            if not isinstance(node, ast.Assign):
-                continue
-            for target in node.targets:
-                if isinstance(target, ast.Name) and target.id in false_flags | {"CLEANUP_TARGET"}:
-                    expected = None if target.id == "CLEANUP_TARGET" else False
-                    if not isinstance(node.value, ast.Constant) or node.value.value is not expected:
-                        raise ValueError(
-                            f"{target.id} precisa ser {expected!r} na validação offline"
-                        )
-
-
-def cleanup_status(notebook, tag, field):
-    cells = [cell for cell in notebook.cells if tag in cell.metadata.get("tags", [])]
-    if len(cells) != 1 or cells[0].execution_count is None:
-        raise ValueError(f"Esperada uma célula executada de {tag}")
-    for output in cells[0].get("outputs", []):
-        if output.output_type != "stream":
-            continue
-        for line in output.text.splitlines():
-            try:
-                record = ast.literal_eval(line)
-            except (SyntaxError, ValueError):
-                continue
-            if isinstance(record, dict) and field in record:
-                return record[field]
-    raise ValueError(f"Resultado de {tag} não encontrado")
+            raise ValueError(f"Célula {index + 1} precisa explicar seu código")
+        tree = ast.parse(cell.source)
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Name) and node.id in forbidden:
+                raise ValueError("EXECUTION_FALLBACK_FORBIDDEN:" + node.id)
+            if isinstance(node, ast.ImportFrom) and node.module in {
+                "santander_demo.local", "santander_demo.rag.local",
+            }:
+                raise ValueError("SIMULATION_IMPORT_FORBIDDEN")
 
 
 def main():
-    environment = dict(os.environ, WORKSHOP_MODE="local", AWS_EC2_METADATA_DISABLED="true")
-    environment.pop("RUN_DATABRICKS", None)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--validate-only", action="store_true",
+                        help="Validar sintaxe/material; não conta como aceite operacional")
+    parser.add_argument("--labs", nargs="+", choices=LABS,
+                        help="Selecione as aulas preparadas; omitir exige toda a jornada")
+    parser.add_argument("--output", default="evidence/notebooks-aws.json")
+    args = parser.parse_args()
+    if not args.validate_only and not (
+        os.environ.get("CODEBUILD_BUILD_ARN")
+        or os.environ.get("AWS_EXECUTION_ENV", "").startswith("CloudShell")
+        or Path("/opt/ml/metadata/resource-metadata.json").exists()
+    ):
+        parser.error("Execute os notebooks no runner AWS do projeto ou no ambiente SageMaker/CloudShell.")
     out = ROOT / "evidence/executed"
     out.mkdir(parents=True, exist_ok=True)
     results = []
-    for path in sorted((ROOT / "notebooks").glob("*.ipynb")):
+    paths = [
+        p for p in sorted((ROOT / "notebooks").glob("*.ipynb"))
+        if not args.labs or p.name[:2] in args.labs
+    ]
+    if not paths:
+        parser.error("Nenhuma aula selecionada")
+    if not args.validate_only:
+        try:
+            config = load(os.environ.get("WORKSHOP_CONFIG", ROOT / "config/aws.workshop.json"))
+            selected = [path.name[:2] for path in paths]
+            readiness = ROOT / "evidence/workshop-prerequisites.json"
+            readiness.write_text(json.dumps(account_plan(config, selected), indent=2) + "\n")
+            # Conferir a seleção inteira antes de iniciar o primeiro kernel.
+            check_selection(config, selected)
+        except Exception as exc:
+            # Uma tentativa bloqueada não pode deixar um PASS anterior como seu resultado.
+            target = Path(args.output)
+            target.parent.mkdir(exist_ok=True, parents=True)
+            target.write_text(json.dumps([{
+                "notebook": path.name, "status": "BLOCKED", "validation": "AWS_PREFLIGHT",
+                "started_at": datetime.now(UTC).isoformat(),
+                "error_type": type(exc).__name__, "error_message": str(exc)[:2000],
+            } for path in paths], indent=2) + "\n")
+            raise
+    for path in paths:
         notebook = nbformat.read(path, as_version=4)
-        started = time.monotonic()
+        start = time.monotonic()
         result = {
-            "notebook": path.name,
-            "status": "FAIL",
-            "mode": notebook.metadata.get("santander", {}).get(
-                "local_validation_mode", "LOCAL_SIMULATION"
-            ),
+            "notebook": path.name, "status": "FAIL",
+            "validation": "STATIC_ONLY" if args.validate_only else "AWS_EXECUTION",
             "started_at": datetime.now(UTC).isoformat(),
             "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "code_cells": sum(cell.cell_type == "code" for cell in notebook.cells),
         }
         try:
-            check_offline_defaults(notebook)
-            NotebookClient(
-                notebook, timeout=90, resources={"metadata": {"path": str(ROOT)}}
-            ).execute(env=environment)
-            result["cleanup_local"] = cleanup_status(notebook, "cleanup_local", "cleanup_local")
-            result["cleanup_cloud"] = cleanup_status(notebook, "cleanup_cloud", "cloud_cleanup")
-            if result["cleanup_local"] != "PASS" or result["cleanup_cloud"] != "NOT_RUN":
-                raise ValueError("Resultado inesperado no cleanup offline")
-            result["status"] = "PASS"
+            validate_notebook(notebook)
+            if not args.validate_only:
+                NotebookClient(
+                    notebook, timeout=300, resources={"metadata": {"path": str(ROOT)}},
+                ).execute(env=dict(os.environ))
+                if any(cell.execution_count is None for cell in notebook.cells if cell.cell_type == "code"):
+                    raise ValueError("INCOMPLETE_NOTEBOOK_EXECUTION")
+            result["status"] = "VALID" if args.validate_only else "PASS"
         except Exception as exc:
             result["error_type"] = type(exc).__name__
-            result["error_message"] = str(exc)[:1500]
-            # Os detalhes da falha ficam na célula da cópia executada.
+            result["error_message"] = str(exc)[:2000]
         finally:
-            result["executed_code_cells"] = sum(
-                cell.cell_type == "code" and cell.execution_count is not None
-                for cell in notebook.cells
-            )
-            result["elapsed_seconds"] = round(time.monotonic() - started, 2)
-            nbformat.write(notebook, out / path.name)
+            result["elapsed_seconds"] = round(time.monotonic() - start, 2)
+            if not args.validate_only:
+                nbformat.write(notebook, out / path.name)
             results.append(result)
-            (ROOT / "evidence/notebooks.json").write_text(json.dumps(results, indent=2) + "\n")
-        print(
-            f"{path.name}: {result['status']} "
-            f"({result['executed_code_cells']}/{result['code_cells']} células; "
-            f"cleanup local={result.get('cleanup_local', 'NOT_RUN')})",
-            flush=True,
-        )
-    if any(result["status"] != "PASS" for result in results):
-        raise SystemExit("Falhas registradas em evidence/notebooks.json e evidence/executed/")
+            target = Path(args.output)
+            target.parent.mkdir(exist_ok=True, parents=True)
+            target.write_text(json.dumps(results, indent=2) + "\n")
+        print(f"{path.name}: {result['status']} ({result['validation']})", flush=True)
+        if result["status"] == "FAIL":
+            raise SystemExit("Aula interrompida; veja " + args.output)
 
 
 if __name__ == "__main__":

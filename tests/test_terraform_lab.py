@@ -283,16 +283,16 @@ def test_deploy_rejects_reusing_state_of_another_environment(monkeypatch, mismat
         terraform_deploy.check_state_target(config)
 
 
-def test_terraform_notebook_is_reproducible_and_defaults_to_offline():
+def test_terraform_notebook_is_reproducible_and_requires_aws():
     import nbformat
 
     from scripts.generate_terraform_notebook import OUTPUT, build_notebook
-    from scripts.verify_notebooks import check_offline_defaults
+    from scripts.verify_notebooks import validate_notebook
 
     notebook = build_notebook()
-    check_offline_defaults(notebook)
+    validate_notebook(notebook)
     assert nbformat.read(OUTPUT, as_version=4) == notebook
     assert all(not c.outputs and c.execution_count is None
                for c in notebook.cells if c.cell_type == "code")
-    assert sum("cleanup_cloud" in c.metadata.get("tags", []) for c in notebook.cells) == 1
-    assert sum("cleanup_local" in c.metadata.get("tags", []) for c in notebook.cells) == 1
+    assert notebook.metadata.workshop.execution == "AWS"
+    assert "invoke_runtime" in "\n".join(c.source for c in notebook.cells)

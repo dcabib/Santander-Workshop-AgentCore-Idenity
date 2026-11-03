@@ -42,8 +42,10 @@ def validate_config(config):
         "ap-southeast-2",
     }:
         raise ValueError("MANAGED_KB_REGION_REQUIRED")
-    if not re.fullmatch(r"\d{12}", config["account_id"]) or not config["profile"]:
-        raise ValueError("ACCOUNT_AND_PROFILE_REQUIRED")
+    if not re.fullmatch(r"\d{12}", config["account_id"]):
+        raise ValueError("AWS_ACCOUNT_REQUIRED")
+    if config.get("profile") is not None and not isinstance(config["profile"], str):
+        raise ValueError("PROFILE_OR_AWS_EXECUTION_ROLE_REQUIRED")
     validate_users(config["users"])
     if config.get("auth_provider") == "cognito":
         cognito.issuer(config)
@@ -196,7 +198,11 @@ def generate_answer(model_client, model_arn, question, chunks):
         raise ValueError("EMPTY_MODEL_RESPONSE")
     if not set(re.findall(r"\[([RF]\d+)\]", answer)) <= {c["id"] for c in chunks}:
         raise ValueError("MODEL_CITED_UNRETRIEVED_DOCUMENT")
-    return {"answer": answer, "generated": True}
+    return {
+        "answer": answer, "generated": True,
+        "citations": sorted(set(re.findall(r"\[([RF]\d+)\]", answer))),
+        "model_request_id": response.get("ResponseMetadata", {}).get("RequestId"),
+    }
 
 
 def _network_failure(exc):
@@ -263,6 +269,7 @@ async def ask(config, environment, gateway_token, question, model_client):
         outcome="RETRIEVED" if chunks else "NO_AUTHORIZED_RESULTS",
         document_ids=sorted({c["id"] for c in chunks}),
         domains=sorted({c["domain"] for c in chunks}),
+        retrieved_context=chunks,
     )
     report.update(
         await asyncio.to_thread(

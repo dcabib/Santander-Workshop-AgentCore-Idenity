@@ -3,6 +3,7 @@
 import hashlib
 import json
 
+from santander_demo.aws_workshop.lifecycle import revision, stage
 from santander_demo.rag.contract import DOMAINS, validate_users
 
 DOCUMENTS = (
@@ -37,48 +38,57 @@ DOCUMENTS = (
 )
 
 
-def acl_entries(domain, users):
+def acl_entries(domain, users, lifecycle_stage="baseline"):
+    stage(lifecycle_stage)
     return [
         {
             "Name": user["email"],
             "Type": "USER",
-            "Access": "ALLOW" if domain in DOMAINS[label] else "DENY",
+            "Access": "ALLOW" if domain in DOMAINS[label] and not (
+                lifecycle_stage == "revoked" and label == "c" and domain == "fraude"
+            ) else "DENY",
         }
         for label, user in users.items()
     ]
 
 
-def objects(bucket, users):
+def objects(bucket, users, lifecycle_stage="baseline"):
     validate_users(users)
+    stage(lifecycle_stage)
     result = {}
     global_acl = []
     for domain in ("riscos", "fraude"):
         global_acl.append(
             {
                 "keyPrefix": f"s3://{bucket}/documents/{domain}/",
-                "aclEntries": acl_entries(domain, users),
+                "aclEntries": acl_entries(domain, users, lifecycle_stage),
             }
         )
     result["acl/global-acl.json"] = json.dumps(global_acl, ensure_ascii=False).encode()
     for doc in DOCUMENTS:
+        if doc["id"] == "F1" and lifecycle_stage == "deleted":
+            continue
         key = f"documents/{doc['domain']}/{doc['id']}.txt"
-        result[key] = doc["text"].encode()
+        text = doc["text"]
+        if doc["id"] == "F1":
+            text += f" Versão do exercício de ciclo de vida: CICLO-F1-V{revision(lifecycle_stage)}."
+        result[key] = text.encode()
         result[key + ".metadata.json"] = json.dumps(
             {
                 "metadataAttributes": {
                     "document_id": doc["id"],
                     "domain": doc["domain"],
                 },
-                "accessControlList": acl_entries(doc["domain"], users),
+                "accessControlList": acl_entries(doc["domain"], users, lifecycle_stage),
             },
             ensure_ascii=False,
         ).encode()
     return result
 
 
-def corpus_digest(users):
+def corpus_digest(users, lifecycle_stage="baseline"):
     """Força atualização do custom resource se conteúdo ou permissões mudarem."""
-    content = objects("digest-only", users)
+    content = objects("digest-only", users, lifecycle_stage)
     return hashlib.sha256(
         b"".join(key.encode() + content[key] for key in sorted(content))
     ).hexdigest()

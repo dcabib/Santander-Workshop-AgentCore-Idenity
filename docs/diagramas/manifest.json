@@ -1,243 +1,308 @@
 [
   {
     "id": "00_preflight",
-    "pillar": "Visão geral",
-    "title": "Antes de começar: dois ambientes",
-    "subtitle": "O que você já consegue executar e o que ainda precisa validar nos serviços.",
-    "status": "MAPA DO LABORATÓRIO",
-    "takeaway": "A simulação valida a lógica. O ensaio AWS valida as integrações.",
-    "description": "Compare a bancada local com o ambiente AWS. Tokens de teste e Cedar rodam localmente; os serviços gerenciados exigem configuração e ensaio.",
-    "result": "Saber exatamente qual ambiente está sendo usado e o que seu resultado comprova.",
+    "pillar": "Preflight",
+    "title": "Serviços AWS e prontidão",
+    "nodes": [
+      "Notebook AWS",
+      "STS: plataforma",
+      "CloudFormation",
+      "Gateway / Runtime"
+    ],
+    "description": "Aula 00: uma conta preparada. O runner completo exige quatro; selecione as aulas antes de executar.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "Local: nenhuma conta AWS é utilizada.",
-      "AWS: preflight lê o estado dos recursos; não os cria.",
-      "Dados de negócio são sintéticos em ambas as trilhas."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "01_gateway_targets",
     "pillar": "Gateway",
-    "title": "Uma entrada para ferramentas diferentes",
-    "subtitle": "O Gateway expõe Lambda e um especialista MCP pelo mesmo contrato de ferramentas.",
-    "status": "ARQUITETURA AWS PREVISTA",
-    "takeaway": "O cliente usa tools/list e tools/call; o Gateway conecta os destinos.",
-    "description": "O supervisor acessa Riscos/K2 em Lambda e Fraude em um servidor MCP. O Gateway autentica, aplica Policy e usa a credencial adequada a cada target.",
-    "result": "Encontrar os nomes reais das tools e executar uma chamada pelo caminho autorizado.",
+    "title": "Gateway: Lambda e MCP no Runtime",
+    "nodes": [
+      "Notebook AWS",
+      "Gateway + Cedar",
+      "Lambda / MCP Runtime",
+      "DynamoDB: fonte"
+    ],
+    "description": "Dois tipos de target; JWT na entrada e autorização antes da ferramenta.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "Riscos/K2: chamada Lambda com IAM.",
-      "Fraude: target MCP com OAuth/OBO.",
-      "Local: protocolo MCP por stdio; roteamento AWS ainda depende de ensaio."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "02_identity_entra_obo",
     "pillar": "Identity",
-    "title": "O usuário continua sendo o usuário",
-    "subtitle": "Duas trocas OBO mudam a audiência do token sem substituir o principal humano.",
-    "status": "FLUXO ENTRA / AWS A VALIDAR",
-    "takeaway": "A prova de delegação é o destino reconhecer o usuário esperado.",
-    "description": "O usuário entra pelo frontend Entra. O agente confidencial obtém um token para o Gateway; o AgentCore Identity participa da troca para o Microsoft Graph.",
-    "result": "Comparar o ID devolvido por Graph /me com o OID esperado de dois usuários de teste.",
+    "title": "Identity: Cognito, workload e adaptação para Entra",
+    "nodes": [
+      "Cognito: pessoa",
+      "Runtime: agente",
+      "Identity: workload",
+      "Gateway: ferramentas"
+    ],
+    "description": "Pessoa e workload são identidades distintas; inferência acontece no Runtime.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "Primeiro OBO: helper MSAL no host do instrutor.",
-      "Segundo OBO: integração Gateway + AgentCore Identity.",
-      "Somente Graph /me; tokens e perfis completos não entram nas evidências."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "03_identity_agente_mcp",
     "pillar": "Identity",
-    "title": "A pessoa é a mesma. O agente mudou.",
-    "subtitle": "A decisão considera quem é o usuário e qual aplicação está agindo por ele.",
-    "status": "LÓGICA LOCAL · AWS A VALIDAR",
-    "takeaway": "Permissão do usuário e permissão do agente precisam ser satisfeitas.",
-    "description": "Com o mesmo usuário habilitado a Riscos e Fraude, o supervisor pode consultar Fraude, mas o agente de Riscos recebe uma negativa.",
-    "result": "Mostrar uma mudança de decisão alterando apenas a identidade técnica do chamador.",
+    "title": "Pessoa e aplicação na autorização",
+    "nodes": [
+      "Pessoa C",
+      "Apps Supervisor / Riscos",
+      "Gateway + Policy",
+      "Fonte: grant + app"
+    ],
+    "description": "A mesma pessoa recebe decisões diferentes conforme a aplicação autenticada.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "tid + oid: identidade humana no tenant.",
-      "azp, no fluxo Entra v2: aplicação confidencial.",
-      "O Runtime Fraude também valida audiência, aplicação do Gateway e workload."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "04_policy_cedar",
     "pillar": "Policy",
-    "title": "A autorização acontece antes da ferramenta",
-    "subtitle": "Cedar combina identidade, ação, recurso e parâmetros em uma única decisão.",
-    "status": "CEDAR LOCAL · AWS A VALIDAR",
-    "takeaway": "50 registros podem passar. 51 devem parar antes de executar o backend.",
-    "description": "A regra exige simultaneamente usuário, aplicação, delegação, ação, Gateway e limite de entrada corretos. Uma condição falsa impede a execução.",
-    "result": "Reproduzir a matriz P-SAN-01 a P-SAN-06 e distinguir negação de Policy de outros erros.",
+    "title": "Policy: decisões Cedar no Gateway",
+    "nodes": [
+      "Pessoa + app",
+      "Ferramenta + parâmetros",
+      "Policy: ENFORCE",
+      "ALLOW / DENY"
+    ],
+    "description": "Uma negativa Cedar não é um erro de rede; a fonte possui ACL independente.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "ENFORCE no Gateway previsto por IaC.",
-      "Contador local verifica que negativas não executam o backend.",
-      "A prova equivalente em AWS exige correlacionar decisão, chamada e logs."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "05_policy_autoria",
     "pillar": "Policy",
-    "title": "Da intenção à política revisada",
-    "subtitle": "Gerar Cedar é uma etapa de autoria. Publicar exige revisão, testes e mudança por IaC.",
-    "status": "AUTORIA LOCAL · SERVIÇO A VALIDAR",
-    "takeaway": "Um rascunho gerado não se transforma automaticamente em permissão.",
-    "description": "Uma intenção em linguagem natural pode gerar um rascunho por um stack separado. O notebook lê Cedar e findings; a promoção ocorre pelo pipeline revisado.",
-    "result": "Conferir se o Cedar representa a intenção e se os casos permitidos e negados continuam corretos.",
+    "title": "Policy: autoria assistida e revisão",
+    "nodes": [
+      "Intenção explícita",
+      "Geração de rascunho",
+      "Revisão de Cedar",
+      "Publicação por IaC"
+    ],
+    "description": "Um rascunho não concede permissão; a publicação exige revisão.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "Provider de rascunho não recebe CreatePolicy.",
-      "Findings precisam ser revisados, sem IGNORE_ALL_FINDINGS.",
-      "O histórico de geração é retido; ele não concede acesso."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "06_registry_governanca",
     "pillar": "Registry",
-    "title": "Publicar, aprovar e consumir são papéis distintos",
-    "subtitle": "Um catálogo governado separa o ciclo do registro da autorização para executar uma tool.",
-    "status": "MODELO LOCAL · IAM A VALIDAR",
-    "takeaway": "O publisher submete. O approver decide. O consumer encontra aprovados.",
-    "description": "Os registros percorrem DRAFT, PENDING_APPROVAL e APPROVED ou REJECTED. Os papéis AWS usam sessões temporárias e permissões distintas.",
-    "result": "Verificar a separação de papéis e observar todos os estados preparados para o workshop.",
+    "title": "Registry: publicação e aprovação por IaC",
+    "nodes": [
+      "Descritor + digest",
+      "DRAFT",
+      "PENDING_APPROVAL",
+      "APPROVED"
+    ],
+    "description": "O Registry governa metadados e versões; o serviço de destino autoriza a execução.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "autoApproval = false.",
-      "Busca desta implementação usa AWS_IAM e STS.",
-      "No modo AWS, o notebook lê estados preparados pelo IaC."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "07_registry_personas",
     "pillar": "Registry",
-    "title": "Da ideia à capacidade aprovada.",
-    "description": "Quatro personas acompanham um MCP e um agente.",
-    "result": "Separar desenvolvimento, publicação, aprovação e execução.",
-    "notes": [
-      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
-      "Resultados locais não comprovam os serviços gerenciados."
+    "title": "Registry: quatro personas e IAM",
+    "nodes": [
+      "Developer",
+      "Publisher",
+      "Approver",
+      "Consumer"
     ],
-    "svg": "../registry/arquitetura.svg",
-    "png": "../registry/arquitetura.png"
+    "description": "Sessões STS e políticas IAM separam as quatro responsabilidades.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
+    "notes": [
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
+    ]
   },
   {
     "id": "08_registry_descoberta_execucao",
     "pillar": "Registry",
-    "title": "Encontrar uma capacidade não libera seu uso",
-    "subtitle": "O supervisor descobre no Registry, valida o endpoint e invoca pelo Gateway.",
-    "status": "FLUXO LOCAL · AWS A VALIDAR",
-    "takeaway": "Registry responde “o que existe”; Policy decide “o que este chamador pode fazer”.",
-    "description": "O catálogo devolve capacidades aprovadas. O supervisor valida metadados antes de enviar o token; o Gateway continua sendo o ponto de autorização.",
-    "result": "Encontrar Fraude para dois perfis e observar que só o perfil autorizado consegue executá-la.",
+    "title": "Descoberta não concede execução",
+    "nodes": [
+      "Consumer",
+      "Descoberta no Registry",
+      "Descritor validado",
+      "Runtime autorizado"
+    ],
+    "description": "Descobrir uma capacidade não concede permissão de invocação.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "Busca AWS semântica; busca local lexical.",
-      "Somente o endpoint exato configurado recebe bearer.",
-      "Aprovação no Registry não substitui a decisão Cedar."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "09_terraform_runtime_gateway_identity",
-    "pillar": "Gateway",
-    "title": "A primeira implantação, em uma conta.",
-    "description": "Terraform provisiona Runtime, Identity, Cognito, Gateway e Lambda.",
-    "result": "Planejar, implantar e testar a identidade de aplicação antes de avançar para múltiplas contas.",
-    "notes": [
-      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
-      "Resultados locais não comprovam os serviços gerenciados."
+    "pillar": "Terraform",
+    "title": "Terraform, Runtime e Identity M2M",
+    "nodes": [
+      "Runtime + Bedrock",
+      "Identity: token M2M",
+      "Gateway",
+      "Lambda: ferramenta"
     ],
-    "svg": "../terraform/arquitetura.svg",
-    "png": null
+    "description": "Terraform gerencia recursos e estado; M2M identifica a aplicação.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
+    "notes": [
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
+    ]
   },
   {
     "id": "10_santander_multi_conta",
-    "pillar": "Arquitetura integrada",
-    "title": "Três contas. Fronteiras explícitas.",
-    "subtitle": "O supervisor está na origem; governança fica no hub; Fraude pertence a outro domínio.",
-    "status": "ARQUITETURA AWS A VALIDAR",
-    "takeaway": "A chamada deve preservar o usuário e respeitar a autorização em cada fronteira.",
-    "description": "Conta A hospeda o supervisor; conta C concentra Registry, Gateway, Identity e Policy; conta B hospeda o especialista de Fraude.",
-    "result": "Executar A → C → B de verdade e reunir evidências nos três lados da chamada.",
+    "pillar": "Contas",
+    "title": "Quatro contas AWS e suas fronteiras",
+    "nodes": [
+      "Plataforma",
+      "Retail",
+      "Transaction",
+      "Lending"
+    ],
+    "description": "O STS exige quatro contas distintas, com Gateway e fonte por domínio.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "A → Registry C: IAM com AssumeRole.",
-      "A → Gateway C: JWT delegado.",
-      "C → Fraude B: OBO e restrição ao workload do Gateway."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "11_blog_multi_account_gateway_mcp",
     "pillar": "Gateway",
-    "title": "Um agente, três áreas, quatro contas.",
-    "description": "Referência do artigo AWS com Strands e M2M nas ferramentas.",
-    "result": "Comparar a identidade humana na entrada e a credencial técnica nos destinos.",
-    "notes": [
-      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
-      "Resultados locais não comprovam os serviços gerenciados."
+    "title": "Agente central e três domínios AWS",
+    "nodes": [
+      "Runtime supervisor",
+      "Gateway plataforma",
+      "Gateways: 3 domínios",
+      "MCP / fonte"
     ],
-    "svg": "../banking/arquitetura.svg",
-    "png": "../banking/arquitetura.png"
+    "description": "Exige quatro contas distintas: plataforma, Retail, Transaction e Lending. Não executa em conta única.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
+    "notes": [
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
+    ]
   },
   {
     "id": "12_gateways_por_conta_identity_policy",
-    "pillar": "Policy",
-    "title": "Cada conta tem sua própria porta.",
-    "description": "Gateway, Identity OBO e Policy independentes em quatro contas.",
-    "result": "Entender a autonomia de autorização de cada domínio.",
-    "notes": [
-      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
-      "Resultados locais não comprovam os serviços gerenciados."
+    "pillar": "Gateway",
+    "title": "Gateway e Policy em cada conta",
+    "nodes": [
+      "Cognito JWT",
+      "Policy plataforma",
+      "Policy domínio",
+      "ACL da fonte"
     ],
-    "svg": "../federation/arquitetura.svg",
-    "png": "../federation/arquitetura.png"
+    "description": "Fluxo de duas contas; manifesto e federação atuais exigem quatro contas preparadas.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
+    "notes": [
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
+    ]
   },
   {
     "id": "13_databricks_e_evidencias",
-    "pillar": "Fonte de dados",
-    "title": "A fonte de dados precisa reconhecer a pessoa",
-    "subtitle": "A extensão Databricks verifica identidade efetiva e grants, com uma tabela canário.",
-    "status": "EXTENSÃO AZURE A VALIDAR",
-    "takeaway": "Sem token delegado válido, a consulta para. Não há fallback para credencial compartilhada.",
-    "description": "O adapter de extensão troca um JWT Entra por um token Databricks e consulta o SQL Warehouse. A identidade e a permissão da fonte são verificadas separadamente.",
-    "result": "Provar current_user() exato e acesso distinto para dois usuários na mesma tabela sintética.",
+    "pillar": "Fonte",
+    "title": "Fonte de dados: simulador Databricks na AWS",
+    "nodes": [
+      "Pessoa autenticada",
+      "Runtime MCP",
+      "Grants DynamoDB",
+      "Dados sintéticos"
+    ],
+    "description": "Simulador AWS. Identidade e fonte em duas contas; o manifesto atual exige quatro. Não executa em conta única.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
-      "Caminho de extensão separado do Gateway nesta entrega.",
-      "Unity Catalog governa o acesso aos dados.",
-      "Graph /me não comprova delegação no Databricks Azure."
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
     ]
   },
   {
     "id": "14_cenario_santander_integrado",
-    "pillar": "Identity",
-    "title": "Uma chamada entre áreas, até a fonte.",
-    "description": "Agentes na conta A → hub → Gateway da conta B → MCP Databricks.",
-    "result": "Distinguir agentes no hub e verificar a identidade humana na fonte.",
-    "notes": [
-      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
-      "Resultados locais não comprovam os serviços gerenciados."
+    "pillar": "Contas",
+    "title": "Agentes na origem, hub e fonte entre contas",
+    "nodes": [
+      "Retail: dois agentes",
+      "Plataforma: Gateway",
+      "Transaction: Gateway",
+      "Runtime: fonte"
     ],
-    "svg": "../journey/arquitetura.svg",
-    "png": "../journey/arquitetura.png"
+    "description": "Três contas no fluxo, quatro exigidas pelo IaC e preflight atuais. Não executa em conta única.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
+    "notes": [
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
+    ]
   },
   {
     "id": "15_ingestao_acl_memoria",
-    "pillar": "Registry",
-    "title": "Conhecimento compartilhado, acesso individual.",
-    "description": "Contrato local de ingestão, ACL, revogação e memória por usuário.",
-    "result": "Compartilhar o índice sem compartilhar todas as permissões.",
-    "notes": [
-      "Este laboratório executa somente o contrato local de documentos e memória.",
-      "Observe a recuperação após revogar uma ACL ou excluir um documento."
+    "pillar": "Memory",
+    "title": "AgentCore Memory, identidade e ACL atual",
+    "nodes": [
+      "JWT: issuer + sub",
+      "Actor / sessão",
+      "Memory: referência",
+      "Fonte: grant atual"
     ],
-    "svg": "../ingestao/arquitetura.svg",
-    "png": "../ingestao/arquitetura.png"
+    "description": "Uma referência antiga nunca restaura permissão revogada na fonte.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
+    "notes": [
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
+    ]
   },
   {
     "id": "16_rag_managed_identity_policy",
-    "pillar": "Policy",
-    "title": "Uma base, quatro experiências de acesso.",
-    "description": "Cognito, AgentCore Identity, Policy e ACLs nativas da Managed Knowledge Base.",
-    "result": "A vê Riscos, B vê Fraude, C vê ambos e D não acessa o RAG.",
-    "notes": [
-      "Leia o guia do cenário antes de habilitar a execução na nuvem.",
-      "Resultados locais não comprovam os serviços gerenciados."
+    "pillar": "RAG",
+    "title": "RAG, ACL nativa e inferência no Runtime",
+    "nodes": [
+      "Cognito: A / B / C / D",
+      "Runtime RAG",
+      "Gateway + Policy",
+      "Knowledge Base + ACL"
     ],
-    "svg": "../rag/arquitetura.svg",
-    "png": "../rag/arquitetura.png"
+    "description": "O modelo recebe somente trechos autorizados; retrieval direto é negado.",
+    "result": "Confrontar a resposta AWS com as asserções da aula.",
+    "notes": [
+      "Recursos e permissões declarados no IaC.",
+      "JWT Cognito; notas Entra explicam as diferenças de protocolo.",
+      "A figura descreve a arquitetura; aceite depende da execução AWS."
+    ]
   }
 ]

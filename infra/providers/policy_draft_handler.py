@@ -34,23 +34,34 @@ def generate(client, event, sleep=time.sleep, max_polls=150):
                 "ReviewRequired": "true",
             }
         if result["status"].endswith("_FAILED"):
-            raise RuntimeError("POLICY_GENERATION_FAILED")
+            reasons = "; ".join(result.get("statusReasons", []))[:600]
+            raise RuntimeError("POLICY_GENERATION_FAILED: " + reasons)
         sleep(2)
     raise TimeoutError("POLICY_GENERATION_TIMEOUT")
 
 
 def handler(event, context):
     physical = event.get("PhysicalResourceId", "failed-" + stable_token(event)[:12])
-    status, data = "SUCCESS", {}
+    status, data, reason = "SUCCESS", {}, "Rascunho exige revisão"
     try:
         physical, data = generate(boto3.client("bedrock-agentcore-control"), event)
     except Exception as exc:
         status = "FAILED"
-        print(json.dumps({"error_type": type(exc).__name__}))
+        # Mensagens geradas acima contêm apenas o estado/motivo do serviço.
+        # Para erros SDK, registramos código e request ID, sem payload.
+        if isinstance(exc, (RuntimeError, TimeoutError)):
+            reason = str(exc)[:700]
+        else:
+            error = getattr(exc, "response", {})
+            reason = "{}: {} ({})".format(
+                type(exc).__name__, error.get("Error", {}).get("Code", "PROVIDER_ERROR"),
+                error.get("ResponseMetadata", {}).get("RequestId", "no-request-id"),
+            )
+        print(json.dumps({"error_type": type(exc).__name__, "reason": reason}))
     body = json.dumps(
         {
             "Status": status,
-            "Reason": "Rascunho exige revisão" if status == "SUCCESS" else "Falha na geração",
+            "Reason": reason,
             "PhysicalResourceId": physical,
             "StackId": event["StackId"],
             "RequestId": event["RequestId"],

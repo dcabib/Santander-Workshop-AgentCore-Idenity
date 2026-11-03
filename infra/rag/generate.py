@@ -34,7 +34,12 @@ def users_params():
 def data():
     t = template(
         "Santander RAG - fully managed Knowledge Base and synthetic ACL-aware S3 corpus",
-        {"Project": param(), **artifact_params(), **users_params(), "CorpusDigest": param()},
+        {
+            "Project": param(), **artifact_params(), **users_params(), "CorpusDigest": param(),
+            "LifecycleStage": param("baseline", AllowedValues=[
+                "baseline", "updated", "revoked", "deleted", "reingested",
+            ]),
+        },
     )
     r = t["Resources"]
     base = bootstrap()
@@ -120,6 +125,13 @@ def data():
                 [sub("${SourceBucket.Arn}/documents/*"), sub("${SourceBucket.Arn}/acl/*")],
             ),
             statement(
+                ["s3:DeleteObject"],
+                [
+                    sub("${SourceBucket.Arn}/documents/fraude/F1.txt"),
+                    sub("${SourceBucket.Arn}/documents/fraude/F1.txt.metadata.json"),
+                ],
+            ),
+            statement(
                 ["bedrock:StartIngestionJob", "bedrock:GetIngestionJob", "bedrock:GetDataSource"],
                 att("KnowledgeBase", "KnowledgeBaseArn"),
             ),
@@ -147,6 +159,7 @@ def data():
             "KnowledgeBaseId": ref("KnowledgeBase"),
             "DataSourceId": att("DataSource", "DataSourceId"),
             "CorpusDigest": ref("CorpusDigest"),
+            "LifecycleStage": ref("LifecycleStage"),
             "Users": {
                 label.lower(): {"oid": ref(f"User{label}Oid"), "email": ref(f"User{label}Email")}
                 for label in "ABCD"
@@ -159,6 +172,7 @@ def data():
         "KnowledgeBaseArn": att("KnowledgeBase", "KnowledgeBaseArn"),
         "DataSourceId": att("DataSource", "DataSourceId"),
         "IngestionJobId": att("Corpus", "IngestionJobId"),
+        "LifecycleStage": ref("LifecycleStage"),
     }.items():
         output(t, name, value)
     return t

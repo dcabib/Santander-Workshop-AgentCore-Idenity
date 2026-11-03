@@ -49,6 +49,17 @@
     },
     "CorpusDigest": {
       "Type": "String"
+    },
+    "LifecycleStage": {
+      "Type": "String",
+      "Default": "baseline",
+      "AllowedValues": [
+        "baseline",
+        "updated",
+        "revoked",
+        "deleted",
+        "reingested"
+      ]
     }
   },
   "Resources": {
@@ -295,6 +306,20 @@
                 {
                   "Effect": "Allow",
                   "Action": [
+                    "s3:DeleteObject"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "${SourceBucket.Arn}/documents/fraude/F1.txt"
+                    },
+                    {
+                      "Fn::Sub": "${SourceBucket.Arn}/documents/fraude/F1.txt.metadata.json"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
                     "bedrock:StartIngestionJob",
                     "bedrock:GetIngestionJob",
                     "bedrock:GetDataSource"
@@ -370,6 +395,9 @@
         "CorpusDigest": {
           "Ref": "CorpusDigest"
         },
+        "LifecycleStage": {
+          "Ref": "LifecycleStage"
+        },
         "Users": {
           "a": {
             "oid": {
@@ -440,6 +468,11 @@
           "Corpus",
           "IngestionJobId"
         ]
+      }
+    },
+    "LifecycleStage": {
+      "Value": {
+        "Ref": "LifecycleStage"
       }
     }
   }

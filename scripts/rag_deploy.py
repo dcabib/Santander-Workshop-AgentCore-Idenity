@@ -8,11 +8,12 @@ from pathlib import Path
 
 import boto3
 
-from infra.rag.generate import generate
-from santander_demo.rag.client import validate_config
-from santander_demo.rag.deployment import outputs, prepare_phase
-
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from infra.rag.generate import generate  # noqa: E402
+from santander_demo.rag.client import validate_config  # noqa: E402
+from santander_demo.rag.deployment import outputs, prepare_phase  # noqa: E402
 
 
 def configuration(session, project, profile, region):
@@ -46,10 +47,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("phase", choices=["bootstrap", "identity", "data", "access", "config"])
     parser.add_argument("--project", default="santander-rag")
-    parser.add_argument("--profile", default="default")
+    parser.add_argument("--profile", help="Omitir para usar a role do ambiente AWS")
     parser.add_argument("--region", default="us-east-1")
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--lifecycle-stage", choices=[
+        "baseline", "updated", "revoked", "deleted", "reingested",
+    ])
     args = parser.parse_args()
+    if args.lifecycle_stage and args.phase != "data":
+        parser.error("--lifecycle-stage aplica-se somente à fase data")
     session = boto3.Session(profile_name=args.profile, region_name=args.region)
     account = session.client("sts").get_caller_identity()["Account"]
     generate()
@@ -62,7 +68,7 @@ def main():
                     "ArtifactBucket"
                 ],
             }
-        path = ROOT / "config" / f"local.rag-{args.phase}.json"
+        path = ROOT / "config" / f"aws.rag-{args.phase}.json"
         path.write_text(json.dumps(params, indent=2) + "\n")
         path.chmod(0o600)
         command = [
@@ -71,8 +77,7 @@ def main():
             args.phase,
             "--scenario",
             "rag",
-            "--profile",
-            args.profile,
+            *(["--profile", args.profile] if args.profile else []),
             "--account",
             account,
             "--region",
@@ -84,7 +89,9 @@ def main():
         ]
     else:
         config = configuration(session, args.project, args.profile, args.region)
-        path = ROOT / "config/local.rag.json"
+        if args.lifecycle_stage:
+            config["lifecycle_stage"] = args.lifecycle_stage
+        path = ROOT / "config/aws.rag.json"
         path.write_text(json.dumps(config, indent=2) + "\n")
         path.chmod(0o600)
         if args.phase == "config":

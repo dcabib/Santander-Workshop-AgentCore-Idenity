@@ -444,7 +444,9 @@ def test_deploy_parameters_match_all_templates_without_cloud_mutation(
         required = {k for k, v in docs[phase]["Parameters"].items() if "Default" not in v} - {
             "ArtifactKey"
         }
-        assert set(params) == required
+        assert required <= set(params) <= set(docs[phase]["Parameters"])
+        if phase == "data":
+            assert params["LifecycleStage"] == "baseline"
         assert "--execute" not in plan["args"]
     assert {call[0] for call in session.client.return_value.mock_calls} == {"get_caller_identity"}
 
@@ -472,7 +474,7 @@ def test_corpus_provider_ingests_through_cfn_and_delete_retains():
         "ingestionJob": {"status": "COMPLETE", "statistics": {"numberOfDocumentsFailed": 0}}
     }
     _, result = seed.provision(event(), s3, kb)
-    assert result == {"IngestionJobId": "job"}
+    assert result == {"IngestionJobId": "job", "LifecycleStage": "baseline"}
     assert s3.put_object.call_count == 9
     s3.reset_mock()
     kb.reset_mock()
