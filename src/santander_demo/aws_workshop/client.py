@@ -1,7 +1,6 @@
 """Cliente dos ambientes implantados; nenhuma implementação de serviços em memória."""
 
 import json
-import re
 import uuid
 from contextlib import asynccontextmanager
 from datetime import timedelta
@@ -10,6 +9,8 @@ import httpx
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from mcp.shared.exceptions import McpError
+
+from santander_demo.aws_endpoints import gateway_region
 
 from .config import check_accounts, load, session, stack_outputs
 from .contracts import USER_TOKEN_HEADER
@@ -33,10 +34,10 @@ def verify_target_headers(headers):
 
 @asynccontextmanager
 async def gateway_session(url, token, *, request_ids=None):
-    if not re.fullmatch(
-        r"https://[a-z0-9-]+\.gateway\.bedrock-agentcore\.us-east-1\.amazonaws\.com/mcp", url,
-    ):
-        raise ValueError("UNTRUSTED_GATEWAY_URL")
+    try:
+        gateway_region(url)
+    except ValueError as exc:
+        raise ValueError("UNTRUSTED_GATEWAY_URL") from exc
 
     async def capture(response):
         try:

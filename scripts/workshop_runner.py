@@ -10,7 +10,6 @@ from pathlib import Path
 
 from santander_demo.aws_workshop.client import stack_name
 from santander_demo.aws_workshop.config import (
-    DOMAINS,
     _identifiers_only,
     check_accounts,
     load,
@@ -18,9 +17,12 @@ from santander_demo.aws_workshop.config import (
     stack_outputs,
 )
 from santander_demo.aws_workshop.manifest import (
+    LABS,
     account_plan,
     assert_account_plan,
     check_selection,
+    runner_domains,
+    selected_labs,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,25 +33,46 @@ def outputs(config, phase):
     return stack_outputs(session(config), stack_name(config, "platform", phase))
 
 
-def integration_configs(config):
+def integration_configs(config, labs=None):
     values = {}
-    for integration in config["integrations"].values():
+    dependencies = {dep for lab in selected_labs(config, labs) for dep in LABS[lab]}
+    for name in sorted(dependencies & {"registry", "terraform", "rag"}):
+        integration = config.get("integrations", {}).get(name)
+        if not integration:
+            raise ValueError("RUNNER_INTEGRATION_REQUIRED:" + name)
         path = integration["config"]
         if Path(path).is_absolute() or ".." in Path(path).parts or not path.startswith("config/aws."):
             raise ValueError("INTEGRATION_CONFIG_MUST_BE_PROJECT_AWS_FILE")
         value = json.loads((ROOT / path).read_text())
         _identifiers_only(value)
+        account = value.get("account", value.get("account_id", value.get("expected_account_id")))
+        if account != config["accounts"]["platform"]["id"] or value["region"] != config["region"]:
+            raise ValueError("RUNNER_INTEGRATION_ACCOUNT_REGION_MISMATCH:" + name)
         value["profile"] = None
         values[path] = value
     return values
 
 
-def package(config):
+def terraform_outputs(config):
+    path = config["integrations"]["terraform"]["outputs"]
+    if Path(path).is_absolute() or ".." in Path(path).parts or not path.startswith("build/"):
+        raise ValueError("TERRAFORM_OUTPUTS_MUST_BE_PROJECT_BUILD_FILE")
+    value = json.loads((ROOT / path).read_text())
+    _identifiers_only(value)
+    if value["account_id"] != config["accounts"]["platform"]["id"] or value["region"] != config["region"]:
+        raise ValueError("TERRAFORM_OUTPUTS_ACCOUNT_REGION_MISMATCH")
+    return path, value
+
+
+def package(config, labs=None):
     """Whitelist explícita; não inclui credenciais, state, ambiente Python ou evidências."""
     config = json.loads(json.dumps(config))
+    labs = selected_labs(config, labs)
+    domains = runner_domains(config, labs)
     for domain, account in config["accounts"].items():
         account["profile"] = None
-        if domain != "platform":
+        account.pop("role_arn", None)
+        if domain != "platform" and domain in domains:
             account["role_arn"] = (
                 f"arn:aws:iam::{account['id']}:role/{config['project']}-observer"
             )
@@ -68,13 +91,12 @@ def package(config):
     for name in ["pyproject.toml", "uv.lock", "README.md"]:
         files[name] = (ROOT / name).read_bytes()
     for name, value in {
-        "config/aws.workshop.json": config, **integration_configs(config),
+        "config/aws.workshop.json": config, **integration_configs(config, labs),
     }.items():
         files[name] = (json.dumps(value, indent=2) + "\n").encode()
-    tf = config["integrations"]["terraform"]["outputs"]
-    tf_outputs = json.loads((ROOT / tf).read_text())
-    _identifiers_only(tf_outputs)
-    files[tf] = json.dumps(tf_outputs).encode()
+    if any("terraform" in LABS[lab] for lab in labs):
+        tf, tf_outputs = terraform_outputs(config)
+        files[tf] = json.dumps(tf_outputs).encode()
     destination = ROOT / "build/workshop-source.zip"
     destination.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED) as archive:
@@ -86,25 +108,26 @@ def package(config):
 
 
 def parameters(config, key, labs):
-    envs = [outputs(config, phase) for phase in ["identity", "gateway", "backend", "agent"]]
-    integrations = integration_configs(config)
-    registry = integrations[config["integrations"]["registry"]["config"]]
-    rag = integrations[config["integrations"]["rag"]["config"]]
+    labs = selected_labs(config, labs)
+    dependencies = {dep for lab in labs for dep in LABS[lab]}
+    envs = [outputs(config, phase) for phase in ["identity", "gateway", "backend"]]
+    integrations = integration_configs(config, labs)
+    registry = {}
+    tf = {}
     aws = session(config)
-    for phase in ["identity", "data", "access"]:
-        envs.append(stack_outputs(aws, f"{rag['project']}-rag-{phase}"))
-    envs.append(registry)
-    tf = json.loads((ROOT / config["integrations"]["terraform"]["outputs"]).read_text())
-    envs.append(tf)
-    # Fases opcionais: erros diferentes de ausência real continuam bloqueantes.
-    from botocore.exceptions import ClientError
-
-    for phase in ["rag-agent", "policy-draft"]:
-        try:
+    if "rag" in dependencies:
+        rag = integrations[config["integrations"]["rag"]["config"]]
+        for phase in ["identity", "data", "access"]:
+            envs.append(stack_outputs(aws, f"{rag['project']}-rag-{phase}"))
+    if "registry" in dependencies:
+        registry = integrations[config["integrations"]["registry"]["config"]]
+        envs.append(registry)
+    if "terraform" in dependencies:
+        _, tf = terraform_outputs(config)
+        envs.append(tf)
+    for dependency, phase in [("rag-runtime", "rag-agent"), ("policy-draft", "policy-draft"), ("agent", "agent")]:
+        if dependency in dependencies:
             envs.append(outputs(config, phase))
-        except ClientError as exc:
-            if exc.response["Error"]["Code"] != "ValidationError" or "does not exist" not in str(exc):
-                raise
     arns = {
         value for env in envs for name, value in env.items()
         if (
@@ -144,6 +167,10 @@ def parameters(config, key, labs):
         value for env in envs for key, value in env.items()
         if "secret" in key.lower() and isinstance(value, str) and value.startswith("arn:")
     ]
+    assumed_roles = [
+        f"arn:aws:iam::{config['accounts'][domain]['id']}:role/{config['project']}-observer"
+        for domain in runner_domains(config, labs) if domain != "platform"
+    ] + personas
     return {
         "Project": config["project"], "SourceKey": key,
         "GatewayRoleArn": outputs(config, "gateway")["GatewayRoleArn"],
@@ -153,22 +180,23 @@ def parameters(config, key, labs):
         "SourceArns": ",".join(sorted(source_arns)),
         "LogArns": ",".join(sorted(log_arns)),
         "SecretArns": ",".join(sorted(set(secrets))),
-        "ObserverArns": ",".join(
-            f"arn:aws:iam::{config['accounts'][d]['id']}:role/{config['project']}-observer"
-            for d in DOMAINS if d != "platform"
-        ),
+        "AssumeRoleArns": ",".join(sorted(assumed_roles)),
         "PersonaArns": ",".join(sorted(personas)),
-        "TerraformPoolArn": f"arn:aws:cognito-idp:{config['region']}:{tf['account_id']}:userpool/{tf['user_pool_id']}",
+        "TerraformPoolArn": (
+            f"arn:aws:cognito-idp:{config['region']}:{tf['account_id']}:userpool/{tf['user_pool_id']}"
+            if tf else ""
+        ),
     }
 
 
 def deploy(config, labs, execute):
     from infra.workshop.generate import generate
 
+    labs = selected_labs(config, labs)
     assert_account_plan(account_plan(config, labs, runner=True))
-    check_accounts(config, domains=DOMAINS)
+    check_accounts(config, domains=runner_domains(config, labs))
     generate()
-    archive, digest = package(config)
+    archive, digest = package(config, labs)
     key = "source/" + digest + ".zip"
     params = parameters(config, key, labs)
     path = ROOT / "build/workshop-runner-parameters.json"
@@ -189,15 +217,17 @@ def deploy(config, labs, execute):
 
 def preflight_run(config, codebuild, project_name, labs):
     """Confere a seleção efetiva, inclusive WORKSHOP_LABS salvo no projeto AWS."""
-    if not labs:
-        projects = codebuild.batch_get_projects(names=[project_name])["projects"]
-        if len(projects) != 1:
-            raise ValueError("WORKSHOP_RUNNER_PROJECT_NOT_FOUND")
-        environment = {
-            item["name"]: item["value"]
-            for item in projects[0]["environment"]["environmentVariables"]
-        }
-        labs = environment.get("WORKSHOP_LABS", "").split()
+    projects = codebuild.batch_get_projects(names=[project_name])["projects"]
+    if len(projects) != 1:
+        raise ValueError("WORKSHOP_RUNNER_PROJECT_NOT_FOUND")
+    environment = {
+        item["name"]: item["value"]
+        for item in projects[0]["environment"]["environmentVariables"]
+    }
+    deployed = environment.get("WORKSHOP_LABS", "").split() or list(LABS)
+    if labs and not set(labs) <= set(deployed):
+        raise ValueError("RUNNER_REDEPLOY_REQUIRED: amplie a seleção pelo IaC antes de executar")
+    labs = labs or deployed
     check_selection(config, labs, runner=True)
 
 

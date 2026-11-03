@@ -2,7 +2,8 @@ from infra.workshop.generate import policy_draft, runner
 
 
 def statements(document, role):
-    return document["Resources"][role]["Properties"]["Policies"][0]["PolicyDocument"]["Statement"]
+    values = document["Resources"][role]["Properties"]["Policies"][0]["PolicyDocument"]["Statement"]
+    return [value["Fn::If"][1] if "Fn::If" in value else value for value in values]
 
 
 def test_draft_provider_may_validate_only_its_gateway_and_cannot_publish():

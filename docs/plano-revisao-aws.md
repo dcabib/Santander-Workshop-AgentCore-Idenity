@@ -342,7 +342,8 @@ A [matriz de contas](contas-e-elegibilidade.md) explicita que 10–14 exigem
 quatro contas no manifesto/IaC atuais. A aula 14 percorre três contas, mas
 depende da federação completa. Os fundamentos 00–09 e 15–16 não exigem
 fronteiras entre contas; seus stacks e integrações continuam obrigatórios.
-O runner completo mantém a exigência de quatro contas mesmo com `--labs`.
+Naquela revisão, o runner completo mantinha a exigência de quatro contas mesmo
+com `--labs`. A revisão de conta única abaixo substitui esse comportamento.
 
 README, guias, notebooks e diagramas mostram esses limites antes da execução.
 O planejamento lista bloqueios por aula sem chamar AWS. A execução confere
@@ -354,3 +355,17 @@ passaram na validação estática. Esta revisão não fez deploy nem nova execu�
 de aulas na AWS; o aceite operacional acima pertence ao pacote histórico
 identificado pelo build. A nova fonte do runner precisa ser publicada pelo
 pipeline para executar esses novos notebooks na AWS.
+
+### Jornada de conta única em us-west-2
+
+Escopo aprovado: preparar por IaC e executar 00–09 e 15–16 na nova conta,
+sem reutilizar state, outputs ou recursos do ambiente de referência.
+`topology: single-account` seleciona essas 12 aulas; 10–14 continuam bloqueadas.
+O runner passa a declarar contas, integrações e permissões conforme a seleção
+implantada. Ampliar as aulas requer novo deploy. A região do Registry passa a
+ser validada contra a região do Runtime e usada na assinatura SigV4.
+
+O [diagnóstico da implantação](diagnostico-conta-unica.md) registra três
+bootstraps concluídos e bloqueios IAM na identidade e na fundação Registry.
+Os dois stacks terminaram em ROLLBACK_COMPLETE; nenhum notebook executou.
+Validação estática e testes unitários não antecipam um PASS operacional.

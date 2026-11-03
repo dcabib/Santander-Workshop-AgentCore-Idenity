@@ -1,8 +1,8 @@
 # Implantação por IaC
 
-**Este guia implanta o ambiente completo em quatro contas AWS distintas.**
-A seleção `--labs` não transforma o runner atual em uma implantação de conta
-única. Antes de seguir os comandos, confira a
+**Este guia inclui o ambiente completo em quatro contas AWS distintas.**
+Para implantar somente 00–09 e 15–16 em uma conta, siga
+[conta única](conta-unica.md). Antes de seguir os comandos, confira a
 [matriz de contas e aulas](contas-e-elegibilidade.md). Com menos de quatro
 contas, os cenários 10–14 não executam com este IaC.
 
@@ -100,10 +100,12 @@ O runner empacota uma whitelist do projeto e configurações de identificadores,
 substitui perfis por roles, envia a fonte por hash ao S3 privado e aplica o
 CodeBuild pelo CloudFormation. Não inclui `.aws`, state, ambientes Python ou
 credenciais. Para uma execução parcial, passe `--labs 00 01 04` no deploy.
-Essa opção muda somente as aulas executadas: o runner continua exigindo quatro
-contas, Registry, Terraform e RAG. Seu deploy rejeita IDs ausentes/repetidos
-antes de enviar a fonte ao S3. Seu `run` consulta os pré-requisitos da seleção
-antes de iniciar o build.
+O runner inclui as contas, integrações e permissões exigidas pela seleção.
+Registry, Terraform e RAG só entram quando usados. Seu deploy rejeita IDs
+ausentes/repetidos antes de enviar a fonte ao S3. Seu `run` aceita apenas
+subconjuntos da seleção implantada e consulta os pré-requisitos antes do build.
+Para ampliar as aulas, faça novo deploy. As roles observer abaixo são
+necessárias quando a seleção inclui 10–14:
 
 ```bash
 uv run python scripts/workshop_runner.py deploy --execute

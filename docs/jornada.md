@@ -27,4 +27,6 @@ simulada conserva o objetivo didático de identidade e autorização, mas sua
 validação não substitui um teste no Databricks real.
 
 Antes das aulas, siga [preparação](preparacao.md) e [deploy](deploy.md).
+Para executar as 12 aulas sem fronteiras entre contas, siga
+[conta única](conta-unica.md), incluindo as integrações Registry, Terraform e RAG.
 Para concluir, execute no [runner AWS](validacao.md) e examine as evidências.

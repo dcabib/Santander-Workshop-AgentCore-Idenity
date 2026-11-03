@@ -76,12 +76,12 @@ def test_fundamentals_selection_does_not_require_domain_accounts(config, monkeyp
     assert require.call_count == 5
 
 
-def test_runner_still_requires_four_accounts_for_partial_selection(config):
+def test_runner_partial_selection_can_use_one_account(config):
     report = manifest.account_plan(single_account(config), ["00"], runner=True)
     assert report["labs"][0]["status"] == "ACCOUNTS_CONFIGURED"
-    assert report["status"] == "BLOCKED"
-    with pytest.raises(ValueError, match="runner completo exige 4 contas distintas"):
-        manifest.assert_account_plan(report)
+    assert report["status"] == "ACCOUNTS_CONFIGURED"
+    assert report["runner_required_accounts"] == ["platform"]
+    manifest.assert_account_plan(report)
 
 
 def test_complete_configuration_is_not_operational_acceptance(config):
@@ -98,8 +98,8 @@ def test_unknown_lesson_is_not_silently_omitted(config):
 
 @pytest.mark.parametrize("override,saved,expected", [
     ([], "00 01", ["00", "01"]),
-    ([], "", []),
-    (["14"], "00 01", ["14"]),
+    ([], "", list(manifest.LABS)),
+    (["14"], "00 01 14", ["14"]),
 ])
 def test_runner_preflights_the_effective_build_selection(
     config, monkeypatch, override, saved, expected,
@@ -112,13 +112,15 @@ def test_runner_preflights_the_effective_build_selection(
     monkeypatch.setattr(workshop_runner, "check_selection", check)
     workshop_runner.preflight_run(config, codebuild, "test-notebooks", override)
     check.assert_called_once_with(config, expected, runner=True)
-    if override:
-        codebuild.batch_get_projects.assert_not_called()
+    codebuild.batch_get_projects.assert_called_once_with(names=["test-notebooks"])
 
 
 def test_run_cannot_start_build_when_accounts_are_missing(config, monkeypatch):
     config = single_account(config)
     codebuild = Mock()
+    codebuild.batch_get_projects.return_value = {"projects": [{
+        "environment": {"environmentVariables": [{"name": "WORKSHOP_LABS", "value": "14"}]},
+    }]}
     aws = Mock()
     aws.client.return_value = codebuild
     monkeypatch.setattr(workshop_runner, "load", lambda _: config)
@@ -136,8 +138,8 @@ def test_runner_deploy_blocks_missing_accounts_before_packaging_or_upload(config
     aws = Mock()
     monkeypatch.setattr(workshop_runner, "package", package)
     monkeypatch.setattr(workshop_runner, "session", aws)
-    with pytest.raises(ValueError, match="runner completo exige 4"):
-        workshop_runner.deploy(single_account(config), ["00"], True)
+    with pytest.raises(ValueError, match="runner da seleção exige 4"):
+        workshop_runner.deploy(single_account(config), ["14"], True)
     package.assert_not_called()
     aws.assert_not_called()
 

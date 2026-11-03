@@ -425,15 +425,31 @@ def runner():
         "Project": param(), "ArtifactBucket": param(), "SourceKey": param(),
         "SecretArns": {"Type": "CommaDelimitedList"},
         "ControlArns": {"Type": "CommaDelimitedList"},
-        "KnowledgeArns": {"Type": "CommaDelimitedList"},
-        "SourceArns": {"Type": "CommaDelimitedList"},
+        "KnowledgeArns": {"Type": "CommaDelimitedList", "Default": ""},
+        "SourceArns": {"Type": "CommaDelimitedList", "Default": ""},
         "LogArns": {"Type": "CommaDelimitedList"},
-        "ObserverArns": {"Type": "CommaDelimitedList"},
-        "PersonaArns": {"Type": "CommaDelimitedList"},
-        "TerraformPoolArn": param(), "GatewayRoleArn": param(),
+        "AssumeRoleArns": {"Type": "CommaDelimitedList", "Default": ""},
+        "PersonaArns": {"Type": "CommaDelimitedList", "Default": ""},
+        "TerraformPoolArn": param(""), "GatewayRoleArn": param(),
         "Labs": param("", AllowedPattern=r"[0-9 ]*"),
     })
     r = t["Resources"]
+    optional_statements = [
+        ("AssumeRoleArns", statement(["sts:AssumeRole"], ref("AssumeRoleArns"))),
+        ("PersonaArns", statement(["iam:SimulatePrincipalPolicy"], ref("PersonaArns"))),
+        ("TerraformPoolArn", statement(["cognito-idp:DescribeUserPoolClient"], ref("TerraformPoolArn"))),
+        ("KnowledgeArns", statement(
+            ["bedrock:GetKnowledgeBase", "bedrock:GetDataSource", "bedrock:GetIngestionJob"],
+            ref("KnowledgeArns"),
+        )),
+        ("SourceArns", statement(["s3:GetObject"], ref("SourceArns"))),
+    ]
+    t["Conditions"] = {
+        "Has" + name: {"Fn::Not": [{"Fn::Equals": [
+            ref(name) if name == "TerraformPoolArn" else {"Fn::Join": [",", ref(name)]}, "",
+        ]}]}
+        for name, _ in optional_statements
+    }
     r["Role"] = role("codebuild.amazonaws.com", [
         log(r, "Log"),
         statement(["s3:GetObject", "s3:GetObjectVersion"], sub("arn:${AWS::Partition}:s3:::${ArtifactBucket}/source/*")),
@@ -445,9 +461,6 @@ def runner():
             sub("arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/registry-personas-*/*"),
         ]),
         statement(["secretsmanager:GetSecretValue"], ref("SecretArns")),
-        statement(["sts:AssumeRole"], {"Fn::Split": [",", {"Fn::Join": [",", [
-            {"Fn::Join": [",", ref("ObserverArns")]}, {"Fn::Join": [",", ref("PersonaArns")]},
-        ]]}]}),
         statement([
             "bedrock-agentcore:GetGateway", "bedrock-agentcore:GetGatewayTarget",
             "bedrock-agentcore:ListGatewayTargets", "bedrock-agentcore:GetAgentRuntime",
@@ -465,12 +478,10 @@ def runner():
             "arn:${AWS::Partition}:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:"
             "workload-identity-directory/default"
         )),
-        statement(["cognito-idp:DescribeUserPoolClient"], ref("TerraformPoolArn")),
-        statement(["iam:SimulatePrincipalPolicy"], ref("PersonaArns")),
         statement(["iam:GetRole"], ref("GatewayRoleArn")),
         statement(["logs:FilterLogEvents", "logs:GetLogEvents", "logs:DescribeLogStreams"], ref("LogArns")),
-        statement(["bedrock:GetKnowledgeBase", "bedrock:GetDataSource", "bedrock:GetIngestionJob"], ref("KnowledgeArns")),
-        statement(["s3:GetObject"], ref("SourceArns")),
+        *[{"Fn::If": ["Has" + name, policy, ref("AWS::NoValue")]}
+          for name, policy in optional_statements],
     ])
     r["Role"]["Properties"]["AssumeRolePolicyDocument"]["Statement"][0]["Condition"] = {
         "StringEquals": {"aws:SourceAccount": ref("AWS::AccountId")},
@@ -494,7 +505,8 @@ def runner():
             ]},
         },
         "artifacts": {
-            "files": ["evidence/notebooks-aws.json", "evidence/executed/*.ipynb"],
+            "files": ["evidence/notebooks-aws.json", "evidence/workshop-prerequisites.json",
+                      "evidence/executed/*.ipynb"],
             "discard-paths": False,
         },
     }

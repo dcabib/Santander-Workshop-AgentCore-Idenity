@@ -218,7 +218,9 @@ def foundation():
             },
             "ProtocolConfiguration": "HTTP",
             "NetworkConfiguration": {"NetworkMode": "PUBLIC"},
-            "EnvironmentVariables": {"GATEWAY_URL": att("Gateway", "GatewayUrl")},
+            "EnvironmentVariables": {
+                "GATEWAY_URL": att("Gateway", "GatewayUrl"), "WORKSHOP_REGION": ref("AWS::Region"),
+            },
             "LifecycleConfiguration": {"IdleRuntimeSessionTimeout": 60, "MaxLifetime": 600},
         },
         DependsOn=["Target", "Registry"],

@@ -7,16 +7,18 @@ import sys
 
 import boto3
 
+from santander_demo.aws_endpoints import REGIONS
 from santander_demo.registry_workflow.contracts import digest
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", default="default")
+    parser.add_argument("--profile")
+    parser.add_argument("--region", choices=REGIONS, default="us-east-1")
     parser.add_argument("--prefix", default="registry-personas")
     parser.add_argument("--execute", action="store_true")
     args = parser.parse_args()
-    session = boto3.Session(profile_name=args.profile, region_name="us-east-1")
+    session = boto3.Session(profile_name=args.profile, region_name=args.region)
     cf = session.client("cloudformation")
     name = args.prefix + "-foundation"
     stack = cf.describe_stacks(StackName=name)["Stacks"][0]
@@ -62,8 +64,9 @@ def main():
                 sys.executable,
                 "scripts/registry_deploy.py",
                 "foundation",
-                "--profile",
-                args.profile,
+                *(["--profile", args.profile] if args.profile else []),
+                "--region",
+                args.region,
                 "--prefix",
                 args.prefix,
                 "--recover-registry",

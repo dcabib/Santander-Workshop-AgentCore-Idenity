@@ -43,9 +43,10 @@ def build_notebook(name):
                     "e permissões precisam estar implantados na conta da plataforma. "
                     "Ela não funciona automaticamente em uma conta AWS vazia."
                 )
-                + "\n\n**Runner CodeBuild do projeto:** a implantação atual exige quatro contas "
-                "e as integrações Registry, Terraform e RAG, inclusive com `--labs`. "
-                "A seleção parcial não converte esse runner em uma implantação de conta única. "
+                + "\n\n**Runner CodeBuild do projeto:** a seleção é declarada no deploy. "
+                "A jornada `single-account` inclui 00–09 e 15–16; Registry, Terraform "
+                "e RAG são exigidos somente pelas aulas que os utilizam. "
+                "Ampliar a seleção exige atualizar a implantação pelo IaC. "
                 "Confira a [matriz de contas e execução](../docs/contas-e-elegibilidade.md)."
             ),
             md(f"![Arquitetura AWS da aula {name[:2]}](../docs/diagramas/svg/{name}.svg)\n\n"

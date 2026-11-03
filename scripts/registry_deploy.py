@@ -9,6 +9,7 @@ from pathlib import Path
 import boto3
 from botocore.exceptions import ClientError
 
+from santander_demo.aws_workshop.config import REGIONS
 from santander_demo.registry_workflow.contracts import bundle, digest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -33,7 +34,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("phase", choices=["bootstrap", "foundation", "publish", "submit", "approve"])
     p.add_argument("--profile", help="Perfil do operador; omitir para role de execução AWS")
-    p.add_argument("--region", choices=["us-east-1"], default="us-east-1")
+    p.add_argument("--region", choices=REGIONS, default="us-east-1")
     p.add_argument("--prefix", default="registry-personas")
     p.add_argument("--execute", action="store_true")
     p.add_argument("--runner-arn", default=None, help="Role do runner AWS; preservada quando omitida")

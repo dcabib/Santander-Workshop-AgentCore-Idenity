@@ -50,3 +50,14 @@ def test_evidence_never_promotes_incomplete_or_changed_execution(evidence, fault
 
 def test_complete_matching_execution_is_accepted(evidence):
     assert audit(*evidence)["status"] == "MATCH"
+
+
+def test_selected_acceptance_cannot_omit_a_missing_notebook_file(evidence):
+    with pytest.raises(ValueError, match="SELECTED_NOTEBOOK_FILES_MISSING"):
+        audit(*evidence, labs=["00", "09"])
+
+
+def test_selected_acceptance_reports_only_executed_scope(evidence):
+    result = audit(*evidence, labs=["00"])
+    assert result["labs"] == ["00"]
+    assert result["notebooks"] == 1

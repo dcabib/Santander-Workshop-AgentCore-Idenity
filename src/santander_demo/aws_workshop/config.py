@@ -6,6 +6,8 @@ from pathlib import Path
 
 import boto3
 
+from santander_demo.aws_endpoints import REGIONS
+
 DOMAINS = ("platform", "retail-banking", "transaction-banking", "lending-wealth")
 SECRET_FIELDS = {
     "access_token", "id_token", "refresh_token", "client_secret", "password",
@@ -30,8 +32,10 @@ def validate(config):
         raise ValueError("WORKSHOP_CONFIG_VERSION: esperado schema_version=1")
     if not re.fullmatch(r"[a-z][a-z0-9-]{2,24}", config.get("project", "")):
         raise ValueError("WORKSHOP_PROJECT_INVALID")
-    if config.get("region") != "us-east-1":
-        raise ValueError("WORKSHOP_REGION: esta jornada foi preparada para us-east-1")
+    if config.get("region") not in REGIONS:
+        raise ValueError("WORKSHOP_REGION: regiões implementadas: " + ", ".join(REGIONS))
+    if config.get("topology", "multi-account") not in {"single-account", "multi-account"}:
+        raise ValueError("WORKSHOP_TOPOLOGY_INVALID")
     if config.get("auth_provider") != "cognito":
         raise ValueError("WORKSHOP_IDP: este pipeline implementa Cognito; Entra exige adaptar o IaC")
     if config.get("source_kind") != "aws_simulated_databricks":
@@ -51,6 +55,10 @@ def validate(config):
             raise ValueError("WORKSHOP_ROLE_INVALID:" + name)
     if not accounts["platform"].get("id"):
         raise ValueError("WORKSHOP_PLATFORM_ACCOUNT_REQUIRED")
+    if config.get("topology") == "single-account" and any(
+        accounts[domain].get("id") for domain in DOMAINS[1:]
+    ):
+        raise ValueError("SINGLE_ACCOUNT_DOMAINS_MUST_BE_EMPTY")
     return config
 
 

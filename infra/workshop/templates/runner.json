@@ -18,22 +18,27 @@
       "Type": "CommaDelimitedList"
     },
     "KnowledgeArns": {
-      "Type": "CommaDelimitedList"
+      "Type": "CommaDelimitedList",
+      "Default": ""
     },
     "SourceArns": {
-      "Type": "CommaDelimitedList"
+      "Type": "CommaDelimitedList",
+      "Default": ""
     },
     "LogArns": {
       "Type": "CommaDelimitedList"
     },
-    "ObserverArns": {
-      "Type": "CommaDelimitedList"
+    "AssumeRoleArns": {
+      "Type": "CommaDelimitedList",
+      "Default": ""
     },
     "PersonaArns": {
-      "Type": "CommaDelimitedList"
+      "Type": "CommaDelimitedList",
+      "Default": ""
     },
     "TerraformPoolArn": {
-      "Type": "String"
+      "Type": "String",
+      "Default": ""
     },
     "GatewayRoleArn": {
       "Type": "String"
@@ -152,40 +157,6 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "sts:AssumeRole"
-                  ],
-                  "Resource": {
-                    "Fn::Split": [
-                      ",",
-                      {
-                        "Fn::Join": [
-                          ",",
-                          [
-                            {
-                              "Fn::Join": [
-                                ",",
-                                {
-                                  "Ref": "ObserverArns"
-                                }
-                              ]
-                            },
-                            {
-                              "Fn::Join": [
-                                ",",
-                                {
-                                  "Ref": "PersonaArns"
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  }
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
                     "bedrock-agentcore:GetGateway",
                     "bedrock-agentcore:GetGatewayTarget",
                     "bedrock-agentcore:ListGatewayTargets",
@@ -219,24 +190,6 @@
                 {
                   "Effect": "Allow",
                   "Action": [
-                    "cognito-idp:DescribeUserPoolClient"
-                  ],
-                  "Resource": {
-                    "Ref": "TerraformPoolArn"
-                  }
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "iam:SimulatePrincipalPolicy"
-                  ],
-                  "Resource": {
-                    "Ref": "PersonaArns"
-                  }
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
                     "iam:GetRole"
                   ],
                   "Resource": {
@@ -255,24 +208,91 @@
                   }
                 },
                 {
-                  "Effect": "Allow",
-                  "Action": [
-                    "bedrock:GetKnowledgeBase",
-                    "bedrock:GetDataSource",
-                    "bedrock:GetIngestionJob"
-                  ],
-                  "Resource": {
-                    "Ref": "KnowledgeArns"
-                  }
+                  "Fn::If": [
+                    "HasAssumeRoleArns",
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "sts:AssumeRole"
+                      ],
+                      "Resource": {
+                        "Ref": "AssumeRoleArns"
+                      }
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
                 },
                 {
-                  "Effect": "Allow",
-                  "Action": [
-                    "s3:GetObject"
-                  ],
-                  "Resource": {
-                    "Ref": "SourceArns"
-                  }
+                  "Fn::If": [
+                    "HasPersonaArns",
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "iam:SimulatePrincipalPolicy"
+                      ],
+                      "Resource": {
+                        "Ref": "PersonaArns"
+                      }
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
+                },
+                {
+                  "Fn::If": [
+                    "HasTerraformPoolArn",
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "cognito-idp:DescribeUserPoolClient"
+                      ],
+                      "Resource": {
+                        "Ref": "TerraformPoolArn"
+                      }
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
+                },
+                {
+                  "Fn::If": [
+                    "HasKnowledgeArns",
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "bedrock:GetKnowledgeBase",
+                        "bedrock:GetDataSource",
+                        "bedrock:GetIngestionJob"
+                      ],
+                      "Resource": {
+                        "Ref": "KnowledgeArns"
+                      }
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
+                },
+                {
+                  "Fn::If": [
+                    "HasSourceArns",
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "s3:GetObject"
+                      ],
+                      "Resource": {
+                        "Ref": "SourceArns"
+                      }
+                    },
+                    {
+                      "Ref": "AWS::NoValue"
+                    }
+                  ]
                 }
               ]
             }
@@ -299,7 +319,7 @@
           "Location": {
             "Fn::Sub": "${ArtifactBucket}/${SourceKey}"
           },
-          "BuildSpec": "{\"version\": 0.2, \"phases\": {\"install\": {\"runtime-versions\": {\"python\": \"3.12\"}, \"commands\": [\"python -m pip install uv==0.9.7\", \"uv sync --frozen --extra banking\", \"uv run python -m ipykernel install --user --name python3\"]}, \"build\": {\"commands\": [\"uv run python scripts/verify_notebooks.py ${WORKSHOP_LABS:+--labs $WORKSHOP_LABS}\"]}}, \"artifacts\": {\"files\": [\"evidence/notebooks-aws.json\", \"evidence/executed/*.ipynb\"], \"discard-paths\": false}}"
+          "BuildSpec": "{\"version\": 0.2, \"phases\": {\"install\": {\"runtime-versions\": {\"python\": \"3.12\"}, \"commands\": [\"python -m pip install uv==0.9.7\", \"uv sync --frozen --extra banking\", \"uv run python -m ipykernel install --user --name python3\"]}, \"build\": {\"commands\": [\"uv run python scripts/verify_notebooks.py ${WORKSHOP_LABS:+--labs $WORKSHOP_LABS}\"]}}, \"artifacts\": {\"files\": [\"evidence/notebooks-aws.json\", \"evidence/workshop-prerequisites.json\", \"evidence/executed/*.ipynb\"], \"discard-paths\": false}}"
         },
         "Artifacts": {
           "Type": "S3",
@@ -358,6 +378,88 @@
       "Value": {
         "Ref": "Log"
       }
+    }
+  },
+  "Conditions": {
+    "HasAssumeRoleArns": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Fn::Join": [
+                ",",
+                {
+                  "Ref": "AssumeRoleArns"
+                }
+              ]
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasPersonaArns": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Fn::Join": [
+                ",",
+                {
+                  "Ref": "PersonaArns"
+                }
+              ]
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasTerraformPoolArn": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Ref": "TerraformPoolArn"
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasKnowledgeArns": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Fn::Join": [
+                ",",
+                {
+                  "Ref": "KnowledgeArns"
+                }
+              ]
+            },
+            ""
+          ]
+        }
+      ]
+    },
+    "HasSourceArns": {
+      "Fn::Not": [
+        {
+          "Fn::Equals": [
+            {
+              "Fn::Join": [
+                ",",
+                {
+                  "Ref": "SourceArns"
+                }
+              ]
+            },
+            ""
+          ]
+        }
+      ]
     }
   }
 }

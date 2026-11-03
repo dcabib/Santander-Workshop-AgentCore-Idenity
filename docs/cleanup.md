@@ -8,6 +8,8 @@ proteções e políticas de retenção. Sem `--execute`, apenas apresenta o plan
 Use `--scenario aws_workshop` para os templates da nova jornada. O parâmetro
 `--confirm-stack-id` exige o ARN exato observado; uma proteção ativa ou um
 template divergente interrompem a exclusão.
+`--profile` é opcional: quando omitido, o wrapper usa a sessão AWS do ambiente,
+mantendo a conferência explícita de conta e região.
 
 Ordem de dependências: runner/observers; fases do catálogo origin-approve,
 origin-submit e origin-publish; agentes de origem; bindings federados;

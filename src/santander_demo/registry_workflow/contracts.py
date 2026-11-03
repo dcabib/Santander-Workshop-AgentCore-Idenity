@@ -5,6 +5,8 @@ import json
 import re
 from copy import deepcopy
 
+from santander_demo.aws_endpoints import gateway_region
+
 TOOL = {
     "name": "consultar_risco",
     "description": "Consulta o risco sintético de C001 ou C002; não usa dados bancários reais.",
@@ -45,13 +47,9 @@ def bundle(gateway_url=LOCAL_GATEWAY, runtime_arn=LOCAL_RUNTIME, version="1.0.0"
     """O desenvolvedor entrega metadados; não cria registros por esta função."""
     if not re.fullmatch(r"\d+\.\d+\.\d+", version):
         raise ValueError("VERSION_INVALID")
-    if gateway_url != LOCAL_GATEWAY and not re.fullmatch(
-        r"https://[a-z0-9-]+\.gateway\.bedrock-agentcore\.us-east-1\.amazonaws\.com/mcp",
-        gateway_url,
-    ):
-        raise ValueError("GATEWAY_INVALID")
+    region = gateway_region(gateway_url) if gateway_url != LOCAL_GATEWAY else "us-east-1"
     if not re.fullmatch(
-        r"arn:aws:bedrock-agentcore:us-east-1:\d{12}:runtime/[A-Za-z0-9_-]+", runtime_arn
+        rf"arn:aws:bedrock-agentcore:{region}:\d{{12}}:runtime/[A-Za-z0-9_-]+", runtime_arn
     ):
         raise ValueError("RUNTIME_INVALID")
     mcp = {

@@ -9,7 +9,7 @@
       "CloudFormation",
       "Gateway / Runtime"
     ],
-    "description": "Aula 00: uma conta preparada. O runner completo exige quatro; selecione as aulas antes de executar.",
+    "description": "Uma conta: 00–09 e 15–16. Aulas 10–14: quatro contas. O runner exige os recursos da seleção implantada.",
     "result": "Confrontar a resposta AWS com as asserções da aula.",
     "notes": [
       "Recursos e permissões declarados no IaC.",

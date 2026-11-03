@@ -3,7 +3,8 @@
 **O aceite anterior é do ambiente de referência de quatro contas, não de
 qualquer conta AWS.** Consulte a [matriz por aula](contas-e-elegibilidade.md)
 antes de iniciar. O bloco 10–14 exige quatro contas no IaC atual, inclusive a
-aula 14, cujo fluxo demonstra três. `--labs` não reduz os requisitos do runner.
+aula 14, cujo fluxo demonstra três. A [jornada de conta única](conta-unica.md)
+seleciona 12 aulas e exige seu próprio aceite na conta e região de destino.
 
 Há duas verificações diferentes:
 
@@ -28,8 +29,8 @@ O planejamento por contas retorna `ACCOUNTS_CONFIGURED` ou `BLOCKED`; ele não
 `BLOCKED / AWS_PREFLIGHT`, substituindo um eventual relatório antigo nesse
 caminho. Aulas omitidas não contam como PASS. Em uma turma sem as
 quatro contas preparadas, remova 10–14 da seleção do participante e use a
-demonstração do instrutor. O runner completo só pode ser usado no ambiente
-preparado descrito no deploy.
+demonstração do instrutor. O runner é implantado para as dependências da
+seleção; só execute aulas para as quais o ambiente foi preparado.
 
 Cada aula verifica seu resultado: identidade autenticada, configuração dos
 recursos, respostas de ferramentas, estados de catálogo ou matriz de acesso.
@@ -57,6 +58,8 @@ Use `workshop_runner.py fetch --build-id ...` para baixar a execução exata.
 rejeita falta de aulas, validação apenas estática, hash antigo, código alterado,
 células sem execução e saídas de erro. Asserções sobre AWS fazem parte do
 código executado, e os logs do build permitem auditar a execução.
+Na jornada de conta única, passe `--labs 00 01 02 03 04 05 06 07 08 09 15 16`
+ao auditor; as cinco aulas entre contas ficam fora desse aceite.
 
 Testes unitários cobrem JWT adulterado, issuer/audience/validade, acesso à fonte,
 revogação, isolamento de memória e os controles de evidência. Fixtures desses

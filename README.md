@@ -1,9 +1,11 @@
 # Santander — Workshop Amazon Bedrock AgentCore
 
-**Pré-requisito da jornada completa: quatro contas AWS distintas em `us-east-1`,
-preparadas por IaC. As aulas 10–14 não funcionam em conta única.** A aula 14
+**A jornada completa exige quatro contas AWS distintas, preparadas por IaC.
+As aulas 10–14 não funcionam em conta única.** A aula 14
 ensina um fluxo de três contas, mas depende da implantação completa de quatro.
-O runner CodeBuild atual também exige esse ambiente, inclusive com `--labs`.
+Para uma conta, a [jornada de conta única](docs/conta-unica.md) implanta e
+seleciona 00–09 e 15–16 no CodeBuild. O código aceita `us-east-1` e `us-west-2`;
+cada nova implantação precisa de seu próprio teste operacional.
 Confira a [matriz de contas e seleção das aulas](docs/contas-e-elegibilidade.md)
 antes de executar o workshop.
 
@@ -25,7 +27,8 @@ referência de quatro contas**, para o pacote de fonte registrado nesse build.
 ## Começar
 
 1. Escolha as aulas pela [matriz de contas](docs/contas-e-elegibilidade.md).
-   Para a jornada completa, configure os IDs das quatro contas.
+   Use o guia de [conta única](docs/conta-unica.md) para 12 aulas ou configure
+   os IDs das quatro contas para a jornada completa.
 2. Siga [implantação](docs/deploy.md): todos os recursos pertencem ao IaC.
 3. Execute as aulas em CodeBuild ou em um ambiente de notebooks na AWS.
 4. Confira [validação](docs/validacao.md) e as evidências da execução escolhida.
@@ -77,8 +80,8 @@ grants antes de devolver conteúdo.
 | 15 | Memory: isolamento por pessoa e reautorização da fonte | 1 |
 | 16 | RAG gerenciado: usuários A/B/C/D, retrieval, ACL e geração | 1 |
 
-Uma conta precisa conter os stacks e integrações da aula. A coluna não reduz
-o requisito de quatro contas do runner completo.
+Uma conta precisa conter os stacks e integrações da aula. O runner declara
+as dependências da seleção implantada; ampliar as aulas exige novo deploy.
 
 [Detalhamento da jornada](docs/jornada.md) · [Conceitos de identidade](docs/conceitos.md)
 

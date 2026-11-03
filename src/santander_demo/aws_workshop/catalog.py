@@ -3,13 +3,14 @@
 import json
 import re
 
+from santander_demo.aws_endpoints import gateway_region
+
 
 def origin_bundle(identity, gateway_url, runtimes):
-    if not re.fullmatch(
-        r"https://[a-z0-9-]+\.gateway\.bedrock-agentcore\.us-east-1\.amazonaws\.com/mcp",
-        gateway_url,
-    ):
-        raise ValueError("CATALOG_GATEWAY_INVALID")
+    try:
+        region = gateway_region(gateway_url)
+    except ValueError as exc:
+        raise ValueError("CATALOG_GATEWAY_INVALID") from exc
     result = {}
     for label, application, client in [
         ("Riscos", "riscos", "RiscosClientId"),
@@ -17,7 +18,7 @@ def origin_bundle(identity, gateway_url, runtimes):
     ]:
         arn = runtimes[label]
         if not re.fullmatch(
-            r"arn:aws:bedrock-agentcore:us-east-1:\d{12}:runtime/[A-Za-z0-9_-]+", arn,
+            rf"arn:aws:bedrock-agentcore:{region}:\d{{12}}:runtime/[A-Za-z0-9_-]+", arn,
         ):
             raise ValueError("CATALOG_RUNTIME_INVALID")
         result[label] = {

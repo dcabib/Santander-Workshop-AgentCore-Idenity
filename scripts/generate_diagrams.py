@@ -15,7 +15,7 @@ from scripts.aws_notebook_lessons import LESSONS  # noqa: E402
 
 OUT = ROOT / "docs/diagramas"
 FLOWS = [
-    ("Preflight", ["Notebook AWS", "STS: plataforma", "CloudFormation", "Gateway / Runtime"], "Aula 00: uma conta preparada. O runner completo exige quatro; selecione as aulas antes de executar."),
+    ("Preflight", ["Notebook AWS", "STS: plataforma", "CloudFormation", "Gateway / Runtime"], "Uma conta: 00–09 e 15–16. Aulas 10–14: quatro contas. O runner exige os recursos da seleção implantada."),
     ("Gateway", ["Notebook AWS", "Gateway + Cedar", "Lambda / MCP Runtime", "DynamoDB: fonte"], "Dois tipos de target; JWT na entrada e autorização antes da ferramenta."),
     ("Identity", ["Cognito: pessoa", "Runtime: agente", "Identity: workload", "Gateway: ferramentas"], "Pessoa e workload são identidades distintas; inferência acontece no Runtime."),
     ("Identity", ["Pessoa C", "Apps Supervisor / Riscos", "Gateway + Policy", "Fonte: grant + app"], "A mesma pessoa recebe decisões diferentes conforme a aplicação autenticada."),

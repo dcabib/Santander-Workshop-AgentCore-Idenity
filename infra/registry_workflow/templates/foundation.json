@@ -704,6 +704,9 @@
               "Gateway",
               "GatewayUrl"
             ]
+          },
+          "WORKSHOP_REGION": {
+            "Ref": "AWS::Region"
           }
         },
         "LifecycleConfiguration": {

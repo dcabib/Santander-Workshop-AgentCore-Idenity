@@ -16,7 +16,7 @@ ROLE = "arn:aws:iam::111111111111:role/workshop-gateway"
 
 @pytest.mark.parametrize("runtime,role", [
     (RUNTIME + "*", ROLE),
-    (RUNTIME.replace("us-east-1", "us-west-2"), ROLE),
+    (RUNTIME.replace("us-east-1", "eu-west-3"), ROLE),
     (RUNTIME, ROLE.replace("111111111111", "222222222222")),
     (RUNTIME, "*"),
 ])

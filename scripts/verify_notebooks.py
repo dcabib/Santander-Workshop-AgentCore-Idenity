@@ -13,7 +13,7 @@ import nbformat
 from nbclient import NotebookClient
 
 from santander_demo.aws_workshop.config import load
-from santander_demo.aws_workshop.manifest import LABS, account_plan, check_selection
+from santander_demo.aws_workshop.manifest import LABS, account_plan, check_selection, selected_labs
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -42,7 +42,7 @@ def main():
     parser.add_argument("--validate-only", action="store_true",
                         help="Validar sintaxe/material; não conta como aceite operacional")
     parser.add_argument("--labs", nargs="+", choices=LABS,
-                        help="Selecione as aulas preparadas; omitir exige toda a jornada")
+                        help="Selecione as aulas preparadas; omitir usa a seleção padrão da topologia")
     parser.add_argument("--output", default="evidence/notebooks-aws.json")
     args = parser.parse_args()
     if not args.validate_only and not (
@@ -63,7 +63,10 @@ def main():
     if not args.validate_only:
         try:
             config = load(os.environ.get("WORKSHOP_CONFIG", ROOT / "config/aws.workshop.json"))
-            selected = [path.name[:2] for path in paths]
+            selected = selected_labs(config, args.labs)
+            paths = [path for path in paths if path.name[:2] in selected]
+            if {path.name[:2] for path in paths} != set(selected):
+                raise ValueError("SELECTED_NOTEBOOK_FILES_MISSING")
             readiness = ROOT / "evidence/workshop-prerequisites.json"
             readiness.write_text(json.dumps(account_plan(config, selected), indent=2) + "\n")
             # Conferir a seleção inteira antes de iniciar o primeiro kernel.

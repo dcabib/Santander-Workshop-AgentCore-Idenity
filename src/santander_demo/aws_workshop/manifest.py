@@ -31,6 +31,22 @@ SCENARIO_ACCOUNTS = {
     "13": ("platform", "transaction-banking"),
     "14": ("retail-banking", "platform", "transaction-banking"),
 }
+SINGLE_ACCOUNT_LABS = tuple(lab for lab in LABS if "multi-account" not in LABS[lab])
+
+
+def selected_labs(config, labs=None):
+    selected = list(dict.fromkeys(labs or (
+        SINGLE_ACCOUNT_LABS if config.get("topology") == "single-account" else LABS
+    )))
+    for lab in selected:
+        if lab not in LABS:
+            raise ValueError("UNKNOWN_LAB:" + lab)
+    return selected
+
+
+def runner_domains(config, labs=None):
+    required = {domain for lab in selected_labs(config, labs) for domain in required_domains(lab)}
+    return tuple(domain for domain in DOMAINS if domain in required)
 
 
 def required_domains(lab):
@@ -51,7 +67,7 @@ def account_requirements(lab):
 def account_plan(config, labs=None, *, runner=False):
     """Só inspeciona IDs declarados: não consulta AWS nem atesta prontidão."""
     validate(config)
-    selected = list(dict.fromkeys(labs or LABS))
+    selected = selected_labs(config, labs)
 
     def blockers(domains):
         ids = [config["accounts"][domain].get("id") for domain in domains]
@@ -68,22 +84,27 @@ def account_plan(config, labs=None, *, runner=False):
     for lab in selected:
         requirements = account_requirements(lab)
         problems = blockers(requirements["required_accounts"])
+        if config.get("topology") == "single-account" and lab not in SINGLE_ACCOUNT_LABS:
+            problems.append("Aula indisponível na jornada single-account")
         rows.append({
             "lab": lab, **requirements, "dependencies": list(LABS[lab]),
             "status": "BLOCKED" if problems else "ACCOUNTS_CONFIGURED",
             "blockers": problems,
         })
-    runner_blockers = blockers(DOMAINS) if runner else []
+    domains = runner_domains(config, selected) if runner else ()
+    runner_blockers = blockers(domains)
     return {
         "validation": "ACCOUNT_CONFIGURATION_ONLY",
         "status": "BLOCKED" if runner_blockers or any(row["blockers"] for row in rows)
         else "ACCOUNTS_CONFIGURED",
         "labs": rows,
-        "runner_required_accounts": list(DOMAINS) if runner else [],
+        "topology": config.get("topology", "multi-account"),
+        "runner_required_accounts": list(domains),
         "runner_blockers": runner_blockers,
         "note": (
             "IDs configurados não comprovam credenciais, roles, stacks ou serviços disponíveis. "
-            "O runner completo exige quatro contas e Registry, Terraform e RAG, mesmo com --labs."
+            "O runner é implantado para a seleção declarada; ampliar as aulas exige novo deploy. "
+            "As aulas 10–14 continuam exigindo quatro contas distintas."
         ),
     }
 
@@ -98,7 +119,7 @@ def assert_account_plan(plan):
     ]
     if plan["runner_blockers"]:
         details.append(
-            "runner completo exige 4 contas distintas, mesmo com --labs: "
+            f"runner da seleção exige {len(plan['runner_required_accounts'])} contas distintas: "
             + "; ".join(plan["runner_blockers"])
         )
     raise ValueError(
@@ -112,7 +133,7 @@ def check_selection(config, labs=None, *, runner=False):
     plan = account_plan(config, labs, runner=runner)
     assert_account_plan(plan)
     if runner:
-        check_accounts(config, domains=DOMAINS)
+        check_accounts(config, domains=runner_domains(config, labs))
     return {row["lab"]: require(config, row["lab"]) for row in plan["labs"]}
 
 

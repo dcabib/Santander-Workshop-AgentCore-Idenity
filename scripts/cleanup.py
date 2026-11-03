@@ -104,7 +104,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scenario", choices=sorted(TEMPLATE_DIRS), required=True)
     parser.add_argument("--template", required=True)
-    parser.add_argument("--profile", required=True)
+    parser.add_argument("--profile", help="Perfil do operador; omitir para a sessão AWS do ambiente")
     parser.add_argument("--account", required=True)
     parser.add_argument("--region", required=True)
     parser.add_argument("--stack", required=True, help="Nome exato do stack do laboratório")

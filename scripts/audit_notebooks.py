@@ -14,6 +14,8 @@ def audit(evidence, source_dir, executed_dir, labs=None):
     paths = [p for p in sorted(source_dir.glob("*.ipynb")) if not labs or p.name[:2] in labs]
     if not paths:
         raise ValueError("NO_NOTEBOOKS")
+    if labs and {path.name[:2] for path in paths} != set(labs):
+        raise ValueError("SELECTED_NOTEBOOK_FILES_MISSING")
     rows = {row["notebook"]: row for row in evidence}
     if len(rows) != len(evidence):
         raise ValueError("DUPLICATE_EVIDENCE")
@@ -34,14 +36,15 @@ def audit(evidence, source_dir, executed_dir, labs=None):
             raise ValueError("INCOMPLETE_EXECUTION:" + path.name)
         if any(o.output_type == "error" for cell in code for o in cell.outputs):
             raise ValueError("CELL_ERROR:" + path.name)
-    return {"status": "MATCH", "notebooks": len(paths), "scope": "AWS_NOTEBOOK_EVIDENCE"}
+    return {"status": "MATCH", "notebooks": len(paths),
+            "labs": [path.name[:2] for path in paths], "scope": "AWS_NOTEBOOK_EVIDENCE"}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--evidence", default="evidence/notebooks-aws.json")
     parser.add_argument("--executed", default="evidence/executed")
-    parser.add_argument("--labs", nargs="*")
+    parser.add_argument("--labs", nargs="+", choices=[f"{n:02d}" for n in range(17)])
     args = parser.parse_args()
     result = audit(json.loads(Path(args.evidence).read_text()), ROOT / "notebooks",
                    Path(args.executed), args.labs)

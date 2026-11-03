@@ -12,7 +12,7 @@ def main():
     parser.add_argument("--config", default="config/aws.workshop.json")
     parser.add_argument("--labs", nargs="+", choices=LABS)
     parser.add_argument("--runner", action="store_true",
-                        help="Incluir a exigência de quatro contas do runner completo")
+                        help="Incluir as contas exigidas pela seleção implantada no runner")
     parser.add_argument("--check-aws", action="store_true",
                         help="Também consultar STS e dependências das aulas, somente leitura")
     args = parser.parse_args()

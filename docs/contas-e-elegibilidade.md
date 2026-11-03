@@ -41,7 +41,7 @@ Consumer do Registry são roles IAM e também podem existir na mesma conta.
 
 | Ambiente disponível | Roteiro |
 |---|---|
-| Uma conta com os stacks das aulas preparados | Selecionar 00–09 e 15–16 em um ambiente de notebooks na AWS. Os serviços e integrações de cada aula continuam obrigatórios. |
+| Uma conta com os stacks das aulas preparados | Usar a jornada de conta única, com 00–09 e 15–16 no CodeBuild. Os serviços e integrações de cada aula continuam obrigatórios. |
 | Duas ou três contas | O bloco 10–14 continua bloqueado na implementação atual; não repetir IDs para satisfazer a configuração. |
 | Quatro contas, integrações e roles preparadas | Executar a jornada completa depois do preflight. |
 | Apenas uma conta vazia ou sem permissões para implantar os serviços | Fazer a preparação por IaC antes das aulas; a existência da conta não é um aceite de prontidão. |
@@ -50,22 +50,22 @@ Sem as quatro contas, reserve 10–14 para **demonstração do instrutor no
 ambiente completo** ou leitura guiada do código. Retire essas aulas da seleção
 do participante. Uma aula não executada não recebe PASS e não entra no aceite.
 
-Para os notebooks sem requisito multi-conta, mantenha as quatro chaves em
+Para a jornada de conta única, use `topology: single-account` e mantenha as quatro chaves em
 `accounts`, mas use `{"id": null, "profile": null}` nos domínios indisponíveis.
 Preencha `platform` e configure as integrações usadas na mesma conta. Não
 copie IDs, ARNs ou perfis do ambiente de referência para uma nova turma.
 
-## Restrição adicional do runner CodeBuild
+## Seleção do runner CodeBuild
 
-**O runner do projeto é uma implantação completa de quatro contas.** Seu
-empacotamento/IAM depende de Registry, Terraform, RAG e das roles observer dos
-três domínios. Isso também vale para `deploy --labs 00 01` e `run --labs 00 01`.
-`--labs` seleciona exercícios; não reduz os pré-requisitos de implantação desse
-runner.
+O [pipeline de conta única](conta-unica.md) seleciona 00–09 e 15–16 por padrão.
+Ele usa Registry, Terraform e RAG na plataforma e não precisa de roles observer.
+`deploy --labs 00 01` prepara um runner apenas para essas aulas, sem empacotar
+ou conceder permissões para integrações ausentes.
 
-Para uma turma com uma conta, a seleção de fundamentos acima usa um ambiente
-de notebooks na AWS com seus stacks e permissões preparados. Não existe hoje
-um pipeline de CodeBuild simplificado para conta única.
+`run --labs` pode restringir a seleção implantada. Para ampliá-la, é necessário
+novo deploy por IaC. Sem `topology: single-account`, a seleção padrão continua
+sendo as 17 aulas e exige quatro contas. Uma seleção explícita com 10–14 sempre
+exige quatro contas distintas.
 
 ## Conferir antes de iniciar
 
@@ -96,7 +96,8 @@ uv run python scripts/verify_notebooks.py --labs 00 01 02 03 04 05 06 07 08 09 1
 O verificador confere os pré-requisitos de toda a seleção antes de iniciar o
 primeiro notebook. O runner também verifica a seleção efetiva antes de
 `StartBuild`, incluindo as aulas salvas no projeto CodeBuild quando `--labs`
-não é informado. Não há remoção automática de aulas incompatíveis.
+não é informado. A topologia define a seleção padrão; uma seleção explícita
+incompatível é bloqueada, sem descartar aulas silenciosamente.
 
 O preflight não substitui testes operacionais: credenciais podem expirar,
 serviços/modelos e quotas precisam estar disponíveis, políticas IAM/SCP e as

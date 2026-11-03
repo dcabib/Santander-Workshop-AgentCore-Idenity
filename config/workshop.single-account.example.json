@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "project": "santander-workshop",
+  "topology": "single-account",
+  "region": "us-west-2",
+  "auth_provider": "cognito",
+  "source_kind": "aws_simulated_databricks",
+  "model_id": "amazon.nova-lite-v1:0",
+  "accounts": {
+    "platform": {"id": "REPLACE_PLATFORM_ACCOUNT", "profile": null},
+    "retail-banking": {"id": null, "profile": null},
+    "transaction-banking": {"id": null, "profile": null},
+    "lending-wealth": {"id": null, "profile": null}
+  },
+  "integrations": {
+    "registry": {"config": "config/aws.registry.json"},
+    "terraform": {
+      "config": "config/aws.terraform.json",
+      "outputs": "build/terraform-agentcore/outputs.json"
+    },
+    "rag": {"config": "config/aws.rag.json"}
+  }
+}

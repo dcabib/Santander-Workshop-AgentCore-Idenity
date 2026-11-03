@@ -6,10 +6,12 @@ from urllib.request import Request, urlopen
 
 import boto3
 
+from santander_demo.aws_endpoints import REGIONS
+
 
 def policy(runtime_arn, gateway_role_arn):
     runtime = re.fullmatch(
-        r"arn:aws:bedrock-agentcore:us-east-1:(\d{12}):runtime/[A-Za-z0-9_-]+",
+        rf"arn:aws:bedrock-agentcore:(?:{'|'.join(REGIONS)}):(\d{{12}}):runtime/[A-Za-z0-9_-]+",
         runtime_arn,
     )
     if not runtime or not re.fullmatch(

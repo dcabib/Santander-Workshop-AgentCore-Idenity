@@ -1,15 +1,18 @@
 # Preparação
 
-A **jornada completa e o runner CodeBuild atual** exigem quatro contas AWS
-distintas em `us-east-1`. **Não execute 10–14 em uma conta única.**
+A **jornada completa** exige quatro contas AWS distintas.
+Para 00–09 e 15–16, use a [implantação de conta única](conta-unica.md).
+O código aceita `us-east-1` e `us-west-2`, sujeito à disponibilidade dos serviços
+e às permissões da conta. **Não execute 10–14 em uma conta única.**
 Leia primeiro a [matriz de contas e aulas](contas-e-elegibilidade.md), incluindo
 a diferença entre as três contas do fluxo da aula 14 e as quatro exigidas
 pela implantação atual. Para uma turma sem esse ambiente, selecione os
 fundamentos e reserve 10–14 para demonstração do instrutor.
 
-Copie
-`config/workshop.example.json` para `config/aws.workshop.json` e preencha IDs e
-perfis. Arquivos `config/aws.*.json` são ignorados pelo Git. Use referências ao
+Copie `config/workshop.example.json` (jornada completa) ou
+`config/workshop.single-account.example.json` (12 aulas) para
+`config/aws.workshop.json` e preencha IDs e perfis.
+Arquivos `config/aws.*.json` são ignorados pelo Git. Use referências ao
 Secrets Manager; não inclua senhas, tokens ou chaves AWS.
 
 Os nomes abaixo são os perfis usados no ambiente de referência; não vêm

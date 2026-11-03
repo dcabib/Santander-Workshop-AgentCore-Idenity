@@ -10,7 +10,7 @@ from botocore.awsrequest import AWSRequest
 from mcp import ClientSession
 from mcp.client.streamable_http import streamablehttp_client
 
-from .contracts import GATEWAY_TOOL, bundle, risk
+from .contracts import GATEWAY_TOOL, gateway_region, risk
 
 
 class GatewayAuth(httpx.Auth):
@@ -37,8 +37,10 @@ class GatewayAuth(httpx.Auth):
 async def run(arguments):
     risk(arguments)  # Validação antes de abrir a sessão; não concede autorização.
     url = os.environ["GATEWAY_URL"]
-    bundle(gateway_url=url)  # Valida domínio, protocolo e região permitidos.
-    session = boto3.Session(region_name="us-east-1")
+    region = gateway_region(url)  # Domínio/protocolo verificados antes de obter credenciais.
+    if region != os.environ["WORKSHOP_REGION"]:
+        raise ValueError("GATEWAY_REGION_MISMATCH")
+    session = boto3.Session(region_name=region)
 
     def client_factory(**kwargs):
         return httpx.AsyncClient(
