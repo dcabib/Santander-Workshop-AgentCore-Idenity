@@ -15,6 +15,26 @@ from scripts.aws_notebook_lessons import LESSONS, md, setup  # noqa: E402
 
 
 def build_notebook(name):
+    if name == "00_preflight":
+        from scripts.sdk_notebook_lessons import build_preflight
+
+        return build_preflight()
+    if name == "01_gateway_targets":
+        from scripts.sdk_notebook_lessons import build_gateway
+
+        return build_gateway()
+    if name == "99_cleanup_sdk":
+        from scripts.sdk_notebook_lessons import build_cleanup
+
+        return build_cleanup()
+    if name == "02_identity_entra_obo":
+        from scripts.sdk_notebook_lessons import build_identity
+
+        return build_identity()
+    if name == "03_identity_agente_mcp":
+        from scripts.sdk_notebook_lessons import build_runtime
+
+        return build_runtime()
     title, lesson = LESSONS[name]
     accounts = account_requirements(name[:2])
     notebook = nbformat.v4.new_notebook()
@@ -63,7 +83,7 @@ def build_notebook(name):
 
 
 def main(only=None):
-    for name in sorted(LESSONS):
+    for name in sorted({*LESSONS, "99_cleanup_sdk"}):
         if only and name not in only:
             continue
         notebook = build_notebook(name)
