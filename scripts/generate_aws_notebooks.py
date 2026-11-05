@@ -35,6 +35,38 @@ def build_notebook(name):
         from scripts.sdk_notebook_lessons import build_runtime
 
         return build_runtime()
+    if name == "04_policy_cedar":
+        from scripts.sdk_notebook_lessons import build_policy
+
+        return build_policy()
+    if name == "05_policy_autoria":
+        from scripts.sdk_notebook_lessons import build_policy_authoring
+
+        return build_policy_authoring()
+    if name == "06_registry_governanca":
+        from scripts.sdk_notebook_lessons import build_registry
+
+        return build_registry()
+    if name == "07_registry_personas":
+        from scripts.sdk_notebook_lessons import build_registry_personas
+
+        return build_registry_personas()
+    if name == "08_registry_descoberta_execucao":
+        from scripts.sdk_notebook_lessons import build_registry_execution
+
+        return build_registry_execution()
+    if name == "09_integracao_runtime_gateway_identity":
+        from scripts.sdk_notebook_lessons import build_integration
+
+        return build_integration()
+    if name == "15_ingestao_acl_memoria":
+        from scripts.sdk_notebook_lessons import build_memory
+
+        return build_memory()
+    if name == "16_rag_managed_identity_policy":
+        from scripts.sdk_notebook_lessons import build_rag
+
+        return build_rag()
     title, lesson = LESSONS[name]
     accounts = account_requirements(name[:2])
     notebook = nbformat.v4.new_notebook()

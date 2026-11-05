@@ -1,7 +1,7 @@
 # Santander — Workshop Amazon Bedrock AgentCore
 
-**Revisão em andamento: os recursos devem ser criados durante as aulas, com
-chamadas SDK visíveis. O workshop completo ainda não está pronto neste formato.**
+**A jornada de conta única (00–09, 15–16 e limpeza 99) foi validada na AWS.
+Os cenários de múltiplas contas 10–14 ainda estão em conversão.**
 A nova jornada não exige CloudFormation, um runner CodeBuild ou um arquivo
 privado de configuração antes do primeiro notebook.
 
@@ -15,6 +15,12 @@ confundir os protocolos. A fonte Databricks será um **simulador com dados
 sintéticos hospedado na AWS**; não representa um SQL Warehouse ou Unity Catalog
 real.
 
+As contas são **efêmeras**: cada evento começa a construção novamente, com
+sessão autorizada, registro próprio e nomes exclusivos. O
+[roteiro de contas efêmeras](docs/contas-efemeras.md) cobre preparação na AWS,
+execução das células, retomada, evidências e limpeza. O código não depende
+do domínio ou da role do Code Editor fornecido pelo evento.
+
 ## Estado da conversão
 
 | Aula | Construção durante o notebook | Situação |
@@ -23,23 +29,32 @@ real.
 | 01 | Cognito, usuários sintéticos, IAM, Lambda, Gateway JWT e target MCP | Testada na AWS, incluindo invocação MCP |
 | 02 | Pessoa, aplicações Cognito e comparação com Entra ID | Testada na AWS, com negativas e chamada permitida |
 | 03 | Runtime MCP, artefato ARM64 e identidade IAM | Testada na AWS, incluindo invocação e logs |
-| 04–09 | Policy, Registry e integração | Migração pendente |
+| 04 | Engine, associação ENFORCE, Cedar e matriz de autorização | Testada na AWS: um ALLOW e dois DENY |
+| 05 | Geração AWS de política, findings, testes e rascunho LOG_ONLY | Testada na AWS, mantendo a política ACTIVE |
+| 06 | Registry, aprovação manual e descoberta IAM | Testada na AWS, incluindo negativa anônima |
+| 07 | Três personas oficiais e chamadas reais de autorização | Testada na conta atual com as três personas oficiais |
+| 08 | Publicação, aprovação, descoberta e invocação por personas | Testada na AWS, incluindo negativas entre personas |
+| 09 | Integração Runtime, Gateway e Identity | Testada na AWS: analista permitido e auditor negado |
 | 10–14 | Integrações e fronteiras entre contas | Migração pendente; o legado exige quatro contas |
-| 15–16 | Memory, RAG e ACLs | Migração pendente |
-| 99 | Limpeza SDK dos recursos criados nas aulas 01–03 | Código preparado; ainda não executado na AWS |
+| 15 | Memory por actor e concessão atual na fonte sintética | Testada na AWS, incluindo isolamento e revogação |
+| 16 | KB MANAGED, ACL nativa, conector Gateway e geração no Runtime | Testada na AWS: geração por pessoa e negativas de acesso |
+| 99 | Limpeza SDK dos recursos criados nas aulas 01–09 e 15–16 | Testada na AWS para toda a jornada SDK |
 
-No teste de 03/11/2026, a aula 01 criou pool, app client, segredo, usuários,
-grupo de logs e role Lambda em `us-west-2`. O
-[ajuste Cognito aprovado](docs/decisao-cognito-notebook-sdk.md) foi aplicado.
-A [alternativa Lambda aprovada](docs/decisao-lambda-notebook-sdk.md) também
-foi aplicada: Lambda e Gateway foram criados, e as negativas JWT retornaram 401.
-A [retomada sem ampliar permissões](docs/decisao-propagacao-iam-gateway-sdk.md)
-foi autorizada e passou: target READY e Lambda invocada por MCP. A aula 02
-também passou, assim como a criação e invocação do Runtime na aula 03.
-Consulte as versões e Request IDs no
-[aceite das aulas SDK](docs/aceite-notebooks-sdk.md).
+Em 05/11/2026, **00–09, 15 e 16 passaram** na conta atual com a sessão do editor.
+As aulas 07–08 agora usam as três personas previstas no workshop oficial;
+a aula 15 validou federação Cognito, isolamento entre pessoas e revogação.
+A tabela usa [TableId na retomada e limpeza](docs/decisao-dynamodb-notebook-sdk.md).
+O Runtime RAG gerou respostas Nova Lite limitadas à ACL de cada pessoa.
+A limpeza completa e a reconstrução do zero passaram. Os 12 notebooks foram
+executados novamente, sem falhas, em aproximadamente 12 minutos.
+Passaram também 793 testes de código.
+Consulte a [revisão das sessões](docs/decisao-sessao-participante-20261105.md).
 
-As aulas 04–16 ainda contêm o fluxo antigo de implantação. **Não execute
+Os relatórios, versões e Request IDs estão no
+[aceite das aulas SDK](docs/aceite-notebooks-sdk.md). O documento separa
+os resultados da conta atual do histórico de contas encerradas.
+
+As aulas 10–14 ainda contêm o fluxo antigo de implantação. **Não execute
 “Run All” na coleção inteira.** O [plano da conversão](docs/plano-notebooks-sdk.md)
 registra o escopo e a ordem das mudanças.
 
@@ -63,7 +78,7 @@ chaves ou tokens. Senhas sintéticas são guardadas no Secrets Manager.
 
 ## Contas e permissões
 
-A jornada planejada de conta única inclui 00–09 e 15–16. Os cenários 10–14
+A jornada validada de conta única inclui 00–09 e 15–16. Os cenários 10–14
 precisam de contas distintas para demonstrar fronteiras reais. A versão antiga
 desses notebooks exige quatro contas, mesmo quando o fluxo ilustrado mostra
 três; esse requisito ainda precisa ser revisto na conversão.
@@ -82,20 +97,35 @@ responsável pela conta, não um motivo para alterar roles protegidas do evento.
   assinatura e audiência, com negativas no Gateway.
 - `scripts/sdk_runtime_lesson.py`: código MCP, artefato ARM64, criação e
   invocação do Runtime e identidade IAM do workload.
+- `scripts/sdk_policy_lesson.py`: engine e Cedar criados nas células, com
+  teste de pessoa, cliente sintético e claims verificadas.
+- `scripts/sdk_policy_authoring_lesson.py`: geração no serviço AWS, findings,
+  contraexemplos e criação do rascunho somente em LOG_ONLY.
+- `scripts/sdk_registry_lesson.py`: criação do Registry, aprovação manual
+  e descoberta autenticada por IAM.
+- `scripts/sdk_registry_personas_lesson.py`: três personas oficiais com trust e
+  permissões limitadas ao catálogo e Runtime desta execução.
+- `scripts/sdk_memory_lesson.py`: referências no Memory e autorização atual na fonte sintética.
+- `scripts/sdk_rag_lesson.py`: corpus, ACL, ingestão, conector nativo e agente RAG.
 - `scripts/sdk_cleanup_lesson.py`: exclusão dos recursos da execução, com
   conferência de propriedade e dependências.
 - `src/santander_demo/notebook_state.py`: persistência de IDs; não chama APIs AWS.
 - `scripts/generate_aws_notebooks.py`: gera os notebooks a partir dessas fontes.
+- `scripts/run_sdk_notebooks.py`: executa uma seleção explícita das células
+  SDK no ambiente AWS, confere a conta e registra evidências sem pré-deploy.
 
 ```bash
 uv run python scripts/generate_aws_notebooks.py
-uv run pytest -q tests/test_notebook_state.py tests/test_sdk_preflight.py tests/test_sdk_gateway.py tests/test_sdk_identity.py tests/test_sdk_runtime.py
+uv run pytest -q tests/test_notebook_state.py tests/test_sdk_*.py
 ```
 
 Os notebooks distribuídos não contêm saídas executadas. A limpeza é uma etapa
 explícita: [99_cleanup_sdk.ipynb](notebooks/99_cleanup_sdk.ipynb) mostra as
 chamadas de exclusão e recusa dependências ainda não contempladas. Os recursos
 permanecem disponíveis entre aulas e podem gerar cobrança até serem removidos.
+Após a limpeza, a próxima aula 00 arquiva os IDs liberados e inicia outra
+execução com novos nomes. Uma conta diferente sempre recebe seu próprio
+registro; o histórico de outra conta não é reaproveitado como configuração.
 
 ## Material da arquitetura anterior
 

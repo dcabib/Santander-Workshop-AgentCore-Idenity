@@ -1092,7 +1092,7 @@ LESSONS = {
     "06_registry_governanca": ("Registry: publicação e aprovação por IaC", registry_governance),
     "07_registry_personas": ("Registry: quatro personas e IAM", registry_personas),
     "08_registry_descoberta_execucao": ("Descoberta não concede execução", registry_execution),
-    "09_terraform_runtime_gateway_identity": ("Terraform, Runtime e Identity M2M", terraform),
+    "09_integracao_runtime_gateway_identity": ("Runtime MCP, Gateway e identidades", terraform),
     "10_santander_multi_conta": ("Quatro contas AWS e suas fronteiras", accounts),
     "11_blog_multi_account_gateway_mcp": ("Agente central e três domínios AWS", multi_agent),
     "12_gateways_por_conta_identity_policy": ("Gateway e Policy em cada conta", federation),

@@ -73,3 +73,59 @@ def test_cleanup_requires_the_exact_record_and_persists_removal(tmp_path):
     assert json.loads(state.path.read_text())["resources"] == {}
     with pytest.raises(RuntimeError, match="aula 01"):
         state.require("gateway", lesson="01")
+
+
+def test_new_account_starts_empty_without_reusing_previous_account_ids(tmp_path):
+    previous = state_at(tmp_path)
+    previous.record("gateway", {"id": "previous-account-gateway"}, lesson="01")
+    current = state_at(tmp_path, account="999999999999")
+    assert current.data["resources"] == {}
+    assert current.prefix != previous.prefix
+    assert state_at(tmp_path).get("gateway")["id"] == "previous-account-gateway"
+
+
+def test_cleanup_and_next_event_use_new_names_with_an_auditable_archive(tmp_path):
+    state = state_at(tmp_path)
+    entry = state.record("identity.demo_credentials", {"arn": "synthetic-secret-arn"}, lesson="01")
+    with pytest.raises(RuntimeError, match="CLEANUP_INCOMPLETE"):
+        state.complete_cleanup()
+    with pytest.raises(RuntimeError, match="ACTIVE_EXECUTION"):
+        state.start_new_execution()
+    state.forget("identity.demo_credentials", expected=entry)
+    state.complete_cleanup()
+    resumed = state_at(tmp_path)
+    assert resumed.is_closed
+    with pytest.raises(RuntimeError, match="EXECUTION_CLOSED"):
+        resumed.record("gateway", {"id": "another"}, lesson="01")
+    old_prefix = resumed.prefix
+    archive = resumed.start_new_execution()
+    assert resumed.prefix != old_prefix
+    assert not resumed.is_closed and resumed.data["resources"] == {}
+    history = json.loads(archive.read_text())
+    assert history["released_resources"]["identity.demo_credentials"] == entry
+    assert history["status"] == "CLEANED"
+    assert state_at(tmp_path).prefix == resumed.prefix
+    assert archive.stat().st_mode & 0o777 == 0o600
+
+
+def test_failed_new_execution_can_retry_without_losing_closed_history(tmp_path):
+    state = state_at(tmp_path)
+    state.complete_cleanup()
+    old_prefix = state.prefix
+    with patch("santander_demo.notebook_state.os.replace", side_effect=OSError("disk failure")):
+        with pytest.raises(OSError):
+            state.start_new_execution()
+    assert state.is_closed and state.prefix == old_prefix
+    assert state_at(tmp_path).is_closed
+    state.start_new_execution()
+    assert state.prefix != old_prefix
+    assert len(list((tmp_path / "history").glob("*.json"))) == 1
+
+
+def test_failed_cleanup_checkpoint_preserves_active_run(tmp_path):
+    state = state_at(tmp_path)
+    with patch("santander_demo.notebook_state.os.replace", side_effect=OSError("disk failure")):
+        with pytest.raises(OSError):
+            state.complete_cleanup()
+    assert not state.is_closed
+    assert not state_at(tmp_path).is_closed

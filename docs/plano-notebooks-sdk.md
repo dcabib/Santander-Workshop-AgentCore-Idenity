@@ -8,7 +8,7 @@ prévia escondida em `setup.sh`, scripts, CLI ou runner.
 
 Esta decisão substitui o desenho de pré-deploy descrito nos planos anteriores.
 **Este documento é um plano; a migração e o aceite operacional ainda não foram
-concluídos.** As aulas 04–16 ainda contêm dependências de stacks.
+concluídos.** As aulas 10–14 ainda contêm dependências de stacks.
 
 ## Referências conferidas
 
@@ -133,11 +133,118 @@ dos recursos criados pelos novos notebooks.
   dependências do lockfile, role e Runtime MCP criados nas células.
   A invocação retornou a identidade IAM do workload e Request IDs do Runtime
   e STS. A entrada anônima foi negada e os logs receberam retenção de sete dias.
+* Aula 04 convertida: criação do engine, permissão IAM delimitada, associação
+  ENFORCE e política Cedar estrita, com chamadas permitidas e negadas. Os
+  testes de contrato e do avaliador Cedar passaram. O teste AWS está pendente:
+  o endereço do VS Code deixou de resolver no DNS antes da execução.
+* Aula 05 convertida: StartPolicyGeneration, leitura dos assets/findings,
+  testes da intenção e criação estrita do rascunho em LOG_ONLY. A política
+  manual continua ACTIVE. Testes verificam retomada, rejeição de findings
+  e rascunhos excessivamente permissivos. Ainda não executada na AWS.
 * Aula 99 preparada para limpar somente os recursos registrados das aulas
-  01–03, com conferência de propriedade, hashes e dependências antes das
+  01–05, com conferência de propriedade, hashes e dependências antes das
   exclusões. Testada com contratos SDK; ainda não executada na AWS.
-* 40 testes focados nos novos notebooks e no estado passaram. O lint e a
-  validação dos 18 notebooks também passaram. O [aceite AWS parcial](aceite-notebooks-sdk.md)
+* Passaram 65 testes focados nos notebooks SDK e no estado, e 701 testes na
+  suíte completa. O lint e a validação dos 18 notebooks também passaram.
+  O [aceite AWS parcial](aceite-notebooks-sdk.md)
   registra as versões efetivamente executadas e seus Request IDs.
-* Aulas 04–16, verificadores de execução e remoção das dependências antigas
+* Aulas 06–16, verificadores de execução e remoção das dependências antigas
   ainda pendentes. O desenvolvimento permanece em `main`.
+
+## Contas efêmeras — 04/11/2026
+
+* A conta usada no aceite anterior foi encerrada, conforme informado pelo
+  usuário. Suas evidências permanecem históricas; seus recursos e identificadores
+  não são pré-requisitos de uma nova execução.
+* O [roteiro de contas efêmeras](contas-efemeras.md) descreve preparação na AWS,
+  obtenção do código, sessão, sequência SDK, retomada, evidências e limpeza.
+* O estado diferencia execução ativa de execução limpa. A próxima aula 00
+  arquiva uma execução limpa e cria novos nomes; execuções ainda ativas não
+  podem ser descartadas para iniciar outra.
+* O executor `scripts/run_sdk_notebooks.py` usa os próprios notebooks, exige
+  conta esperada, interrompe em erro e não usa o verificador legado baseado
+  em stacks. Credenciais temporárias e JWTs são removidos das saídas persistidas.
+* Passaram 714 testes da suíte completa, lint e validação dos 18 notebooks.
+  A execução do novo executor com `--validate-only` foi registrada como
+  `STATIC_ONLY`, sem representar aceite AWS.
+* O usuário disponibilizou o Code Editor operacional após a falha inicial.
+  A execução foi retomada nele, usando a role da própria instância.
+* As aulas 00–06 passaram na conta nova, começando sem recursos do workshop.
+  A aula 05 foi corrigida para ler `definition.policy` e submeter o texto ao
+  parser Cedar e aos contraexemplos antes de criar a política em `LOG_ONLY`.
+* A aula 06 agora cria o Registry com aprovação manual e descoberta IAM.
+  Foram comprovados READY, descoberta autenticada e negativa anônima.
+* Passaram 725 testes, lint e validação de sintaxe/formato dos 18 notebooks.
+  Os testes não substituem o aceite AWS, que registra hashes e Request IDs.
+* A limpeza SDK 99 passou para 00–06, fechou a execução e arquivou 26 referências
+  liberadas. A reconstrução 00–06 passou com novos IDs, incluindo nova geração.
+* A aula 07 criou as quatro personas, mas a sessão do editor não permite
+  SimulatePrincipalPolicy nem assumir nossas roles. O diagnóstico com a sessão
+  fornecida confirmou as 16 decisões IAM, sem representar aceite do notebook.
+  A [alternativa A](decisao-personas-conta-efemera.md) foi posteriormente
+  aprovada e executada; nenhuma permissão do editor foi alterada.
+* Passaram 734 testes, incluindo entrada oculta de credenciais e limpeza
+  das personas por contrato SDK.
+* A limpeza com personas concluiu `212b89261d98`, com 30 referências liberadas.
+  Foi adicionada espera pela confirmação de agendamento do Secrets Manager,
+  após observar consistência eventual na leitura. A falha e a retomada foram
+  preservadas como evidência.
+* O novo ciclo `41faf1babbbf` passou em 00–07 com a sessão `WSOpsRole`, recebida
+  por entrada oculta. As 16 simulações IAM da aula 07 passaram no kernel AWS.
+* A aula 08 foi convertida para publicar, submeter, aprovar, descobrir e invocar
+  MCP com as personas. A limpeza foi ampliada para conferir o hash do registro
+  antes de removê-lo. Seu aceite AWS passou: Publisher não aprovou; Approver
+  aprovou; Consumer descobriu e invocou; sessão restrita à descoberta não invocou.
+* A aula 09 foi renomeada e convertida para integração Runtime MCP–Gateway.
+  As células criaram a permissão IAM, o target MCP e o permit Cedar. O teste
+  AWS passou com ALLOW do analista e DENY do auditor.
+* A aula 15 foi convertida para Memory de curto prazo, actor condicionado
+  por IAM e uma visão sintética de dados por pessoa no DynamoDB. O evento
+  guarda referência; revogar a linha autorizada não remove o documento
+  canônico nem torna a referência um acesso permanente.
+* IAM Access Analyzer validou as condições de actor e LeadingKeys sem findings,
+  Request ID `1b5660a2-9323-42d7-a679-ce085b68beb3`. Os 757 testes e a
+  reprodução/validação dos notebooks passaram. O teste AWS da aula 15 passou:
+  isolamento de actor e partition key, referência preservada e fonte sem
+  conteúdo após revogação da linha autorizada.
+* As sessões dos perfis `containers`, `cognito` e `serverless` foram identificadas
+  por STS em três contas distintas. Com a plataforma atual, estão disponíveis
+  quatro contas para preparar os cenários; ainda não é aceite das integrações.
+  As aulas 10–14 permanecem em conversão.
+* A aula 16 agora cria uma KB MANAGED, corpus S3 com ACL, ingestão, conector
+  nativo, permits Cedar vinculados ao sub e Runtime HTTP com Cognito. O agente
+  tem Deny explícito de retrieval direto e gera somente depois de recuperar
+  trechos autorizados pelo Gateway. Base, ingestão e conector passaram;
+  a invocação Runtime falhou por ausência do SDK no ZIP. A
+  [retomada restrita](decisao-pacote-rag-sdk.md) foi aprovada em 05/11/2026.
+  A sessão retornou `ExpiredToken` na verificação STS e a conta foi encerrada
+  antes da reconstrução.
+* Em 05/11/2026, o usuário pediu um novo ciclo na conta `813782517426`.
+  Código e kernel foram preparados em uma pasta limpa no editor AWS.
+  A verificação anterior à criação identificou `AccessDenied` para
+  `iam:SimulatePrincipalPolicy`; a jornada completa precisa de uma sessão
+  autorizada pelo organizador, como no ciclo anterior. O usuário escolheu
+  essa alternativa. A suíte no Python 3.12 revelou uma diferença na
+  indentação da descrição MCP; após corrigi-la com `inspect.getdoc`,
+  passaram 775 testes no editor AWS.
+* A sessão fornecida para essa alternativa é `WSParticipantRole`. A leitura
+  das policies confirmou a ausência de SimulatePrincipalPolicy e um Deny
+  explícito de AssumeRole para as roles da jornada. A aula 00 passou,
+  iniciando `a96b1de2499d` com zero recursos. A criação aguarda a
+  [escolha de retomada](decisao-sessao-participante-20261105.md).
+
+* Após a orientação de usar o ambiente existente, a revisão do workshop oficial
+  identificou as três personas já permitidas pelo editor. 07–08 foram alinhadas
+  a esse fluxo com testes reais; 15 usa Identity Pool com regras por sub.
+  Nenhuma role do evento foi alterada. Passaram 778 testes de código, e 00–06
+  passaram na conta atual com a sessão do editor. Reteste AWS restante em curso.
+
+* 00–09 e 15 passaram no ciclo atual com a sessão do editor. A tabela da aula
+  15 agora usa TableId na retomada/limpeza. A execução AWS confirmou sessões
+  por Identity Pool, isolamento Memory/DynamoDB e revogação. O RAG passou,
+  incluindo geração Nova Lite e ACL por pessoa. A limpeza 99 confirmou
+  `CLEANED` e registro ativo vazio. A reconstrução `952f3855e8d9` passou nas
+  12 aulas (00–09, 15–16), sem falhas, em 736,35 s. Passaram 793 testes de
+  código e 45 testes específicos também no Python 3.12 do editor. Foram
+  conferidos 194 arquivos de código, notebooks e dependências entre a pasta
+  local e a cópia AWS, sem diferenças. 10–14 continuam pendentes de conversão.

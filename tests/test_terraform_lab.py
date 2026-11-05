@@ -283,7 +283,7 @@ def test_deploy_rejects_reusing_state_of_another_environment(monkeypatch, mismat
         terraform_deploy.check_state_target(config)
 
 
-def test_terraform_notebook_is_reproducible_and_requires_aws():
+def test_historical_generator_now_emits_reproducible_sdk_integration():
     import nbformat
 
     from scripts.generate_terraform_notebook import OUTPUT, build_notebook
@@ -295,4 +295,8 @@ def test_terraform_notebook_is_reproducible_and_requires_aws():
     assert all(not c.outputs and c.execution_count is None
                for c in notebook.cells if c.cell_type == "code")
     assert notebook.metadata.workshop.execution == "AWS"
-    assert "invoke_runtime" in "\n".join(c.source for c in notebook.cells)
+    assert notebook.metadata.workshop.provisioning == "NOTEBOOK_SDK"
+    code = "\n".join(c.source for c in notebook.cells if c.cell_type == "code")
+    assert "create_gateway_target(" in code and "create_policy(" in code
+    assert "iam.put_role_policy(" in code and '"gateway_runtime": "ALLOW"' in code
+    assert "AWSWorkshop(" not in code and "stack_outputs(" not in code

@@ -105,7 +105,7 @@ def runtime():
             "a entrada do Runtime será protegida por IAM.",
             "from IPython.display import Code\n\n"
             f"SERVER_SOURCE = {SERVER_SOURCE!r}\n"
-            'display(Code(SERVER_SOURCE, language="python"))\n',
+            'display(Code(SERVER_SOURCE, language="python"), include=["text/html", "text/plain"])\n',
         ),
         *step(
             "Empacotar dependências ARM64 e código",

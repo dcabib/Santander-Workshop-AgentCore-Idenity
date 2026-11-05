@@ -13,6 +13,7 @@ def context():
             "colada no notebook.",
             """
             import json
+            import os
             import uuid
             from pathlib import Path
 
@@ -24,6 +25,11 @@ def context():
             sts = aws.client("sts")
             identity = sts.get_caller_identity()
             ACCOUNT_ID = identity["Account"]
+            expected_account = os.environ.get("WORKSHOP_EXPECTED_ACCOUNT")
+            if expected_account and ACCOUNT_ID != expected_account:
+                raise RuntimeError(
+                    "WORKSHOP_ACCOUNT_MISMATCH: a sessão não corresponde à conta esperada."
+                )
             PARTITION = identity["Arn"].split(":")[1]
             print({
                 "account": ACCOUNT_ID,
@@ -56,6 +62,7 @@ def context():
                 "execution": state.data["run_id"],
                 "resource_name_prefix": NAME_PREFIX,
                 "recorded_resources": sorted(state.data["resources"]),
+                "execution_status": state.data.get("status", "ACTIVE"),
             })
             """,
         ),
@@ -65,6 +72,26 @@ def context():
 def preflight():
     return [
         *context(),
+        *step(
+            "Iniciar ou retomar a execução desta conta efêmera",
+            "Uma conta nova recebe seu próprio registro e nomes exclusivos. "
+            "Não importamos IDs da conta anterior. Na mesma conta, retomamos "
+            "os recursos existentes; após concluir a limpeza 99, arquivamos "
+            "o registro e escolhemos novos nomes. Isso também evita colisão "
+            "com segredos ainda na janela de recuperação de sete dias.",
+            """
+            if state.is_closed:
+                archive = state.start_new_execution()
+                NAME_PREFIX = state.prefix
+                TAGS = state.tags
+                print({"previous_execution_archive": str(archive.relative_to(ROOT))})
+            print({
+                "account": ACCOUNT_ID, "region": REGION,
+                "execution": state.data["run_id"], "resource_name_prefix": NAME_PREFIX,
+                "mode": "RESUME" if state.data["resources"] else "NEW",
+            })
+            """,
+        ),
         md("""
         ### O que vamos construir durante as aulas
 
@@ -81,6 +108,11 @@ def preflight():
         Os recursos são construídos progressivamente. Quando uma aula usa algo
         criado anteriormente, ela aponta a etapa de criação correspondente.
         Este notebook inicial não exige Gateway, Runtime ou stacks existentes.
+
+        Uma conta efêmera exige repetir esta construção a cada novo evento.
+        Confira o [roteiro de contas efêmeras](../docs/contas-efemeras.md):
+        preparar kernel e sessão, criar os recursos nas aulas, testar,
+        guardar evidências sem segredos e limpar antes do encerramento.
 
         **Estado da revisão:** esta aula foi convertida para o novo formato.
         As demais aulas ainda estão sendo migradas; não execute a jornada inteira
@@ -172,11 +204,31 @@ def build_gateway():
 
 
 def build_cleanup():
+    from textwrap import indent
+
     from scripts.sdk_cleanup_lesson import cleanup
+    from scripts.sdk_rag_runtime_reset import reset
+
+    cells = cleanup()
+    check_index = next(index for index, cell in enumerate(cells)
+                       if cell.cell_type == "code" and "supported =" in cell.source)
+    cells[check_index].source = (
+        'import os\n'
+        'CLEANUP_SCOPE = os.environ.get("WORKSHOP_CLEANUP_SCOPE", "all")\n'
+        'assert CLEANUP_SCOPE in {"all", "rag-runtime"}, "UNKNOWN_CLEANUP_SCOPE"\n'
+        + cells[check_index].source
+    )
+    for cell in cells[check_index + 1:]:
+        if cell.cell_type == "code":
+            cell.source = (
+                'if globals().get("CLEANUP_SCOPE", "all") == "all":\n'
+                + indent(cell.source, "    ")
+            )
+    cells[check_index + 1:check_index + 1] = reset()
 
     return build_sdk_notebook(
         "99_cleanup_sdk", "Remover os recursos criados pelas aulas SDK",
-        [*context(), *cleanup()],
+        [*context(), *cells],
     )
 
 
@@ -195,6 +247,78 @@ def build_runtime():
     return build_sdk_notebook(
         "03_identity_agente_mcp", "Runtime MCP e identidade IAM do workload",
         [*context(), *runtime()],
+    )
+
+
+def build_policy():
+    from scripts.sdk_policy_lesson import policy
+
+    return build_sdk_notebook(
+        "04_policy_cedar", "Criar Policy Engine e testar decisões Cedar",
+        [*context(), *policy()],
+    )
+
+
+def build_policy_authoring():
+    from scripts.sdk_policy_authoring_lesson import authoring
+
+    return build_sdk_notebook(
+        "05_policy_autoria", "Gerar, revisar e observar um rascunho de política",
+        [*context(), *authoring()],
+    )
+
+
+def build_registry():
+    from scripts.sdk_registry_lesson import registry
+
+    return build_sdk_notebook(
+        "06_registry_governanca", "Criar o Registry e configurar a governança",
+        [*context(), *registry()],
+    )
+
+
+def build_registry_personas():
+    from scripts.sdk_registry_personas_lesson import personas
+
+    return build_sdk_notebook(
+        "07_registry_personas", "Criar personas e examinar suas permissões IAM",
+        [*context(), *personas()],
+    )
+
+
+def build_registry_execution():
+    from scripts.sdk_registry_execution_lesson import execution
+
+    return build_sdk_notebook(
+        "08_registry_descoberta_execucao", "Publicar, aprovar, descobrir e invocar na AWS",
+        [*context(), *execution()],
+    )
+
+
+def build_integration():
+    from scripts.sdk_integration_lesson import integration
+
+    return build_sdk_notebook(
+        "09_integracao_runtime_gateway_identity", "Integrar Runtime MCP, Gateway e identidades",
+        [*context(), *integration()],
+    )
+
+
+def build_memory():
+    from scripts.sdk_memory_lesson import memory
+
+    return build_sdk_notebook(
+        "15_ingestao_acl_memoria", "Memory por actor e autorização atual na fonte",
+        [*context(), *memory()],
+    )
+
+
+def build_rag():
+    from scripts.sdk_rag_lesson import rag
+
+    return build_sdk_notebook(
+        "16_rag_managed_identity_policy", "Criar RAG gerenciado com ACL nativa e geração no Runtime",
+        [*context(), *rag()],
     )
 
 

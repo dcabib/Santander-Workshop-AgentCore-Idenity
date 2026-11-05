@@ -1,6 +1,8 @@
 import ast
 from unittest.mock import Mock, patch
 
+import pytest
+
 from scripts.sdk_notebook_lessons import build_preflight
 
 
@@ -50,3 +52,22 @@ def test_preflight_contains_no_cloudformation_or_deploy_execution():
         assert "AWSWorkshop(" not in cell.source
         assert "subprocess" not in cell.source
         assert "aws.workshop.json" not in cell.source
+
+
+def test_expected_account_guard_precedes_any_resource_state(tmp_path, monkeypatch):
+    (tmp_path / "pyproject.toml").write_text("[project]\nname = 'test-workshop'\n")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("WORKSHOP_EXPECTED_ACCOUNT", "111111111111")
+    aws = Mock()
+    aws.region_name = "us-west-2"
+    aws.client.return_value.get_caller_identity.return_value = {
+        "Account": "999999999999", "Arn": "arn:aws:iam::999999999999:role/Session",
+        "ResponseMetadata": {"RequestId": "other-account"},
+    }
+    namespace = {}
+    with patch("boto3.Session", return_value=aws), pytest.raises(RuntimeError, match="ACCOUNT_MISMATCH"):
+        for cell in build_preflight().cells:
+            if cell.cell_type == "code":
+                exec(cell.source, namespace)
+    assert not (tmp_path / ".workshop").exists()
+    aws.client.assert_called_once_with("sts")

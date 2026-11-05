@@ -13,7 +13,14 @@ import pytest
 from botocore.exceptions import ClientError
 from botocore.validate import validate_parameters
 
-from scripts.sdk_notebook_lessons import build_cleanup, build_gateway, build_identity, build_runtime
+from scripts.sdk_notebook_lessons import (
+    build_cleanup,
+    build_gateway,
+    build_identity,
+    build_policy,
+    build_policy_authoring,
+    build_runtime,
+)
 
 ACCOUNT = "123456789012"
 REGION = "us-west-2"
@@ -152,6 +159,7 @@ class AWSContract:
             return objects["function"]
         if method == "create_gateway":
             objects["gateway"] = {
+                "name": args["name"], "protocolType": args["protocolType"],
                 "gatewayId": "gateway-abcdefghij",
                 "gatewayArn": f"arn:aws:bedrock-agentcore:{REGION}:{ACCOUNT}:gateway/gateway-abcdefghij",
                 "gatewayUrl": f"https://gateway-abcdefghij.gateway.bedrock-agentcore.{REGION}.amazonaws.com/mcp",
@@ -278,7 +286,7 @@ def test_cleanup_refuses_dependencies_before_any_mutation(tmp_path):
     from santander_demo.notebook_state import NotebookState
 
     state = NotebookState(tmp_path, account_id=ACCOUNT, region=REGION)
-    state.record("policy.engine", {"id": "engine-from-later-lesson"}, lesson="04")
+    state.record("registry.record", {"id": "record-from-later-lesson"}, lesson="07")
     aws = AWSContract()
     check = next(c for c in build_cleanup().cells if c.cell_type == "code" and "supported =" in c.source)
     with pytest.raises(RuntimeError, match="CLEANUP_DEPENDENCIES_NOT_SUPPORTED"):
@@ -287,7 +295,10 @@ def test_cleanup_refuses_dependencies_before_any_mutation(tmp_path):
 
 
 def test_notebook_code_is_valid_and_independent_of_legacy_predeployment():
-    for notebook in (build_gateway(), build_identity(), build_runtime(), build_cleanup()):
+    for notebook in (
+        build_gateway(), build_identity(), build_runtime(), build_policy(), build_policy_authoring(),
+        build_cleanup(),
+    ):
         for cell in notebook.cells:
             if cell.cell_type == "code":
                 compile(cell.source, "sdk-cell", "exec", flags=ast.PyCF_ALLOW_TOP_LEVEL_AWAIT)

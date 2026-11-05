@@ -44,6 +44,9 @@ class NotebookState:
                 or self.data.get("region") != region
                 or not re.fullmatch(r"[0-9a-f]{12}", self.data.get("run_id", ""))
                 or not isinstance(self.data.get("resources"), dict)
+                or not isinstance(self.data.get("released_resources", {}), dict)
+                or self.data.get("status", "ACTIVE") not in {"ACTIVE", "CLEANED"}
+                or (self.data.get("status") == "CLEANED" and self.data.get("resources"))
             ):
                 raise ValueError("NOTEBOOK_STATE_CONTEXT_MISMATCH")
             identifiers_only(self.data)
@@ -53,6 +56,7 @@ class NotebookState:
                 "account_id": account_id,
                 "region": region,
                 "run_id": uuid.uuid4().hex[:12],
+                "status": "ACTIVE",
                 "resources": {},
             }
             self.save()
@@ -68,6 +72,10 @@ class NotebookState:
             "workshop-run": self.data["run_id"],
         }
 
+    @property
+    def is_closed(self):
+        return self.data.get("status") == "CLEANED"
+
     def get(self, key):
         value = self.data["resources"].get(key)
         return None if value is None else json.loads(json.dumps(value))
@@ -82,6 +90,8 @@ class NotebookState:
 
     def record(self, key, identifiers, *, lesson):
         """Guarda somente os campos selecionados na célula, nunca a resposta inteira."""
+        if self.is_closed:
+            raise RuntimeError("NOTEBOOK_EXECUTION_CLOSED: execute a aula 00 para iniciar outra execução.")
         if not isinstance(identifiers, dict) or not identifiers:
             raise ValueError("NOTEBOOK_IDENTIFIERS_REQUIRED")
         identifiers_only(identifiers)
@@ -105,26 +115,84 @@ class NotebookState:
         if self.data["resources"].get(key) != expected:
             raise ValueError("NOTEBOOK_CLEANUP_STATE_CHANGED")
         previous = self.data["resources"].pop(key)
+        released_before = self.data.get("released_resources")
+        self.data["released_resources"] = {**(released_before or {}), key: previous}
         try:
             self.save()
         except Exception:
             self.data["resources"][key] = previous
+            if released_before is None:
+                self.data.pop("released_resources", None)
+            else:
+                self.data["released_resources"] = released_before
             raise
 
+    def complete_cleanup(self):
+        """Fecha o registro somente depois de todas as confirmações da aula 99."""
+        if self.data["resources"]:
+            raise RuntimeError("NOTEBOOK_CLEANUP_INCOMPLETE")
+        if self.is_closed:
+            return
+        previous = self.data.get("status")
+        self.data["status"] = "CLEANED"
+        try:
+            self.save()
+        except Exception:
+            if previous is None:
+                self.data.pop("status", None)
+            else:
+                self.data["status"] = previous
+            raise
+
+    def start_new_execution(self):
+        """Aula 00: arquiva a execução limpa e escolhe novos nomes sem tocar AWS."""
+        if not self.is_closed or self.data["resources"]:
+            raise RuntimeError("NOTEBOOK_ACTIVE_EXECUTION: conclua a aula 99 antes de reiniciar.")
+        previous = self.data
+        archive = self.path.parent / "history" / (
+            f"{previous['account_id']}-{previous['region']}-{previous['run_id']}.json"
+        )
+        if archive.exists():
+            if json.loads(archive.read_text()) != previous:
+                raise ValueError("NOTEBOOK_HISTORY_MISMATCH")
+        else:
+            self._write(archive, previous, exclusive=True)
+        self.data = {
+            "schema_version": 1,
+            "account_id": previous["account_id"],
+            "region": previous["region"],
+            "run_id": uuid.uuid4().hex[:12],
+            "status": "ACTIVE",
+            "resources": {},
+        }
+        try:
+            self.save()
+        except Exception:
+            self.data = previous
+            raise
+        return archive
+
     def save(self):
-        identifiers_only(self.data)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._write(self.path, self.data)
+
+    @staticmethod
+    def _write(path, data, *, exclusive=False):
+        identifiers_only(data)
+        path.parent.mkdir(parents=True, exist_ok=True)
         temporary = None
         try:
             with tempfile.NamedTemporaryFile(
-                mode="w", encoding="utf-8", dir=self.path.parent, delete=False,
+                mode="w", encoding="utf-8", dir=path.parent, delete=False,
             ) as output:
                 temporary = Path(output.name)
-                json.dump(self.data, output, ensure_ascii=False, indent=2)
+                json.dump(data, output, ensure_ascii=False, indent=2)
                 output.write("\n")
                 output.flush()
                 os.fsync(output.fileno())
-            os.replace(temporary, self.path)
+            if exclusive:
+                os.link(temporary, path)
+            else:
+                os.replace(temporary, path)
         finally:
             if temporary is not None:
                 temporary.unlink(missing_ok=True)

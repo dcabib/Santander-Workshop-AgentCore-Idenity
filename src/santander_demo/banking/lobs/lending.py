@@ -5,6 +5,7 @@ Provides tools: get_loans, check_eligibility, get_credit_score, get_emi_details,
                 calculate_emi, search_lending_policies
 """
 
+import inspect
 import json
 import math
 import os
@@ -124,7 +125,6 @@ def calculate_emi(principal: float, rate: float, tenure: int) -> dict:
     }
 
 
-@mcp.tool()
 def search_lending_policies(query: str) -> str:
     """Search the bank's lending policy documents for guidelines, eligibility criteria,
     regulatory requirements, and product terms. Use this when you need to check bank
@@ -146,6 +146,10 @@ def search_lending_policies(query: str) -> str:
                 {"text": text, "source": os.path.basename(source), "score": round(score, 3)}
             )
     return json.dumps({"results": chunks}, default=str)
+
+
+# Python 3.12 preserves docstring indentation; publish the same schema on 3.12/3.13.
+mcp.add_tool(search_lending_policies, description=inspect.getdoc(search_lending_policies))
 
 
 if __name__ == "__main__":

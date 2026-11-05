@@ -254,7 +254,7 @@ def gateway():
                 }
             """
             from IPython.display import Code
-            display(Code(TOOL_SOURCE, language="python"))
+            display(Code(TOOL_SOURCE, language="python"), include=["text/html", "text/plain"])
             FUNCTION_NAME = NAME_PREFIX + "-customer-risk"
             FUNCTION_ARN = f"arn:{PARTITION}:lambda:{REGION}:{ACCOUNT_ID}:function:{FUNCTION_NAME}"
             FUNCTION_MARKER = "santander-agentcore:" + state.data["run_id"] + ":lesson01:customer-risk"
