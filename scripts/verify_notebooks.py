@@ -14,6 +14,7 @@ from nbclient import NotebookClient
 
 from santander_demo.aws_workshop.config import load
 from santander_demo.aws_workshop.manifest import LABS, account_plan, check_selection, selected_labs
+from santander_demo.notebook_catalog import LAB_ALIASES, lab_id
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,10 +42,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--validate-only", action="store_true",
                         help="Validar sintaxe/material; não conta como aceite operacional")
-    parser.add_argument("--labs", nargs="+", choices=LABS,
+    parser.add_argument("--labs", nargs="+", choices=(*LABS, *LAB_ALIASES),
                         help="Selecione as aulas preparadas; omitir usa a seleção padrão da topologia")
     parser.add_argument("--output", default="evidence/notebooks-aws.json")
     args = parser.parse_args()
+    if args.labs:
+        args.labs = [lab_id(lab) for lab in args.labs]
     if not args.validate_only and not (
         os.environ.get("CODEBUILD_BUILD_ARN")
         or os.environ.get("AWS_EXECUTION_ENV", "").startswith("CloudShell")
@@ -56,7 +59,7 @@ def main():
     results = []
     paths = [
         p for p in sorted((ROOT / "notebooks").glob("*.ipynb"))
-        if not args.labs or p.name[:2] in args.labs
+        if not args.labs or lab_id(p) in args.labs
     ]
     if not paths:
         parser.error("Nenhuma aula selecionada")
@@ -64,8 +67,8 @@ def main():
         try:
             config = load(os.environ.get("WORKSHOP_CONFIG", ROOT / "config/aws.workshop.json"))
             selected = selected_labs(config, args.labs)
-            paths = [path for path in paths if path.name[:2] in selected]
-            if {path.name[:2] for path in paths} != set(selected):
+            paths = [path for path in paths if lab_id(path) in selected]
+            if {lab_id(path) for path in paths} != set(selected):
                 raise ValueError("SELECTED_NOTEBOOK_FILES_MISSING")
             readiness = ROOT / "evidence/workshop-prerequisites.json"
             readiness.write_text(json.dumps(account_plan(config, selected), indent=2) + "\n")

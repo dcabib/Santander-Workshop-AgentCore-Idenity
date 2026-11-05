@@ -7,14 +7,17 @@ from pathlib import Path
 import nbformat
 
 from santander_demo.aws_workshop.manifest import account_requirements
+from santander_demo.notebook_catalog import display_number, published_stem, source_stem
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from scripts.aws_notebook_lessons import LESSONS, md, setup  # noqa: E402
+from scripts.notebook_curriculum import enrich_notebook  # noqa: E402
 
 
 def build_notebook(name):
+    name = source_stem(name)
     if name == "00_preflight":
         from scripts.sdk_notebook_lessons import build_preflight
 
@@ -76,9 +79,9 @@ def build_notebook(name):
             "workshop": {"execution": "AWS", "lab": name[:2], **accounts},
     })
     notebook.cells = [
-            md(f"# {name[:2]} — {title}\n\n"
+            md(f"# {display_number(name[:2])} — {title}\n\n"
                "Referência: [AgentCore workshops](https://github.com/awslabs/agentcore-samples/tree/main/06-workshops). "
-               "O código e o IaC desta jornada adaptam os conceitos às contas do workshop."),
+               "Esta aula conserva o código da arquitetura anterior enquanto sua conversão está pendente."),
             md(
                 f"## Pré-requisito: {accounts['required_count']} "
                 + ("contas AWS distintas" if accounts["required_count"] > 1 else "conta AWS")
@@ -95,31 +98,36 @@ def build_notebook(name):
                     "e permissões precisam estar implantados na conta da plataforma. "
                     "Ela não funciona automaticamente em uma conta AWS vazia."
                 )
-                + "\n\n**Runner CodeBuild do projeto:** a seleção é declarada no deploy. "
-                "A jornada `single-account` inclui 00–09 e 15–16; Registry, Terraform "
-                "e RAG são exigidos somente pelas aulas que os utilizam. "
-                "Ampliar a seleção exige atualizar a implantação pelo IaC. "
+                + "\n\nA jornada SDK atual de conta única inclui 00–09 e 15–16. "
+                "Os recursos dessas aulas não preparam esta integração legada. "
                 "Confira a [matriz de contas e execução](../docs/contas-e-elegibilidade.md)."
             ),
-            md(f"![Arquitetura AWS da aula {name[:2]}](../docs/diagramas/svg/{name}.svg)\n\n"
-               "Leia as fronteiras do diagrama e confronte-as com o IaC e as chamadas abaixo."),
             *setup(name[:2]), *lesson(),
             md("### Evidências e encerramento\n\n"
                "Registre IDs de requisição e decisões, sem tokens ou senhas. "
                "Os recursos são compartilhados entre aulas: a remoção pertence "
                "ao pipeline de limpeza do projeto e deve respeitar essa dependência."),
     ]
+    if published_stem(name) != name:
+        notebook.metadata.workshop["notebook_number"] = display_number(name[:2])
+        notebook.cells[0].source += (
+            "\n\n**Bloco final multiconta — fora da jornada de conta única do Workshop Studio.** "
+            f"Anteriormente aula {name[:2]}; o ID `{name[:2]}` nas chamadas e evidências legadas "
+            "permanece estável. A mudança de ordem não altera os recursos nem dispensa as quatro contas."
+        )
+    enrich_notebook(notebook, name)
     for index, cell in enumerate(notebook.cells):
         cell.id = hashlib.sha256(f"{name}:{index}:{cell.source}".encode()).hexdigest()[:16]
     return notebook
 
 
 def main(only=None):
-    for name in sorted({*LESSONS, "99_cleanup_sdk"}):
-        if only and name not in only:
+    selected = {source_stem(name) for name in only} if only else None
+    for name in sorted({*LESSONS, "99_cleanup_sdk"}, key=published_stem):
+        if selected and name not in selected:
             continue
         notebook = build_notebook(name)
-        nbformat.write(notebook, ROOT / "notebooks" / f"{name}.ipynb")
+        nbformat.write(notebook, ROOT / "notebooks" / f"{published_stem(name)}.ipynb")
 
 
 if __name__ == "__main__":

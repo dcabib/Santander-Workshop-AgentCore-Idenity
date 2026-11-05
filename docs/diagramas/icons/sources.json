@@ -1,0 +1,77 @@
+{
+  "source": "https://aws.amazon.com/architecture/icons/",
+  "release": "2026-07-31",
+  "archive": "https://d1.awsstatic.com/onedam/marketing-channels/website/public/shared/architecture-icon-release/Icon-package_07312026.5846e92413caa21490223536cc97f1269e44fa92.zip",
+  "icons": {
+    "agentcore": {
+      "file": "agentcore.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Artificial-Intelligence/64/Arch_Amazon-Bedrock-AgentCore_64.svg",
+      "sha256": "09596bda3e7cd42288deec94d3b4647bcc951c3b8855236e8a88d31e1766636f"
+    },
+    "bedrock": {
+      "file": "bedrock.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Artificial-Intelligence/64/Arch_Amazon-Bedrock_64.svg",
+      "sha256": "80fa4190bb55bde5c3004ed8d2f16bf25db28d230cf46760813f2171636ea105"
+    },
+    "cognito": {
+      "file": "cognito.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Security-Identity/64/Arch_Amazon-Cognito_64.svg",
+      "sha256": "cf9c55baa325d5d07aea0054115b1b24d68c1d7e046a4f8a360ccdefbba507e9"
+    },
+    "lambda": {
+      "file": "lambda.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Compute/64/Arch_AWS-Lambda_64.svg",
+      "sha256": "5818c80cd8e7d08891a2492c7694f472ca914fb3a99d9ef8e597db0b37ad7f13"
+    },
+    "iam": {
+      "file": "iam.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Security-Identity/64/Arch_AWS-Identity-and-Access-Management_64.svg",
+      "sha256": "3135793557c065d0481a3985ccc0574b36278d56a2e2c5d59107d0d28f51b827"
+    },
+    "s3": {
+      "file": "s3.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Storage/64/Arch_Amazon-Simple-Storage-Service_64.svg",
+      "sha256": "b92c5101cc6565dd12df37655802279f8fba0c719279f62f93106d26750b36c6"
+    },
+    "dynamodb": {
+      "file": "dynamodb.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Databases/64/Arch_Amazon-DynamoDB_64.svg",
+      "sha256": "ed169f049cc24c954cfbe3d14695d5b022558c45e5605936a565d1347c14b664"
+    },
+    "secrets": {
+      "file": "secrets.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Security-Identity/64/Arch_AWS-Secrets-Manager_64.svg",
+      "sha256": "c3941b75fe0ad1181696c1dbbd5f9d1fe4561879e195b1e68bb6dc35a99da6b3"
+    },
+    "cloudwatch": {
+      "file": "cloudwatch.svg",
+      "archive_path": "Architecture-Service-Icons_07312026/Arch_Management-Tools/64/Arch_Amazon-CloudWatch_64.svg",
+      "sha256": "a84b5b88172ab39170eaa6154345332d755758a37cda6a5580981cf679e01c0b"
+    },
+    "client": {
+      "file": "client.svg",
+      "archive_path": "Resource-Icons_07312026/Res_General-Icons/Res_48_Light/Res_Client_48_Light.svg",
+      "sha256": "5c0eb210ca9cca0f53c136eb524273ce5ad90e40545752aeadb129bdcb2af0f3"
+    },
+    "user": {
+      "file": "user.svg",
+      "archive_path": "Resource-Icons_07312026/Res_General-Icons/Res_48_Light/Res_User_48_Light.svg",
+      "sha256": "82cad1b559b84252e86f17ee9707ff9228e6c92816f207e4fde5daadaa346d38"
+    },
+    "cloud": {
+      "file": "cloud.svg",
+      "archive_path": "Architecture-Group-Icons_07312026/AWS-Cloud-logo_32.svg",
+      "sha256": "63d73df1aac59dab323df732f82e196e359fb7b6370c0ca8e51e7b897cd350be"
+    },
+    "sts": {
+      "file": "sts.svg",
+      "archive_path": "Resource-Icons_07312026/Res_Security-Identity/Res_AWS-Identity-Access-Management_AWS-STS_48.svg",
+      "sha256": "2cb69b0aba7a9c1e0a24e9213bba31841d9302af532c1a3945dbf1514a6c0154"
+    },
+    "role": {
+      "file": "role.svg",
+      "archive_path": "Resource-Icons_07312026/Res_Security-Identity/Res_AWS-Identity-Access-Management_Role_48.svg",
+      "sha256": "e47256f0e788e6bda40d17b0da4cf9abab170a29dfc7a22f579e13f4891407da"
+    }
+  }
+}

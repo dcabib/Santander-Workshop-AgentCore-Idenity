@@ -1,7 +1,7 @@
 # Santander — Workshop Amazon Bedrock AgentCore
 
 **A jornada de conta única (00–09, 15–16 e limpeza 99) foi validada na AWS.
-Os cenários de múltiplas contas 10–14 ainda estão em conversão.**
+Os cenários de múltiplas contas 13–14 e 90–92 ainda estão em conversão.**
 A nova jornada não exige CloudFormation, um runner CodeBuild ou um arquivo
 privado de configuração antes do primeiro notebook.
 
@@ -35,9 +35,10 @@ do domínio ou da role do Code Editor fornecido pelo evento.
 | 07 | Três personas oficiais e chamadas reais de autorização | Testada na conta atual com as três personas oficiais |
 | 08 | Publicação, aprovação, descoberta e invocação por personas | Testada na AWS, incluindo negativas entre personas |
 | 09 | Integração Runtime, Gateway e Identity | Testada na AWS: analista permitido e auditor negado |
-| 10–14 | Integrações e fronteiras entre contas | Migração pendente; o legado exige quatro contas |
+| 13–14 | Fonte Databricks e cenário integrado legados | Migração pendente; o legado exige quatro contas |
 | 15 | Memory por actor e concessão atual na fonte sintética | Testada na AWS, incluindo isolamento e revogação |
 | 16 | KB MANAGED, ACL nativa, conector Gateway e geração no Runtime | Testada na AWS: geração por pessoa e negativas de acesso |
+| 90–92 | Bloco final de multiconta (antigas aulas 10–12) | Fora da jornada Workshop Studio; exige quatro contas distintas |
 | 99 | Limpeza SDK dos recursos criados nas aulas 01–09 e 15–16 | Testada na AWS para toda a jornada SDK |
 
 Em 05/11/2026, **00–09, 15 e 16 passaram** na conta atual com a sessão do editor.
@@ -54,9 +55,24 @@ Os relatórios, versões e Request IDs estão no
 [aceite das aulas SDK](docs/aceite-notebooks-sdk.md). O documento separa
 os resultados da conta atual do histórico de contas encerradas.
 
-As aulas 10–14 ainda contêm o fluxo antigo de implantação. **Não execute
+As aulas 13–14 e 90–92 ainda contêm o fluxo antigo de implantação. **Não execute
 “Run All” na coleção inteira.** O [plano da conversão](docs/plano-notebooks-sdk.md)
 registra o escopo e a ordem das mudanças.
+
+## Bloco final de multiconta
+
+Os três notebooks específicos de multiconta ficam no final da sequência,
+antes da limpeza 99. Na conta única do Workshop Studio, siga **00–09 → 15–16 → 99**.
+
+| Nome anterior | Notebook no final | Tema |
+|---|---|---|
+| 10_santander_multi_conta | [90_multiconta_santander.ipynb](notebooks/90_multiconta_santander.ipynb) | Quatro contas e fronteiras |
+| 11_blog_multi_account_gateway_mcp | [91_multiconta_agente_central_gateway_mcp.ipynb](notebooks/91_multiconta_agente_central_gateway_mcp.ipynb) | Agente central e três domínios |
+| 12_gateways_por_conta_identity_policy | [92_multiconta_gateways_identity_policy.ipynb](notebooks/92_multiconta_gateways_identity_policy.ipynb) | Gateway, Identity e Policy por conta |
+
+**As aulas 13 e 14 também dependem do ambiente legado de quatro contas.**
+A nova posição não torna esses cinco cenários compatíveis com conta única.
+Veja a [matriz de contas e execução](docs/contas-e-elegibilidade.md).
 
 ## Preparar o kernel
 
@@ -67,6 +83,8 @@ No terminal do seu ambiente de notebooks na AWS, dentro deste repositório:
 ```
 
 Esse script instala dependências e registra o kernel; não cria recursos AWS.
+Em um clone novo, execute esse comando antes de abrir os notebooks: a pasta
+`.venv/` não é distribuída pelo Git.
 Selecione **Santander Workshop (.venv)** no VS Code. Abra
 [00_preflight.ipynb](notebooks/00_preflight.ipynb) e confira conta, região e
 identidade antes das aulas de criação.
@@ -78,7 +96,7 @@ chaves ou tokens. Senhas sintéticas são guardadas no Secrets Manager.
 
 ## Contas e permissões
 
-A jornada validada de conta única inclui 00–09 e 15–16. Os cenários 10–14
+A jornada validada de conta única inclui 00–09 e 15–16. Os cenários 13–14 e 90–92
 precisam de contas distintas para demonstrar fronteiras reais. A versão antiga
 desses notebooks exige quatro contas, mesmo quando o fluxo ilustrado mostra
 três; esse requisito ainda precisa ser revisto na conversão.
@@ -91,6 +109,10 @@ responsável pela conta, não um motivo para alterar roles protegidas do evento.
 
 ## Código e validação
 
+- [Roteiro didático](docs/roteiro-didatico.md): arquiteturas por aula, serviços,
+  validações comentadas e interpretação dos resultados.
+- `scripts/notebook_curriculum.py`: objetivos e análise junto dos testes de cada aula.
+- `scripts/notebook_architecture.py`: desenhos incorporados aos notebooks.
 - `scripts/sdk_notebook_lessons.py`: contexto AWS e estrutura das novas aulas.
 - `scripts/sdk_gateway_lesson.py`: chamadas de criação e testes da aula 01.
 - `scripts/sdk_identity_lesson.py`: comparação de aplicações, validação de

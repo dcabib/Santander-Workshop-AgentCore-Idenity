@@ -9,14 +9,14 @@ sys.path.insert(0, str(ROOT))
 from scripts.generate_aws_notebooks import build_notebook as build_aws_notebook  # noqa: E402
 from scripts.generate_aws_notebooks import main as generate  # noqa: E402
 
-NAME = '12_gateways_por_conta_identity_policy'
+NAME = '92_multiconta_gateways_identity_policy'
 OUTPUT = ROOT / "notebooks" / (NAME + ".ipynb")
 
 def build_notebook():
     return build_aws_notebook(NAME)
 
 def main():
-    generate(['12_gateways_por_conta_identity_policy'])
+    generate([NAME])
 
 if __name__ == "__main__":
     main()

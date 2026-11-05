@@ -114,9 +114,10 @@ def preflight():
         preparar kernel e sessão, criar os recursos nas aulas, testar,
         guardar evidências sem segredos e limpar antes do encerramento.
 
-        **Estado da revisão:** esta aula foi convertida para o novo formato.
-        As demais aulas ainda estão sendo migradas; não execute a jornada inteira
-        como se a conversão e o aceite AWS já estivessem concluídos.
+        **Jornada validada:** 00–09 e 15–16 constroem e testam os serviços por SDK
+        em uma conta; a aula 99 encerra esse ciclo. As aulas 10–14 ainda são
+        legadas, exigem quatro contas e estão pendentes de conversão e novo aceite.
+        Não execute “Run All” na coleção inteira em uma conta única.
         """),
         *step(
             "Conferir o SDK que executará as chamadas",
@@ -327,6 +328,8 @@ def build_sdk_notebook(name, title, cells):
 
     import nbformat
 
+    from scripts.notebook_curriculum import enrich_notebook
+
     notebook = nbformat.v4.new_notebook()
     notebook.metadata.update({
         "kernelspec": {
@@ -347,8 +350,9 @@ def build_sdk_notebook(name, title, cells):
         md(f"""
         # {name[:2]} — {title}
 
-        Vamos criar e configurar os serviços durante as aulas, observar as
-        respostas da AWS e testar cada componente antes de avançar.
+        Comece pela arquitetura e pelos objetivos. Nas etapas executáveis,
+        leia o código, observe a resposta da AWS e interprete as validações
+        antes de avançar.
 
         Referência: [workshops AgentCore](https://github.com/awslabs/agentcore-samples/tree/main/06-workshops).
 
@@ -359,6 +363,7 @@ def build_sdk_notebook(name, title, cells):
         """),
         *cells,
     ]
+    enrich_notebook(notebook, name)
     for index, cell in enumerate(notebook.cells):
         cell.id = hashlib.sha256(f"{name}:{index}:{cell.source}".encode()).hexdigest()[:16]
     return notebook

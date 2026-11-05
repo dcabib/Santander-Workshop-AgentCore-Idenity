@@ -7,14 +7,17 @@ from pathlib import Path
 
 import nbformat
 
+from santander_demo.notebook_catalog import LAB_ALIASES, lab_id
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def audit(evidence, source_dir, executed_dir, labs=None):
-    paths = [p for p in sorted(source_dir.glob("*.ipynb")) if not labs or p.name[:2] in labs]
+    labs = [lab_id(lab) for lab in labs] if labs else None
+    paths = [p for p in sorted(source_dir.glob("*.ipynb")) if not labs or lab_id(p) in labs]
     if not paths:
         raise ValueError("NO_NOTEBOOKS")
-    if labs and {path.name[:2] for path in paths} != set(labs):
+    if labs and {lab_id(path) for path in paths} != set(labs):
         raise ValueError("SELECTED_NOTEBOOK_FILES_MISSING")
     rows = {row["notebook"]: row for row in evidence}
     if len(rows) != len(evidence):
@@ -44,7 +47,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--evidence", default="evidence/notebooks-aws.json")
     parser.add_argument("--executed", default="evidence/executed")
-    parser.add_argument("--labs", nargs="+", choices=[f"{n:02d}" for n in range(17)])
+    parser.add_argument("--labs", nargs="+", choices=[*[f"{n:02d}" for n in range(17)], *LAB_ALIASES])
     args = parser.parse_args()
     result = audit(json.loads(Path(args.evidence).read_text()), ROOT / "notebooks",
                    Path(args.executed), args.labs)

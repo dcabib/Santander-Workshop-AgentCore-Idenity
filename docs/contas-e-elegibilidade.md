@@ -1,113 +1,66 @@
 # Contas necessárias e seleção das aulas
 
-**O workshop completo não funciona em uma conta AWS qualquer.** A implantação
-atual foi validada em **quatro contas distintas**, em `us-east-1`, com os stacks,
-roles, integrações e acesso aos serviços preparados antes da turma.
+A jornada SDK validada usa **uma conta AWS**: **00–09 → 15–16 → 99 (limpeza)**.
+As células criam, inspecionam e usam os serviços durante o notebook. Ela não
+exige CloudFormation nem recursos da solução preparados antes da aula 00.
+Uma conta precisa ter sessão autorizada, permissões, quotas, serviços e modelos
+disponíveis na região. Consulte o [roteiro de contas efêmeras](contas-efemeras.md).
 
-O participante não deve executar as 17 aulas com “Run All” se esse ambiente
-não estiver disponível. Perfis diferentes apontando para o mesmo ID de conta
-não atendem aos cenários entre contas.
+## Matriz dos notebooks atuais
 
-## Matriz da implementação atual
-
-“Contas no fluxo” descreve a chamada ensinada. “Contas exigidas” inclui as
-dependências reais do manifesto e do IaC distribuídos.
-
-| Aulas | Contas no fluxo | Contas exigidas pelo notebook atual | Preparação adicional |
+| Notebooks | Contas no fluxo | Contas exigidas | Execução no Workshop Studio com uma conta |
 |---|---|---|---|
-| 00–05 | 1: plataforma | 1 | Core; agente na 02; geração de rascunho na 05 |
-| 06–08 | 1: plataforma | 1 | Registry, personas IAM, registros aprovados e Runtime; agente na 08 |
-| 09 | 1: plataforma | 1 | Implantação Terraform, state remoto e outputs |
-| 10–11 | 4: plataforma + Retail + Transaction + Lending | **4 distintas** | Stacks de cada conta; federação e agente central na 11 |
-| 12 | 2: plataforma → Transaction | **4 distintas** | Preflight do bloco multi-conta e federação completa |
-| 13 | 2: identidade na plataforma + fonte em Transaction | **4 distintas** | Preflight do bloco multi-conta; simulador da fonte na AWS |
-| 14 | **3: Retail → plataforma → Transaction** | **4 distintas** | Federação completa, agentes Riscos/Fraude na origem e registros aprovados |
-| 15 | 1: plataforma | 1 | Core, Memory e stacks RAG; ciclo de vida pelo IaC |
-| 16 | 1: plataforma | 1 | RAG gerenciado, ingestão/ACL e Runtime RAG |
+| 00–09 | Uma conta AWS | **1** | Jornada SDK; criação durante as células |
+| 15–16 | Uma conta AWS | **1** | Memory e RAG; dependem das aulas SDK anteriores |
+| 13 | Plataforma + fonte em Transaction | **4 distintas** no legado atual | Não executar; conversão pendente |
+| 14 | Retail → plataforma → Transaction | **4 distintas** no legado atual | Não executar; conversão pendente |
+| 90 (antiga 10) | Plataforma + Retail + Transaction + Lending | **4 distintas** | Bloco final multiconta; não executar |
+| 91 (antiga 11) | Agente central na plataforma + três domínios | **4 distintas** | Bloco final multiconta; não executar |
+| 92 (antiga 12) | Plataforma → Transaction | **4 distintas** no legado atual | Bloco final multiconta; não executar |
+| 99 | Recursos SDK desta execução | **1** | Limpeza explícita depois da jornada SDK |
 
-Na aula 14, as três contas do desenho são A (origem/Retail), C
-(hub/plataforma) e B (fonte/Transaction). Lending não participa dessa chamada,
-mas é uma dependência da implantação atual: `federation-bindings` declara os
-três Gateways de domínio, e o manifesto 10–14 verifica as quatro contas.
-**Ter apenas três contas não basta para executar essa aula com o pipeline atual.**
-Uma versão independente com três contas exigiria alterar e validar o IaC e o
-manifesto; ela não está implementada.
+Os três notebooks específicos de multiconta estão no final da sequência:
 
-Os usuários sintéticos A/B/C/D das aulas de identidade e RAG são pessoas.
-Não representam quatro contas AWS. As personas Developer/Publisher/Approver/
-Consumer do Registry são roles IAM e também podem existir na mesma conta.
+* [90 — Quatro contas e fronteiras](../notebooks/90_multiconta_santander.ipynb).
+* [91 — Agente central e três domínios](../notebooks/91_multiconta_agente_central_gateway_mcp.ipynb).
+* [92 — Gateways, Identity e Policy por conta](../notebooks/92_multiconta_gateways_identity_policy.ipynb).
 
-## O que executar durante a turma
+**13 e 14 também precisam das quatro contas do ambiente legado.** Elas não
+fazem parte da seleção de conta única. Na 14, Lending não participa da chamada,
+mas continua sendo dependência do manifesto e da federação atuais. Na 92,
+o desenho mostra duas contas, mas a implementação exige quatro preparadas.
+Perfis diferentes apontando para o mesmo ID não atendem a esse requisito.
 
-| Ambiente disponível | Roteiro |
-|---|---|
-| Uma conta com os stacks das aulas preparados | Usar a jornada de conta única, com 00–09 e 15–16 no CodeBuild. Os serviços e integrações de cada aula continuam obrigatórios. |
-| Duas ou três contas | O bloco 10–14 continua bloqueado na implementação atual; não repetir IDs para satisfazer a configuração. |
-| Quatro contas, integrações e roles preparadas | Executar a jornada completa depois do preflight. |
-| Apenas uma conta vazia ou sem permissões para implantar os serviços | Fazer a preparação por IaC antes das aulas; a existência da conta não é um aceite de prontidão. |
+Pessoas sintéticas A/B/C/D e personas IAM do Registry não são contas AWS;
+ambas podem existir dentro da mesma conta do participante.
 
-Sem as quatro contas, reserve 10–14 para **demonstração do instrutor no
-ambiente completo** ou leitura guiada do código. Retire essas aulas da seleção
-do participante. Uma aula não executada não recebe PASS e não entra no aceite.
+## O que executar na turma
 
-Para a jornada de conta única, use `topology: single-account` e mantenha as quatro chaves em
-`accounts`, mas use `{"id": null, "profile": null}` nos domínios indisponíveis.
-Preencha `platform` e configure as integrações usadas na mesma conta. Não
-copie IDs, ARNs ou perfis do ambiente de referência para uma nova turma.
+Execute 00–09 e 15–16 em ordem, leia as validações e só então use 99 para remover
+os recursos SDK registrados. Não use “Run All” na coleção inteira. A limpeza 99
+não remove o ambiente legado multiconta nem o editor do evento.
 
-## Seleção do runner CodeBuild
+Com uma, duas ou três contas, reserve 13–14 e 90–92 para leitura guiada.
+Com quatro contas, esses cenários ainda precisam da implantação legada e das
+integrações indicadas; não foram convertidos nem revalidados na jornada SDK.
+A renomeação não cria contas nem altera permissões.
 
-O [pipeline de conta única](conta-unica.md) seleciona 00–09 e 15–16 por padrão.
-Ele usa Registry, Terraform e RAG na plataforma e não precisa de roles observer.
-`deploy --labs 00 01` prepara um runner apenas para essas aulas, sem empacotar
-ou conceder permissões para integrações ausentes.
+## Compatibilidade dos IDs antigos
 
-`run --labs` pode restringir a seleção implantada. Para ampliá-la, é necessário
-novo deploy por IaC. Sem `topology: single-account`, a seleção padrão continua
-sendo as 17 aulas e exige quatro contas. Uma seleção explícita com 10–14 sempre
-exige quatro contas distintas.
+A numeração visível mudou de **10 → 90**, **11 → 91** e **12 → 92**.
+O manifesto, as chamadas nas células e os relatórios históricos conservam os
+IDs legados 10, 11 e 12. Isso mantém os requisitos de quatro contas e os recursos
+referenciados sem alterar o código AWS.
 
-## Conferir antes de iniciar
-
-O planejamento abaixo só lê a configuração e mostra os bloqueios por aula.
-Não chama a AWS, não implanta e não inicia builds:
+Os verificadores de notebooks aceitam os números novos e antigos. Por exemplo,
+a checagem abaixo valida somente o formato e a sintaxe, sem chamar a AWS:
 
 ```bash
-uv run python scripts/workshop_prerequisites.py
-uv run python scripts/workshop_prerequisites.py --labs 14
-uv run python scripts/workshop_prerequisites.py --runner --labs 00 01
+uv run python scripts/verify_notebooks.py --validate-only --labs 90 91 92
 ```
 
-`ACCOUNTS_CONFIGURED` significa apenas IDs presentes e distintos onde exigidos.
-`BLOCKED` identifica contas ausentes ou duplicadas e termina com erro.
-Para consultar STS e as dependências declaradas, somente leitura:
-
-```bash
-uv run python scripts/workshop_prerequisites.py --runner --check-aws
-```
-
-Depois de preparar apenas as aulas sem fronteiras entre contas, execute esta
-seleção **dentro do ambiente de notebooks AWS**, não no computador do operador:
-
-```bash
-uv run python scripts/verify_notebooks.py --labs 00 01 02 03 04 05 06 07 08 09 15 16
-```
-
-O verificador confere os pré-requisitos de toda a seleção antes de iniciar o
-primeiro notebook. O runner também verifica a seleção efetiva antes de
-`StartBuild`, incluindo as aulas salvas no projeto CodeBuild quando `--labs`
-não é informado. A topologia define a seleção padrão; uma seleção explícita
-incompatível é bloqueada, sem descartar aulas silenciosamente.
-
-O preflight não substitui testes operacionais: credenciais podem expirar,
-serviços/modelos e quotas precisam estar disponíveis, políticas IAM/SCP e as
-relações de confiança precisam permitir as operações. Cada aula continua
-exigindo respostas reais dos serviços.
-
-## Alcance do aceite registrado
-
-O [aceite de 03/11/2026](aceite-aws.md) corresponde ao build e ao pacote de
-fonte registrados, no ambiente de referência de quatro contas. Ele não
-certifica execução em uma conta nova, em outra região ou com menos contas.
-Alterações posteriores nos notebooks exigem uma nova execução para um aceite
-dos novos hashes.
+Nos scripts antigos de pré-requisitos e deploy, os IDs continuam sendo 10, 11
+e 12. Esses scripts pertencem ao legado e não são necessários para iniciar a
+jornada SDK. O [aceite SDK](aceite-notebooks-sdk.md) cobre somente as aulas e
+as execuções registradas; leitura de código ou renomeação não representa PASS
+operacional de um cenário multiconta.
