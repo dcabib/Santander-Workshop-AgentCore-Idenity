@@ -1,0 +1,48 @@
+{
+  "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/03-advanced-data-analysis-with-agent-using-code-interpreter/langchain-agent-advanced-data-analysis-code-interpreter.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "b5a8d29b9991b5e382c9edd73f072a204eb4c0d202f3276bd2d8e5e9f1421147",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:13:15Z",
+  "finished_at": "2026-11-05T19:13:18Z",
+  "cells": [
+    {
+      "index": 4,
+      "status": "EXECUTED",
+      "duration_seconds": 0.97
+    },
+    {
+      "index": 5,
+      "status": "FAILED",
+      "error_type": "CellExecutionError",
+      "duration_seconds": 0.68
+    }
+  ],
+  "status": "FAILED",
+  "aws_calls": [],
+  "cleanup_attempts": [
+    {
+      "index": 36,
+      "status": "FAILED",
+      "error_type": "CellExecutionError"
+    }
+  ],
+  "failure_summary": "ImportError: cannot import name 'AgentExecutor' from 'langchain.agents' (/private/tmp/agentcore-appendix-tests-20261105/.venv/lib/python3.12/site-packages/langchain/agents/__init__.py)",
+  "packages": {
+    "strands-agents-tools": "0.9.0",
+    "pandas": "3.1.1",
+    "langchain-core": "1.7.6",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "bedrock-agentcore-starter-toolkit": "0.1.14",
+    "langchain": "1.4.9",
+    "bedrock-agentcore": "1.25.3",
+    "botocore": "1.43.124",
+    "langchain-protocol": "0.0.21",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "strands-agents": "1.64.0",
+    "langchain-aws": "1.9.1"
+  }
+}

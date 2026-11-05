@@ -1,0 +1,159 @@
+--- a/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/academic-research-assistant-short-term-memory-tutorial.ipynb
++++ b/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/academic-research-assistant-short-term-memory-tutorial.ipynb
+@@ -173,7 +173,7 @@
+    "outputs": [],
+    "source": [
+     "# Configuration for SHORT-TERM memory (single session)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "\n",
+     "# Create memory context for single session\n",
+     "context = AgentCoreMemoryContext(\n",
+--- a/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/investment-portfolio-advisor-short-term-memory-tutorial.ipynb
++++ b/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/investment-portfolio-advisor-short-term-memory-tutorial.ipynb
+@@ -194,7 +194,7 @@
+    "outputs": [],
+    "source": [
+     "# Configuration for SHORT-TERM memory (single session)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "\n",
+     "# Create memory context for single session\n",
+     "context = AgentCoreMemoryContext(\n",
+--- a/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/legal-document-analyzer-short-term-memory-tutorial.ipynb
++++ b/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/legal-document-analyzer-short-term-memory-tutorial.ipynb
+@@ -180,7 +180,7 @@
+    "outputs": [],
+    "source": [
+     "# Configuration for SHORT-TERM memory (single session)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "\n",
+     "# Create memory context for single session\n",
+     "context = AgentCoreMemoryContext(\n",
+--- a/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/medical-knowledge-assistant-short-term-memory-tutorial.ipynb
++++ b/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/medical-knowledge-assistant-short-term-memory-tutorial.ipynb
+@@ -187,7 +187,7 @@
+    "outputs": [],
+    "source": [
+     "# Configuration for SHORT-TERM memory (single session)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "\n",
+     "# Create memory context for single session\n",
+     "context = AgentCoreMemoryContext(\n",
+--- a/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-langgraph-agent-hooks/episodic-memory/nutrition-assistant-with-episodic-memory.ipynb
++++ b/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-langgraph-agent-hooks/episodic-memory/nutrition-assistant-with-episodic-memory.ipynb
+@@ -221,7 +221,7 @@
+    "source": [
+     "memory_name = \"NutritionAssistantEpisodic\"\n",
+     "client = MemoryClient(region_name=region)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "\n",
+     "override_strategy = {\n",
+     "    \"customMemoryStrategy\": {\n",
+--- a/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/academic-research-assistant-long-term-memory-tutorial.ipynb
++++ b/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/academic-research-assistant-long-term-memory-tutorial.ipynb
+@@ -364,7 +364,7 @@
+    "outputs": [],
+    "source": [
+     "# Configuration for LONG-TERM memory (cross-session)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "RESEARCHER_ID = \"academic-researcher\"  # Same researcher across all sessions\n",
+     "\n",
+     "\n",
+--- a/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/investment-portfolio-advisor-long-term-memory-tutorial.ipynb
++++ b/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/investment-portfolio-advisor-long-term-memory-tutorial.ipynb
+@@ -385,7 +385,7 @@
+    "outputs": [],
+    "source": [
+     "# Configuration for LONG-TERM memory (cross-session)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "ADVISOR_ID = \"financial-advisor\"  # Same advisor across all sessions\n",
+     "\n",
+     "\n",
+--- a/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/legal-document-analyzer-long-term-memory-tutorial.ipynb
++++ b/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/legal-document-analyzer-long-term-memory-tutorial.ipynb
+@@ -410,7 +410,7 @@
+    "outputs": [],
+    "source": [
+     "# Configuration for LONG-TERM memory (cross-session)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "ANALYST_ID = \"legal-analyst\"  # Same analyst across all sessions\n",
+     "\n",
+     "\n",
+--- a/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/medical-knowledge-assistant-long-term-memory-tutorial.ipynb
++++ b/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/medical-knowledge-assistant-long-term-memory-tutorial.ipynb
+@@ -405,7 +405,7 @@
+    "outputs": [],
+    "source": [
+     "# Configuration for LONG-TERM memory (cross-session)\n",
+-    "MODEL_ID = \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\"\n",
++    "MODEL_ID = \"us.anthropic.claude-sonnet-4-6\"\n",
+     "ASSISTANT_ID = \"medical-assistant\"  # Same assistant across all sessions\n",
+     "\n",
+     "\n",
+--- a/06-workshops/06-AgentCore-observability/01-Agentcore-runtime-hosted/LlamaIndex/runtime_with_llamaindex_and_bedrock_models.ipynb
++++ b/06-workshops/06-AgentCore-observability/01-Agentcore-runtime-hosted/LlamaIndex/runtime_with_llamaindex_and_bedrock_models.ipynb
+@@ -131,7 +131,7 @@
+     "    return a + b\n",
+     "\n",
+     "def get_bedrock_model():\n",
+-    "    model_id = \"anthropic.claude-3-5-haiku-20241022-v1:0\"\n",
++    "    model_id = \"us.anthropic.claude-haiku-4-5-20251001-v1:0\"\n",
+     "    region = boto3.Session().region_name\n",
+     "    \n",
+     "    bedrock_model = BedrockConverse(\n",
+@@ -237,7 +237,7 @@
+     "    return a + b\n",
+     "\n",
+     "def get_bedrock_model():\n",
+-    "    model_id = \"anthropic.claude-3-5-haiku-20241022-v1:0\"\n",
++    "    model_id = \"us.anthropic.claude-haiku-4-5-20251001-v1:0\"\n",
+     "    region = boto3.Session().region_name\n",
+     "    \n",
+     "    bedrock_model = BedrockConverse(\n",
+--- a/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Arize/runtime_with_strands_and_arize.ipynb
++++ b/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Arize/runtime_with_strands_and_arize.ipynb
+@@ -151,7 +151,7 @@
+     "# Function to initialize Bedrock model\n",
+     "def get_bedrock_model():\n",
+     "    region = os.getenv(\"AWS_DEFAULT_REGION\", \"us-west-2\")\n",
+-    "    model_id = os.getenv(\"BEDROCK_MODEL_ID\", \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\")\n",
++    "    model_id = os.getenv(\"BEDROCK_MODEL_ID\", \"us.anthropic.claude-sonnet-4-6\")\n",
+     "\n",
+     "    bedrock_model = BedrockModel(\n",
+     "        model_id=model_id,\n",
+@@ -275,7 +275,7 @@
+     "# Launch Runtime (Configure the runtime to send telemetry data to Arize)\n",
+     "launch_result = agentcore_runtime.launch(\n",
+     "    env_vars={\n",
+-    "        \"BEDROCK_MODEL_ID\": \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\",  # Example model ID\n",
++    "        \"BEDROCK_MODEL_ID\": \"us.anthropic.claude-sonnet-4-6\",  # Example model ID\n",
+     "        \"OTEL_EXPORTER_OTLP_ENDPOINT\": os.environ[\"ARIZE_ENDPOINT\"],  # Use Arize OTEL endpoint\n",
+     "        \"OTEL_EXPORTER_OTLP_HEADERS\": headers,  # Add Arize auth header\n",
+     "        \"DISABLE_ADOT_OBSERVABILITY\": \"true\",  # Bypass Cloudwatch\n",
+--- a/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/OpenLIT/runtime_with_strands_and_openlit.ipynb
++++ b/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/OpenLIT/runtime_with_strands_and_openlit.ipynb
+@@ -191,7 +191,7 @@
+     "# Function to initialize Bedrock model\n",
+     "def get_bedrock_model():\n",
+     "    region = os.getenv(\"AWS_DEFAULT_REGION\", \"us-west-2\")\n",
+-    "    model_id = os.getenv(\"BEDROCK_MODEL_ID\", \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\")\n",
++    "    model_id = os.getenv(\"BEDROCK_MODEL_ID\", \"us.anthropic.claude-sonnet-4-6\")\n",
+     "\n",
+     "    bedrock_model = BedrockModel(\n",
+     "        model_id=model_id,\n",
+@@ -319,7 +319,7 @@
+     "otel_endpoint = \"http://<your-openlit-host>:4318\"  # ⚠️ REPLACE THIS with your OpenLIT endpoint\n",
+     "\n",
+     "env_vars = {\n",
+-    "    \"BEDROCK_MODEL_ID\": \"us.anthropic.claude-3-7-sonnet-20250219-v1:0\",  # Example model ID\n",
++    "    \"BEDROCK_MODEL_ID\": \"us.anthropic.claude-sonnet-4-6\",  # Example model ID\n",
+     "    \"OTEL_EXPORTER_OTLP_ENDPOINT\": otel_endpoint,  # Use OpenLIT OTEL endpoint\n",
+     "    \"DISABLE_ADOT_OBSERVABILITY\": \"true\",\n",
+     "}\n",

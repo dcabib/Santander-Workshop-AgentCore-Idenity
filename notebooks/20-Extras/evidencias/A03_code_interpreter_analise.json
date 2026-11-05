@@ -1,0 +1,246 @@
+{
+  "path": "A03_code_interpreter_analise.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "cc3034be3860a618f02d2ee48dad5a58d406a80bf1e19b243c00aabebf79fc1b",
+  "variant": "published-appendix",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:37:15Z",
+  "finished_at": "2026-11-05T19:38:38Z",
+  "cells": [
+    {
+      "index": 1,
+      "status": "EXECUTED",
+      "duration_seconds": 0.78
+    },
+    {
+      "index": 2,
+      "status": "EXECUTED",
+      "duration_seconds": 6.54
+    },
+    {
+      "index": 3,
+      "status": "EXECUTED",
+      "duration_seconds": 4.32
+    },
+    {
+      "index": 5,
+      "status": "EXECUTED",
+      "duration_seconds": 0.08
+    },
+    {
+      "index": 6,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 8,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 10,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 12,
+      "status": "EXECUTED",
+      "duration_seconds": 3.65
+    },
+    {
+      "index": 15,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 17,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 19,
+      "status": "EXECUTED",
+      "duration_seconds": 0.16
+    },
+    {
+      "index": 23,
+      "status": "EXECUTED",
+      "duration_seconds": 58.48
+    },
+    {
+      "index": 25,
+      "status": "EXECUTED",
+      "duration_seconds": 7.62
+    },
+    {
+      "index": 28,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 29,
+      "status": "EXECUTED",
+      "duration_seconds": 0.75
+    }
+  ],
+  "status": "PASSED_REVIEWED",
+  "aws_calls": [
+    {
+      "service": "sts",
+      "operation": "GetCallerIdentity",
+      "status": 200,
+      "request_id": "e6bbd432-dfaa-49a7-82fb-6c88b59ea0b1"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StartCodeInterpreterSession",
+      "status": 200,
+      "request_id": "698c5d22-066b-41ea-8127-5a4239bb10c7"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "9a8b9e5e-e1ff-4a53-9272-03cda52791e7"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "140936b9-3e25-4e99-9b75-68be24e6724a"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "aa7b9bdf-df22-4f83-b090-fc3021606ef2"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "d83ca7ff-2f85-48a9-ae88-1a08df3f7e5e"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "a592e0c2-99e6-458c-92bc-9a0fd0821f09"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "c7c77fcd-6a1e-479c-a5f5-41c31aba48a0"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "6b7b1a57-fbbb-49cf-906c-86904a3e5878"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "55de0e67-14fe-482e-856b-b46d70e5c788"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "47e9b43b-1f6b-4ca9-bd5d-4cbc4ddda5a0"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "b16fe039-befa-48de-8d30-29d99cb70e24"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "0fc18f62-2448-4cb2-a3c2-b33f63382887"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "ee4395fd-bb9f-499b-bf54-3206caf1e664"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "fe5361af-7f12-494d-bb0d-ee921bd7ff7d"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "7902fb89-e002-4a39-b739-43a6859492ba"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "62735cb9-16a5-4b83-980d-e3739ac90ea9"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "ef29bc11-10bf-4d04-ada3-c40547a11fb3"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "d0529d71-c4f2-49f7-819c-f48fd1a6ad49"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "39bbb603-b9b8-4692-b9c9-3d32c764ae6d"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "6bc555ff-cd9f-47fc-9d6a-8f9ff8d84b0c"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "f752f88d-5695-4e35-85d0-1df4e527b516"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StopCodeInterpreterSession",
+      "status": 200,
+      "request_id": "ed9f1e92-0093-4a32-aca0-bbbf32e12f61"
+    }
+  ],
+  "failure_summary": null,
+  "packages": {
+    "requests": "2.32.5",
+    "pandas": "3.1.1",
+    "ipykernel": "7.4.0",
+    "bedrock-agentcore": "1.25.3",
+    "botocore": "1.43.124",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "strands-agents": "1.64.0"
+  },
+  "review": {
+    "all_nonempty_code_cells_executed": true,
+    "result_assertions_executed": true,
+    "aws_api_results_reviewed": true,
+    "tested_file_hash_matches": true,
+    "cleanup_cells_executed": true
+  }
+}

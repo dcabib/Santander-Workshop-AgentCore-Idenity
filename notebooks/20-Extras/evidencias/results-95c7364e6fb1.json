@@ -1,0 +1,42 @@
+{
+  "path": "01-AgentCore-runtime/01-hosting-agent/01-strands-with-bedrock-model/runtime_with_strands_and_bedrock_models.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "18df3bb5e6015b66bae69752ff782debb5ab291d9a9ed104921d95b5da8f25fe",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:08:22Z",
+  "finished_at": "2026-11-05T19:08:45Z",
+  "cells": [
+    {
+      "index": 2,
+      "status": "EXECUTED",
+      "duration_seconds": 20.59
+    },
+    {
+      "index": 4,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 6,
+      "status": "FAILED",
+      "error_type": "CellExecutionError",
+      "duration_seconds": 1.07
+    }
+  ],
+  "status": "FAILED",
+  "aws_calls": [],
+  "cleanup_attempts": [],
+  "failure_summary": "RuntimeError: Notebook shell command exited with status 1",
+  "packages": {
+    "strands-agents-tools": "0.9.0",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "bedrock-agentcore-starter-toolkit": "0.1.14",
+    "botocore": "1.43.124",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "strands-agents": "1.64.0",
+    "bedrock-agentcore": "0.1.5"
+  }
+}

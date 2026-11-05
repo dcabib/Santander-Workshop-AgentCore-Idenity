@@ -1,0 +1,207 @@
+{
+  "path": "11-AgentCore-harness/00-getting-started/01_getting_started_bedrock.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "ba789c551f5a301af500fc9627aaf61ce7159fe683b5fbe0a2a7376a6187c0d7",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:17:32Z",
+  "finished_at": "2026-11-05T19:18:53Z",
+  "cells": [
+    {
+      "index": 2,
+      "status": "EXECUTED",
+      "duration_seconds": 2.34
+    },
+    {
+      "index": 3,
+      "status": "EXECUTED",
+      "duration_seconds": 0.26
+    },
+    {
+      "index": 6,
+      "status": "EXECUTED",
+      "duration_seconds": 0.96
+    },
+    {
+      "index": 8,
+      "status": "EXECUTED",
+      "duration_seconds": 10.49
+    },
+    {
+      "index": 10,
+      "status": "EXECUTED",
+      "duration_seconds": 64.11
+    },
+    {
+      "index": 12,
+      "status": "FAILED",
+      "error_type": "CellExecutionError",
+      "duration_seconds": 0.91
+    }
+  ],
+  "status": "FAILED",
+  "aws_calls": [
+    {
+      "service": "sts",
+      "operation": "GetCallerIdentity",
+      "status": 200,
+      "request_id": "37b34239-d289-4dc5-9ca9-bbb8f9f38a27"
+    },
+    {
+      "service": "iam",
+      "operation": "GetRole",
+      "status": 200,
+      "request_id": "ab71699f-1a35-4e71-a8b7-a08f8b943c32"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "CreateHarness",
+      "status": 201,
+      "request_id": "841a1b3d-78f8-4d69-9030-46e53bfd6e71"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "4e67c695-b729-44cf-8b63-9c3202528ea8"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "07e98618-2cae-4945-992a-a246ddc90580"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "1043c8fc-b754-46c1-86c6-e92737dbdd33"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "63fd4c89-8de2-4024-b877-3970bade7a12"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "cedc152d-62c2-462a-aafd-8b3640c7d16c"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "2e46fea8-2744-484e-aaf5-5e273514c4b4"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "365ae666-ffde-4691-b1ea-cd5e3b55dff9"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "7fe8247b-f81f-4fd3-98e9-4d209f6c06f9"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "5d806070-1f97-40f8-8868-3c2e363dec39"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "42271cc7-43cc-4fa9-83b8-80b7749912d4"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "8dcc697d-fdef-48ea-8f46-cf85baed1d24"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetHarness",
+      "status": 200,
+      "request_id": "bc3e8a6d-aafd-4f69-85bf-4efbf199cbe1"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeHarness",
+      "error_type": "ValidationException",
+      "error_code": "ValidationException"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "DeleteHarness",
+      "error_type": "ConflictException",
+      "error_code": "ConflictException"
+    },
+    {
+      "service": "iam",
+      "operation": "DeleteRolePolicy",
+      "error_type": "RuntimeError"
+    }
+  ],
+  "cleanup_attempts": [
+    {
+      "index": 21,
+      "status": "FAILED",
+      "error_type": "CellExecutionError"
+    },
+    {
+      "index": 22,
+      "status": "FAILED",
+      "error_type": "CellExecutionError"
+    }
+  ],
+  "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the InvokeHarness operation: Harness is not in an invokable state: CREATING",
+  "packages": {
+    "strands-agents-tools": "0.9.0",
+    "pandas": "3.1.1",
+    "langchain-core": "1.7.6",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "langchain": "1.4.9",
+    "bedrock-agentcore": "1.25.3",
+    "botocore": "1.43.124",
+    "langchain-protocol": "0.0.21",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "bedrock-agentcore-starter-toolkit": "0.3.14",
+    "strands-agents": "1.64.0",
+    "langchain-aws": "1.9.1"
+  },
+  "cleanup_retry": {
+    "original_report_id": "4b50420d8a08",
+    "original_cell": 21,
+    "cell_source_unchanged": true,
+    "status": "CLEANUP_CELL_EXECUTED",
+    "aws_calls": [
+      {
+        "service": "sts",
+        "operation": "GetCallerIdentity",
+        "status": 200,
+        "request_id": "0c96c375-cfba-4000-9025-1d5c5bc401e1"
+      },
+      {
+        "service": "bedrock-agentcore-control",
+        "operation": "GetHarness",
+        "status": 200,
+        "request_id": "bfae2c0a-35e4-4d9c-95a9-6aaedc0c3f3b"
+      },
+      {
+        "service": "bedrock-agentcore-control",
+        "operation": "DeleteHarness",
+        "status": 200,
+        "request_id": "1cd4aa40-cd69-4c6e-a3fb-d3b2edbd9299"
+      }
+    ]
+  }
+}

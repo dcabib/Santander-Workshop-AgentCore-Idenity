@@ -620,9 +620,9 @@ GUIDES = {
             "Conectar Retrieve ao Gateway e vincular userContext ao sub verificado em Cedar.",
             "Executar o agente no Runtime e comparar fraude de identidade, retrieval direto e respostas por pessoa.",
         ),
-        "Aulas 01 e 04 concluídas. Região com os serviços e o modelo usados pela aula disponíveis.",
+        "Aulas 01, 03 e 04 concluídas. Região com os serviços e o modelo usados pela aula disponíveis.",
         "Corpus S3, role da base, Knowledge Base MANAGED, fonte/ingestão, target Retrieve, regras Cedar e Runtime RAG.",
-        "Cognito, Gateway e engine ENFORCE. O Runtime RAG é distinto do MCP da aula 03.",
+        "Cognito, Gateway, engine ENFORCE e bucket de artefatos da aula 03. O Runtime RAG é distinto do MCP.",
         (
             ("s3", "Armazena os documentos sintéticos R1/F1 e os arquivos de ACL."),
             ("kb", "Ingere os documentos e filtra a recuperação usando a ACL nativa."),
@@ -717,9 +717,9 @@ def introduction(name, guide):
     )
     diagram.attachments = {image_name: {"image/png": base64.b64encode(image).decode()}}
     scope = (
-        "**Estudo do legado — quatro contas AWS distintas.** Esta aula ainda depende da "
-        "implantação anterior e não foi validada na jornada SDK atual. "
-        "Não execute este notebook na conta única do Workshop Studio.\n\n"
+        "**Referência de arquitetura — conversão SDK pendente.** O desenho histórico usa quatro "
+        "contas distintas. Este caderno não executa operações nem exige preparar recursos; "
+        "a construção e os testes entre contas ainda não estão implementados.\n\n"
         if lab in LEGACY else
         "**Jornada SDK — uma conta AWS.** Os serviços são construídos pelas células; "
         "quando houver dependências de outra aula, elas estão indicadas abaixo.\n\n"
@@ -741,10 +741,13 @@ def introduction(name, guide):
         "## Serviços AWS e suas responsabilidades\n\n"
         "| Serviço | O que ele faz | Papel nesta aula |\n"
         "|---|---|---|\n" + rows + "\n\n"
-        "**Roteiro de execução:** leia a configuração e o código, execute a célula, "
-        "aguarde o estado indicado e interprete a evidência antes de avançar. "
-        "As seções **Validação** destacam chamadas e asserts já presentes na aula. "
-        "Um erro inesperado não equivale a uma negativa autorizada esperada.",
+        + ("**Roteiro de leitura:** percorra as fronteiras e discuta os critérios de aceitação futuros. "
+         "Este caderno de referência não contém células executáveis."
+         if lab in LEGACY else
+         "**Roteiro de execução:** leia a configuração e o código, execute a célula, "
+         "aguarde o estado indicado e interprete a evidência antes de avançar. "
+         "As seções **Validação** destacam chamadas e asserts já presentes na aula. "
+         "Um erro inesperado não equivale a uma negativa autorizada esperada."),
         "workshop-services",
     )
     return [diagram, objective, services]

@@ -1,0 +1,113 @@
+{
+  "path": "A02_code_interpreter_agente.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "269721dd2a1a2e11f5fc765739ad7474cb0941bdec5dd4a473f1a7e4a84a8a97",
+  "variant": "published-appendix",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:36:31Z",
+  "finished_at": "2026-11-05T19:36:41Z",
+  "cells": [
+    {
+      "index": 1,
+      "status": "EXECUTED",
+      "duration_seconds": 0.79
+    },
+    {
+      "index": 2,
+      "status": "EXECUTED",
+      "duration_seconds": 0.76
+    },
+    {
+      "index": 3,
+      "status": "EXECUTED",
+      "duration_seconds": 0.93
+    },
+    {
+      "index": 5,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 7,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 9,
+      "status": "EXECUTED",
+      "duration_seconds": 0.1
+    },
+    {
+      "index": 11,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 13,
+      "status": "EXECUTED",
+      "duration_seconds": 6.23
+    },
+    {
+      "index": 15,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    }
+  ],
+  "status": "PASSED_REVIEWED",
+  "aws_calls": [
+    {
+      "service": "sts",
+      "operation": "GetCallerIdentity",
+      "status": 200,
+      "request_id": "8c1b0ed7-675a-4ef4-98fd-d742cdda794d"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "5d8eb25e-0e9b-497f-8032-6d4a7ff47a08"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StartCodeInterpreterSession",
+      "status": 200,
+      "request_id": "6bbc5d66-13fb-4d3e-a5d7-ca916391d212"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "5bfe2bb7-c087-46e8-beef-d25a80208e4a"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StopCodeInterpreterSession",
+      "status": 200,
+      "request_id": "56906140-2b62-4999-865f-392a3303c84e"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "a884beaa-6f83-4828-b9e1-ed7d5df6b555"
+    }
+  ],
+  "failure_summary": null,
+  "packages": {
+    "requests": "2.32.5",
+    "ipykernel": "7.4.0",
+    "bedrock-agentcore": "1.25.3",
+    "botocore": "1.43.124",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "strands-agents": "1.64.0"
+  },
+  "review": {
+    "all_nonempty_code_cells_executed": true,
+    "result_assertions_executed": true,
+    "aws_api_results_reviewed": true,
+    "tested_file_hash_matches": true,
+    "cleanup_cells_executed": true
+  }
+}

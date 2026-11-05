@@ -1,0 +1,71 @@
+{
+  "path": "04-AgentCore-memory/03-advanced-patterns/05-memory-streaming/memory_record_streaming.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "2c95e39d9f67cc143e854af45c243f8b85ceab6abd69172a824c7c10a8312d03",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:21:08Z",
+  "finished_at": "2026-11-05T19:21:13Z",
+  "cells": [
+    {
+      "index": 3,
+      "status": "EXECUTED",
+      "duration_seconds": 0.76
+    },
+    {
+      "index": 5,
+      "status": "EXECUTED",
+      "duration_seconds": 0.77
+    },
+    {
+      "index": 7,
+      "status": "FAILED",
+      "error_type": "CellExecutionError",
+      "duration_seconds": 0.78
+    }
+  ],
+  "status": "FAILED",
+  "aws_calls": [
+    {
+      "service": "sts",
+      "operation": "GetCallerIdentity",
+      "status": 200,
+      "request_id": "83955bc2-01fe-49a2-9259-b8d77115baea"
+    },
+    {
+      "service": "kinesis",
+      "operation": "CreateStream",
+      "error_type": "AccessDeniedException",
+      "error_code": "AccessDeniedException"
+    },
+    {
+      "service": "kinesis",
+      "operation": "DeleteStream",
+      "error_type": "AccessDeniedException",
+      "error_code": "AccessDeniedException"
+    }
+  ],
+  "cleanup_attempts": [
+    {
+      "index": 26,
+      "status": "EXECUTED"
+    }
+  ],
+  "failure_summary": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the CreateStream operation: User: arn:aws:sts::813782517426:assumed-role/WSParticipantRole/Participant is not authorized to perform: kinesis:CreateStream on resource: arn:aws:kinesis:us-west-2:813782517426:stream/memory-record-stream-34a3dc08 because no identity-based policy allows the kinesis:CreateStream action",
+  "packages": {
+    "strands-agents-tools": "0.9.0",
+    "pandas": "3.1.1",
+    "langchain-core": "1.7.6",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "langchain": "1.4.9",
+    "bedrock-agentcore": "1.25.3",
+    "botocore": "1.43.124",
+    "langchain-protocol": "0.0.21",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "bedrock-agentcore-starter-toolkit": "0.3.14",
+    "strands-agents": "1.64.0",
+    "langchain-aws": "1.9.1"
+  }
+}

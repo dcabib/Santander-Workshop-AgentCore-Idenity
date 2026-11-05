@@ -1,0 +1,204 @@
+{
+  "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/academic-research-assistant-short-term-memory-tutorial.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "194199d90021d5e683b4c94b9189101693c811ad515cf1ea147e81b7aed7af6f",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:14:58Z",
+  "finished_at": "2026-11-05T19:17:54Z",
+  "cells": [
+    {
+      "index": 2,
+      "status": "EXECUTED",
+      "duration_seconds": 11.46
+    },
+    {
+      "index": 3,
+      "status": "EXECUTED",
+      "duration_seconds": 2.69
+    },
+    {
+      "index": 5,
+      "status": "EXECUTED",
+      "duration_seconds": 157.28
+    },
+    {
+      "index": 7,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 9,
+      "status": "EXECUTED",
+      "duration_seconds": 0.34
+    },
+    {
+      "index": 12,
+      "status": "FAILED",
+      "error_type": "CellExecutionError",
+      "duration_seconds": 2.68
+    }
+  ],
+  "status": "FAILED",
+  "aws_calls": [
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "CreateMemory",
+      "status": 202,
+      "request_id": "c165b866-a554-4428-9ea5-730c96e56fe2"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "82c8fc64-092a-4b6f-a176-51d3264e5936"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "6be32b09-3a78-44fe-82f5-b0738c5e4692"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "d38623b7-5155-4307-8ecc-9370cd76d9c9"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "a30c5979-d931-483e-9f6f-30617c191d90"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "6c9752ce-4364-41f1-9449-8cedadaf7111"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "f9a09d2e-f2bd-43db-86b5-a6b42d39e352"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "c2e9e392-98cf-4fa7-93ad-af17ce7807cf"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "42c15fe5-6883-4e75-9eae-e6c77db0b2b2"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "dfab3b7b-db44-49b9-a4df-288fffc8ff40"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "2a0205ab-1891-4c9d-9f40-e53528e2e0ca"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "4cb521a9-4c10-4069-bd03-04d7dd5ea812"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "cf0fd962-7d08-49d5-89b9-fe3752917300"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "e8313398-72eb-4ef0-971c-60ee0e2b91d1"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "da80dbb8-c34d-459d-864c-f760b12beac5"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "bfe39bcc-022f-42ae-8ddf-dac17c8b75f4"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "9eb28e61-6713-4913-a6f6-fcc45ce1b1dc"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "09d208fa-0728-484c-a30c-6c8cae7c933c"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "CreateEvent",
+      "status": 201,
+      "request_id": "eb655f97-31b0-4e83-9750-11ef023402c8"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "ListEvents",
+      "status": 200,
+      "request_id": "927155da-c4db-49c7-8d99-70761f96ef65"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "RetrieveMemoryRecords",
+      "status": 200,
+      "request_id": "5ef563e8-cb7a-496f-a548-42f4144078b0"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "error_type": "ResourceNotFoundException",
+      "error_code": "ResourceNotFoundException"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "DeleteMemory",
+      "status": 202,
+      "request_id": "0197f539-f625-4957-892c-89b49bc65020"
+    }
+  ],
+  "cleanup_attempts": [
+    {
+      "index": 36,
+      "status": "EXECUTED"
+    }
+  ],
+  "failure_summary": "ResourceNotFoundException: An error occurred (ResourceNotFoundException) when calling the ConverseStream operation: This model version has reached the end of its life. Please refer to the AWS documentation for more details.",
+  "packages": {
+    "llama-index-llms-bedrock-converse": "0.15.5",
+    "llama-index-workflows": "2.26.1",
+    "llama-index-instrumentation": "0.6.0",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "bedrock-agentcore-starter-toolkit": "0.1.14",
+    "botocore": "1.43.124",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "bedrock-agentcore": "0.1.5",
+    "llama-index-core": "0.14.25",
+    "llama-index-memory-bedrock-agentcore": "0.2.0"
+  }
+}

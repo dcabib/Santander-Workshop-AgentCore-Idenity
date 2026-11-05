@@ -1,0 +1,86 @@
+{
+  "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/01-file-operations-using-code-interpreter/file-operations-using-code-interpreter.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "71a53b5f089c2557903db17a84f255f160e0814b2c3501a994021b84d5758334",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:07:12Z",
+  "finished_at": "2026-11-05T19:07:27Z",
+  "cells": [
+    {
+      "index": 4,
+      "status": "EXECUTED",
+      "duration_seconds": 2.73
+    },
+    {
+      "index": 5,
+      "status": "EXECUTED",
+      "duration_seconds": 2.12
+    },
+    {
+      "index": 7,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 9,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 11,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 13,
+      "status": "EXECUTED",
+      "duration_seconds": 3.37
+    },
+    {
+      "index": 15,
+      "status": "EXECUTED",
+      "duration_seconds": 3.65
+    },
+    {
+      "index": 17,
+      "status": "EXECUTED",
+      "duration_seconds": 0.75
+    }
+  ],
+  "status": "CELLS_EXECUTED_REVIEW_REQUIRED",
+  "aws_calls": [
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StartCodeInterpreterSession",
+      "status": 200,
+      "request_id": "76569612-cd4a-4845-8e12-6023fe26748a"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "7db8c9a7-f054-4526-bacd-71c449a184d5"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "683dbb8b-0e82-4b4b-b8e3-7401f563b26d"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "0c07531a-9e96-4911-8dc5-4824d3c9e2ae"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StopCodeInterpreterSession",
+      "status": 200,
+      "request_id": "a05a32a1-6af2-496b-8d4e-d5de331f82df"
+    }
+  ],
+  "failure_summary": null,
+  "packages": {}
+}

@@ -1,0 +1,366 @@
+{
+  "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/14-browser-os-actions/browser-os-actions-boto3.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "13f7e4bf45c9d776faeb9b7c4b39084edf5dbf211ba425634e6eda2783c076d6",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:13:39Z",
+  "finished_at": "2026-11-05T19:14:27Z",
+  "cells": [
+    {
+      "index": 2,
+      "status": "EXECUTED",
+      "duration_seconds": 0.52
+    },
+    {
+      "index": 4,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 6,
+      "status": "EXECUTED",
+      "duration_seconds": 0.14
+    },
+    {
+      "index": 8,
+      "status": "EXECUTED",
+      "duration_seconds": 11.8
+    },
+    {
+      "index": 10,
+      "status": "EXECUTED",
+      "duration_seconds": 0.92
+    },
+    {
+      "index": 12,
+      "status": "EXECUTED",
+      "duration_seconds": 5.19
+    },
+    {
+      "index": 14,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 16,
+      "status": "EXECUTED",
+      "duration_seconds": 2.25
+    },
+    {
+      "index": 17,
+      "status": "EXECUTED",
+      "duration_seconds": 0.82
+    },
+    {
+      "index": 18,
+      "status": "EXECUTED",
+      "duration_seconds": 1.51
+    },
+    {
+      "index": 20,
+      "status": "EXECUTED",
+      "duration_seconds": 4.2
+    },
+    {
+      "index": 22,
+      "status": "EXECUTED",
+      "duration_seconds": 11.17
+    },
+    {
+      "index": 23,
+      "status": "EXECUTED",
+      "duration_seconds": 1.97
+    },
+    {
+      "index": 24,
+      "status": "EXECUTED",
+      "duration_seconds": 1.17
+    },
+    {
+      "index": 26,
+      "status": "EXECUTED",
+      "duration_seconds": 2.23
+    },
+    {
+      "index": 28,
+      "status": "EXECUTED",
+      "duration_seconds": 0.34
+    },
+    {
+      "index": 30,
+      "status": "EXECUTED",
+      "duration_seconds": 0.42
+    },
+    {
+      "index": 31,
+      "status": "EXECUTED",
+      "duration_seconds": 1.69
+    }
+  ],
+  "status": "CELLS_EXECUTED_REVIEW_REQUIRED",
+  "aws_calls": [
+    {
+      "service": "sts",
+      "operation": "GetCallerIdentity",
+      "status": 200,
+      "request_id": "1c8903e4-add2-436d-afd4-28e68459922e"
+    },
+    {
+      "service": "iam",
+      "operation": "GetRole",
+      "error_type": "NoSuchEntityException",
+      "error_code": "NoSuchEntity"
+    },
+    {
+      "service": "iam",
+      "operation": "CreateRole",
+      "status": 200,
+      "request_id": "d524e17b-f27b-4dc7-a3e3-69ac475d7358"
+    },
+    {
+      "service": "iam",
+      "operation": "GetPolicy",
+      "error_type": "NoSuchEntityException",
+      "error_code": "NoSuchEntity"
+    },
+    {
+      "service": "iam",
+      "operation": "CreatePolicy",
+      "status": 200,
+      "request_id": "04526c17-d1f7-40c9-a1dd-862d58a3be12"
+    },
+    {
+      "service": "iam",
+      "operation": "AttachRolePolicy",
+      "status": 200,
+      "request_id": "96efec18-6ee2-4cbb-88d2-cafc8dc7e2e2"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "CreateBrowser",
+      "status": 202,
+      "request_id": "63830bc5-839f-412a-a89a-cfd7b6a66310"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StartBrowserSession",
+      "status": 200,
+      "request_id": "6cd6ed7a-e572-4fa2-96f6-700b4d7aa301"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "eb2fadf6-b0d4-438b-b1d7-03fc4cb333f6"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "dc8c4d6a-4259-4289-8d9a-166ef76bbf09"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "62d7b3b0-cafa-4827-b4f2-5d79b5900715"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "878f3c8f-3723-4f92-81d4-0093ded8e324"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "64e670b1-8723-42c4-8708-afc47e01712b"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "71cf5ee3-d570-4659-89f3-27917e8bd611"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "20ae0cb6-97c7-4ed0-88fa-9052a445658d"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "160255c4-01b4-40f2-bd79-57468fcea007"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "3baf00ee-9780-441a-8ab8-714509ee4871"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "593c4150-f7a9-4e05-a042-1070ee419537"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "6a0ab301-8368-42ef-9e09-870158eb6851"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "3b0555fa-3f0b-4cec-8ed5-ff1b90217ef3"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "4c00fa28-4e4b-48f1-b92b-f53b5ff9ada9"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "394c95ca-3942-426e-8f41-a2cc9a2a1d40"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "4db1bcbd-29ef-4998-9c92-d3da3c7a9fbd"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "b1f66ff3-668d-4236-86aa-45a06459fd40"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "61f693bc-398d-46d8-8938-5581a9c2d74a"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "cd20c7b4-b108-4357-9e01-3e1ee2a068cb"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "7913c8dd-86c1-4fb2-8ea9-2d8916287e57"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "1273679a-a1fa-4597-8afc-744e0dea11dc"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "80521a8f-e1f5-4f24-a6e1-c154f0177e86"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "48ba7d73-f64b-42d7-801a-4af6124998f9"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "28345a0a-c992-4634-a1af-71a1550b6ce4"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "7f495056-b120-4e9b-aed1-504e02eac5fc"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "ec90e947-e2bd-4341-bff1-784a9a6136ab"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "958f620b-3108-4451-82ae-00810822b678"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "046ab377-8bca-48c6-a077-ee3f12940150"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeBrowser",
+      "status": 200,
+      "request_id": "19ab5610-71c0-4509-ae98-ea9ac902ed33"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StopBrowserSession",
+      "status": 200,
+      "request_id": "c816cd3d-20f0-47f0-bfb0-ec7ab50f9567"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "DeleteBrowser",
+      "status": 202,
+      "request_id": "f0185dc8-c8eb-4609-9e91-305df732ad37"
+    },
+    {
+      "service": "sts",
+      "operation": "GetCallerIdentity",
+      "status": 200,
+      "request_id": "2c03a0cc-06de-46c6-871f-b39ba4990278"
+    },
+    {
+      "service": "iam",
+      "operation": "DetachRolePolicy",
+      "status": 200,
+      "request_id": "682e99ea-ba35-44d2-aed3-de63d5460907"
+    },
+    {
+      "service": "iam",
+      "operation": "DeleteRole",
+      "status": 200,
+      "request_id": "331a7008-0815-40da-89cf-d6ab611c0578"
+    },
+    {
+      "service": "iam",
+      "operation": "DeletePolicy",
+      "status": 200,
+      "request_id": "5d5938a3-f3ab-478a-84ff-876d38113c7c"
+    }
+  ],
+  "failure_summary": null,
+  "packages": {
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "bedrock-agentcore-starter-toolkit": "0.1.14",
+    "botocore": "1.43.124",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "bedrock-agentcore": "0.1.5"
+  }
+}

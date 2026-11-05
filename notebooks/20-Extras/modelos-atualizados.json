@@ -1,0 +1,126 @@
+{
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "model_lifecycle_checked_at": "2026-11-05",
+  "region": "us-west-2",
+  "replacements": {
+    "us.anthropic.claude-3-7-sonnet-20250219-v1:0": "us.anthropic.claude-sonnet-4-6",
+    "anthropic.claude-3-5-haiku-20241022-v1:0": "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+  },
+  "notebooks": [
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/academic-research-assistant-short-term-memory-tutorial.ipynb",
+      "modified_cells": [
+        9
+      ],
+      "cleanup_cells": [
+        36
+      ],
+      "original_sha256": "194199d90021d5e683b4c94b9189101693c811ad515cf1ea147e81b7aed7af6f"
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/investment-portfolio-advisor-short-term-memory-tutorial.ipynb",
+      "modified_cells": [
+        9
+      ],
+      "cleanup_cells": [
+        39
+      ],
+      "original_sha256": "acc79cff114b27eeaf3385329ac9a5a30370631bdd12de40f3d268f214cf3153"
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/legal-document-analyzer-short-term-memory-tutorial.ipynb",
+      "modified_cells": [
+        9
+      ],
+      "cleanup_cells": [
+        38
+      ],
+      "original_sha256": "6205b060bd470e7859e7f702a0b795664ac6c57c859caa0a913f382b0a395828"
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/medical-knowledge-assistant-short-term-memory-tutorial.ipynb",
+      "modified_cells": [
+        9
+      ],
+      "cleanup_cells": [
+        39
+      ],
+      "original_sha256": "77450925527f64eabb1b07338512039507fe2e81468e10a5e5f84eb4d107cfdd"
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-langgraph-agent-hooks/episodic-memory/nutrition-assistant-with-episodic-memory.ipynb",
+      "modified_cells": [
+        5
+      ],
+      "cleanup_cells": [],
+      "original_sha256": "fa6e360da1b817a18bd25f7479518869d5438e2415ab2be39218cc0c9032c129"
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/academic-research-assistant-long-term-memory-tutorial.ipynb",
+      "modified_cells": [
+        13
+      ],
+      "cleanup_cells": [
+        38
+      ],
+      "original_sha256": "f9807e3c2cf5f80d5475c93540f2a51cb6c3f585d293675c79d743da46d00817"
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/investment-portfolio-advisor-long-term-memory-tutorial.ipynb",
+      "modified_cells": [
+        13
+      ],
+      "cleanup_cells": [
+        38
+      ],
+      "original_sha256": "65dfa72cf445f06ce32a5d30e5952440d9ca00831750432a3682159897acdf41"
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/legal-document-analyzer-long-term-memory-tutorial.ipynb",
+      "modified_cells": [
+        15
+      ],
+      "cleanup_cells": [
+        41
+      ],
+      "original_sha256": "caf2aaa855178383ea4cb4432f8550c97f52a4a8942080c87442533834669c83"
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/medical-knowledge-assistant-long-term-memory-tutorial.ipynb",
+      "modified_cells": [
+        15
+      ],
+      "cleanup_cells": [
+        41
+      ],
+      "original_sha256": "94c474e088f15ea0c4bedb5ada0948ed3e5505f45a9e153c5609201864ba94e5"
+    },
+    {
+      "path": "06-AgentCore-observability/01-Agentcore-runtime-hosted/LlamaIndex/runtime_with_llamaindex_and_bedrock_models.ipynb",
+      "modified_cells": [
+        5,
+        9
+      ],
+      "cleanup_cells": [],
+      "original_sha256": "44ad3cfaa4903cdb12cf2daef42e3f3e774e89fc8fbcf22d3f1d9d5f8658f55d"
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Arize/runtime_with_strands_and_arize.ipynb",
+      "modified_cells": [
+        5,
+        9
+      ],
+      "cleanup_cells": [],
+      "original_sha256": "12f5beec89c5f4ab841cb99bdc4f0546f5ff59a75643c8e7ccb44c00cb301559"
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/OpenLIT/runtime_with_strands_and_openlit.ipynb",
+      "modified_cells": [
+        5,
+        9
+      ],
+      "cleanup_cells": [],
+      "original_sha256": "0cd76829e44bb980bb7fb4abfc233c6f5566caae5259fd4d9d02f687feb2d81d"
+    }
+  ]
+}

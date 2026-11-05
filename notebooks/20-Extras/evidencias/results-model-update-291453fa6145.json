@@ -1,0 +1,44 @@
+{
+  "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-langgraph-agent-hooks/episodic-memory/nutrition-assistant-with-episodic-memory.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "30799c6808ea71ab2e6fba279e291833e1884a1e7180e738501199f82e342a46",
+  "variant": "model-lifecycle-update",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:45:10Z",
+  "finished_at": "2026-11-05T19:45:15Z",
+  "cells": [
+    {
+      "index": 1,
+      "status": "EXECUTED",
+      "duration_seconds": 3.56
+    },
+    {
+      "index": 2,
+      "status": "FAILED",
+      "error_type": "CellExecutionError",
+      "duration_seconds": 0.06
+    }
+  ],
+  "status": "FAILED",
+  "aws_calls": [],
+  "cleanup_attempts": [],
+  "failure_summary": "ModuleNotFoundError: No module named 'langchain'",
+  "packages": {
+    "llama-index-llms-bedrock-converse": "0.15.5",
+    "llama-index-workflows": "2.26.1",
+    "llama-index-instrumentation": "0.6.0",
+    "langchain-core": "1.7.6",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "bedrock-agentcore": "1.25.3",
+    "botocore": "1.43.124",
+    "langchain-protocol": "0.0.21",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "bedrock-agentcore-starter-toolkit": "0.3.14",
+    "langchain-aws": "1.9.1",
+    "llama-index-core": "0.14.25",
+    "llama-index-memory-bedrock-agentcore": "0.2.0"
+  }
+}

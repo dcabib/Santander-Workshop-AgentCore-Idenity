@@ -1,27 +1,26 @@
-"""Valida o material e executa as aulas contra serviços AWS, sem fallback."""
+"""Verificação estática das aulas SDK e dos cadernos de referência. Não chama AWS."""
 
 import argparse
 import ast
-import hashlib
 import json
-import os
-import time
-from datetime import UTC, datetime
 from pathlib import Path
 
 import nbformat
-from nbclient import NotebookClient
 
-from santander_demo.aws_workshop.config import load
-from santander_demo.aws_workshop.manifest import LABS, account_plan, check_selection, selected_labs
-from santander_demo.notebook_catalog import LAB_ALIASES, lab_id
+from santander_demo.notebook_catalog import lab_id
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def validate_notebook(notebook):
-    if notebook.metadata.get("workshop", {}).get("execution") != "AWS":
-        raise ValueError("AWS_NOTEBOOK_REQUIRED")
+    nbformat.validate(notebook)
+    workshop = notebook.metadata.get("workshop", {})
+    if workshop.get("execution") == "REFERENCE_ONLY":
+        if any(cell.cell_type == "code" for cell in notebook.cells):
+            raise ValueError("REFERENCE_MUST_NOT_EXECUTE")
+        return "REFERENCE_ONLY"
+    if workshop.get("execution") != "AWS" or workshop.get("provisioning") != "NOTEBOOK_SDK":
+        raise ValueError("SDK_NOTEBOOK_REQUIRED")
     forbidden = {"WORKSHOP_MODE", "RUN_AWS", "LocalLifecycle", "LocalCognitoRagLab", "Workshop"}
     for index, cell in enumerate(notebook.cells):
         if cell.cell_type != "code":
@@ -32,91 +31,22 @@ def validate_notebook(notebook):
         for node in ast.walk(tree):
             if isinstance(node, ast.Name) and node.id in forbidden:
                 raise ValueError("EXECUTION_FALLBACK_FORBIDDEN:" + node.id)
-            if isinstance(node, ast.ImportFrom) and node.module in {
-                "santander_demo.local", "santander_demo.rag.local",
-            }:
-                raise ValueError("SIMULATION_IMPORT_FORBIDDEN")
+        compile(cell.source, "notebook", "exec", flags=ast.PyCF_ALLOW_TOP_LEVEL_AWAIT)
+    return "NOTEBOOK_SDK"
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--validate-only", action="store_true",
-                        help="Validar sintaxe/material; não conta como aceite operacional")
-    parser.add_argument("--labs", nargs="+", choices=(*LABS, *LAB_ALIASES),
-                        help="Selecione as aulas preparadas; omitir usa a seleção padrão da topologia")
-    parser.add_argument("--output", default="evidence/notebooks-aws.json")
+    parser.add_argument("--validate-only", action="store_true", help="Compatibilidade: esta ferramenta sempre faz validação estática.")
+    parser.add_argument("--labs", nargs="+", help="Números publicados, por exemplo 00 01 15 16 90.")
     args = parser.parse_args()
-    if args.labs:
-        args.labs = [lab_id(lab) for lab in args.labs]
-    if not args.validate_only and not (
-        os.environ.get("CODEBUILD_BUILD_ARN")
-        or os.environ.get("AWS_EXECUTION_ENV", "").startswith("CloudShell")
-        or Path("/opt/ml/metadata/resource-metadata.json").exists()
-    ):
-        parser.error("Execute os notebooks no runner AWS do projeto ou no ambiente SageMaker/CloudShell.")
-    out = ROOT / "evidence/executed"
-    out.mkdir(parents=True, exist_ok=True)
-    results = []
-    paths = [
-        p for p in sorted((ROOT / "notebooks").glob("*.ipynb"))
-        if not args.labs or lab_id(p) in args.labs
-    ]
-    if not paths:
-        parser.error("Nenhuma aula selecionada")
-    if not args.validate_only:
-        try:
-            config = load(os.environ.get("WORKSHOP_CONFIG", ROOT / "config/aws.workshop.json"))
-            selected = selected_labs(config, args.labs)
-            paths = [path for path in paths if lab_id(path) in selected]
-            if {lab_id(path) for path in paths} != set(selected):
-                raise ValueError("SELECTED_NOTEBOOK_FILES_MISSING")
-            readiness = ROOT / "evidence/workshop-prerequisites.json"
-            readiness.write_text(json.dumps(account_plan(config, selected), indent=2) + "\n")
-            # Conferir a seleção inteira antes de iniciar o primeiro kernel.
-            check_selection(config, selected)
-        except Exception as exc:
-            # Uma tentativa bloqueada não pode deixar um PASS anterior como seu resultado.
-            target = Path(args.output)
-            target.parent.mkdir(exist_ok=True, parents=True)
-            target.write_text(json.dumps([{
-                "notebook": path.name, "status": "BLOCKED", "validation": "AWS_PREFLIGHT",
-                "started_at": datetime.now(UTC).isoformat(),
-                "error_type": type(exc).__name__, "error_message": str(exc)[:2000],
-            } for path in paths], indent=2) + "\n")
-            raise
-    for path in paths:
-        notebook = nbformat.read(path, as_version=4)
-        start = time.monotonic()
-        result = {
-            "notebook": path.name, "status": "FAIL",
-            "validation": "STATIC_ONLY" if args.validate_only else "AWS_EXECUTION",
-            "started_at": datetime.now(UTC).isoformat(),
-            "source_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-            "code_cells": sum(cell.cell_type == "code" for cell in notebook.cells),
-        }
-        try:
-            validate_notebook(notebook)
-            if not args.validate_only:
-                NotebookClient(
-                    notebook, timeout=300, resources={"metadata": {"path": str(ROOT)}},
-                ).execute(env=dict(os.environ))
-                if any(cell.execution_count is None for cell in notebook.cells if cell.cell_type == "code"):
-                    raise ValueError("INCOMPLETE_NOTEBOOK_EXECUTION")
-            result["status"] = "VALID" if args.validate_only else "PASS"
-        except Exception as exc:
-            result["error_type"] = type(exc).__name__
-            result["error_message"] = str(exc)[:2000]
-        finally:
-            result["elapsed_seconds"] = round(time.monotonic() - start, 2)
-            if not args.validate_only:
-                nbformat.write(notebook, out / path.name)
-            results.append(result)
-            target = Path(args.output)
-            target.parent.mkdir(exist_ok=True, parents=True)
-            target.write_text(json.dumps(results, indent=2) + "\n")
-        print(f"{path.name}: {result['status']} ({result['validation']})", flush=True)
-        if result["status"] == "FAIL":
-            raise SystemExit("Aula interrompida; veja " + args.output)
+    labs = {lab_id(lab) for lab in args.labs} if args.labs else None
+    paths = [p for p in sorted((ROOT / "notebooks").glob("*.ipynb")) if not labs or lab_id(p) in labs]
+    if not paths or (labs and {lab_id(path) for path in paths} != labs):
+        parser.error("Aula não encontrada")
+    rows = [{"notebook": path.name, "type": validate_notebook(nbformat.read(path, as_version=4)),
+             "status": "VALID", "validation": "STATIC_ONLY"} for path in paths]
+    print(json.dumps(rows, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

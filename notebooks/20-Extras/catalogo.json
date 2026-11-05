@@ -1,0 +1,3669 @@
+{
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "notebooks": [
+    {
+      "path": "01-AgentCore-runtime/01-hosting-agent/01-strands-with-bedrock-model/runtime_with_strands_and_bedrock_models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/01-hosting-agent/01-strands-with-bedrock-model/runtime_with_strands_and_bedrock_models.ipynb",
+      "source_sha256": "18df3bb5e6015b66bae69752ff782debb5ab291d9a9ed104921d95b5da8f25fe",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 2,
+      "report_id": "95c7364e6fb1",
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "upstream-original",
+          "executed_cells": 2,
+          "failure_summary": "RuntimeError: Notebook shell command exited with status 1",
+          "evidence": "evidencias/results-95c7364e6fb1.json"
+        }
+      ],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/01-hosting-agent/02-langgraph-with-bedrock-model/runtime_with_langgraph_and_bedrock_models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/01-hosting-agent/02-langgraph-with-bedrock-model/runtime_with_langgraph_and_bedrock_models.ipynb",
+      "source_sha256": "7c13cbaf4bf7627991910b661c18d7eb63737808dcdfcf983db84080197e0658",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/01-hosting-agent/03-strands-with-openai-model/runtime_with_strands_and_openai_models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/01-hosting-agent/03-strands-with-openai-model/runtime_with_strands_and_openai_models.ipynb",
+      "source_sha256": "85d1cbd2b34e562094fb39a74770aeadd099dde0d45fdd0af7ab85bcee23ea75",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0",
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/01-hosting-agent/04-crewai-with-bedrock-model/runtime-with-crewai-and-bedrock-models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/01-hosting-agent/04-crewai-with-bedrock-model/runtime-with-crewai-and-bedrock-models.ipynb",
+      "source_sha256": "21e6199f9ba87c623cd3e3dbf7c84452f7c0d46a46fd42bf6225159cb3a367d1",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/01-hosting-agent/06-strands-with-skills/runtime_with_strands_and_skills.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/01-hosting-agent/06-strands-with-skills/runtime_with_strands_and_skills.ipynb",
+      "source_sha256": "5bbecc3152635e51283b168b3829288ea56745d7242882997fc06d53a75ad568",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/02-hosting-MCP-server/hosting_mcp_server.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/02-hosting-MCP-server/hosting_mcp_server.ipynb",
+      "source_sha256": "6d2ed5311fb7c2580a24008545e0ed812cb0a3143878ec3ede509ee588d71716",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/02-hosting-MCP-server/hosting_mcp_server_iam_auth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/02-hosting-MCP-server/hosting_mcp_server_iam_auth.ipynb",
+      "source_sha256": "430edd5005a571c6a5c892c9b4bf470805db2d5e74f018b273216555b2b3b046",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 5,
+      "report_id": "79516b9554ef",
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "upstream-original",
+          "executed_cells": 5,
+          "failure_summary": "ClientError: An error occurred (AccessDeniedException) when calling the CreateProject operation: User: arn:aws:sts::813782517426:assumed-role/WSParticipantRole/Participant is not authorized to perform: iam:PassRole on resource: arn:aws:iam::813782517426:role/AmazonBedrockAgentCoreSDKCodeBuild-us-west-2-22e9392f39 because no identity-based policy allows the iam:PassRole action",
+          "evidence": "evidencias/results-79516b9554ef.json"
+        }
+      ],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/03-advanced-concepts/01-streaming-agent-response/streamining_agent_response.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/03-advanced-concepts/01-streaming-agent-response/streamining_agent_response.ipynb",
+      "source_sha256": "0bb7e694af12ebfe6fea1eb85cb3647d3591d8ee3b530f4d8f65c759d92ad5e9",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/03-advanced-concepts/02-understanding-runtime-context/understanding_runtime_context.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/03-advanced-concepts/02-understanding-runtime-context/understanding_runtime_context.ipynb",
+      "source_sha256": "0233e53b77ca5e31a2a4f1ae672c22f8a6e884d2e0325a054011bed32b30c456",
+      "code_cells": 20,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/03-advanced-concepts/03-handling-large-payloads/handling_large_payloads.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/03-advanced-concepts/03-handling-large-payloads/handling_large_payloads.ipynb",
+      "source_sha256": "57a0ae5ff26768fb202d70c6e74c2bf19356f7bd9fd079298b1262466d99fa84",
+      "code_cells": 7,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/03-advanced-concepts/04-async-agents/01_weekly_report_generator_async/weekly_update_agentcore_deploy.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/03-advanced-concepts/04-async-agents/01_weekly_report_generator_async/weekly_update_agentcore_deploy.ipynb",
+      "source_sha256": "6b11eb7bd545fcf454df23cb247f7f8a25a670c19dd48e51ea69a04c3b5cf13d",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/03-advanced-concepts/04-async-agents/02_async_data_analysis/async_data_analysis_tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/03-advanced-concepts/04-async-agents/02_async_data_analysis/async_data_analysis_tutorial.ipynb",
+      "source_sha256": "d004b479d7a0dd019170580e4b08e9586c9a7461c91a6d191c72644727e5f99f",
+      "code_cells": 18,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/03-advanced-concepts/05-multi-agents/01-multi-runtimes-with-boto3/distributed_agents_with_agentcore.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/03-advanced-concepts/05-multi-agents/01-multi-runtimes-with-boto3/distributed_agents_with_agentcore.ipynb",
+      "source_sha256": "d916b8168401b0c75c7298586491ca5b3604dcbea9159dc7c90a3014e308d601",
+      "code_cells": 24,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/03-advanced-concepts/06-middleware-support/middleware_support.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/03-advanced-concepts/06-middleware-support/middleware_support.ipynb",
+      "source_sha256": "1d618b1817ec1e072b930a57bee4578cc4d5c7fd5a47769645c6c4a3d58afc2f",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/03-advanced-concepts/07-connect-to-vpc-resources/agentcore-runtime-in-vpc-access.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/03-advanced-concepts/07-connect-to-vpc-resources/agentcore-runtime-in-vpc-access.ipynb",
+      "source_sha256": "25a2f777c461f716af101cb3812c99cf77a557e2cc78ada6a2d5cb9a99d7d5ce",
+      "code_cells": 6,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/04-hosting-ts-MCP-server/mcp_client.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/04-hosting-ts-MCP-server/mcp_client.ipynb",
+      "source_sha256": "c20b2057af62c5e4b48bae37437ab4e45697e350d4e38a47f9282266cb519862",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/05-hosting-a2a/01-a2a-agent-orchestrating-mcp/01-a2a-getting-started-agentcore-strands.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/05-hosting-a2a/01-a2a-agent-orchestrating-mcp/01-a2a-getting-started-agentcore-strands.ipynb",
+      "source_sha256": "a15c1f8720cef648cf8195a2fe624b8617b2e7d4cd565e86e7a8fcc93aa56aff",
+      "code_cells": 28,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXPLICIT_KERNEL_RESTART_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/05-hosting-a2a/01-a2a-agent-orchestrating-mcp/02-a2a-deploy-orchestrator.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/05-hosting-a2a/01-a2a-agent-orchestrating-mcp/02-a2a-deploy-orchestrator.ipynb",
+      "source_sha256": "9f318d25d52c9c93a1775b880fecc6b04ab7bb1539503c747b5b4204751ade60",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/05-hosting-a2a/01-a2a-agent-orchestrating-mcp/03-a2a-cleanup.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/05-hosting-a2a/01-a2a-agent-orchestrating-mcp/03-a2a-cleanup.ipynb",
+      "source_sha256": "5f58c9b9e9efeee8f627f06965729adb7594d96d0e147f069cc0d45368c430ab",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/05-hosting-a2a/02-a2a-agent-sigv4/hosting_a2a_iam_auth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/05-hosting-a2a/02-a2a-agent-sigv4/hosting_a2a_iam_auth.ipynb",
+      "source_sha256": "a1fefadbaf7dd205a2da58005525a4f7a7a76438becb37d5b376b80024fa80e7",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/07-mcp-dynamic-client-registration/deploy_dcr_mcp_agentcore.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/07-mcp-dynamic-client-registration/deploy_dcr_mcp_agentcore.ipynb",
+      "source_sha256": "41dad34e6b461419c777685b85cb46f172d94d197e76eec5667fe2ada5b8e016",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/08-mcp-e2e/01-server-e2e/mcp_server_features_e2e.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/08-mcp-e2e/01-server-e2e/mcp_server_features_e2e.ipynb",
+      "source_sha256": "30eb93e64ef9de0faebb7e9423b3a12022e0c5e780eb0533b048bb5538b294a6",
+      "code_cells": 34,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/08-mcp-e2e/02-client-e2e/mcp_client_features_e2e.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/08-mcp-e2e/02-client-e2e/mcp_client_features_e2e.ipynb",
+      "source_sha256": "e450fad335c4c31d8f0f86fe9b9782008d50bc00353cdae96bf3606fd4393019",
+      "code_cells": 24,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/08-mcp-e2e/03-utilities-e2e/01_progress.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/08-mcp-e2e/03-utilities-e2e/01_progress.ipynb",
+      "source_sha256": "f8d253783a2d707ffc04b50b253020881dd47061337c389096ada2b1a84bdc3b",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/09-execute-command/01_exec_command.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/09-execute-command/01_exec_command.ipynb",
+      "source_sha256": "62144ef5bacb74cb98f61b0a86ce679c5d02db15a910935aadd3e8fe49b83e8c",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/10-managed-session-storage/01_managed_session_storage.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/10-managed-session-storage/01_managed_session_storage.ipynb",
+      "source_sha256": "ace680ed65713a05ae9d4795af324b5c37256e00c80ef943616967da1d4f0813",
+      "code_cells": 24,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/11-ag-ui-examples/hosting_agui_agent_cognito.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/11-ag-ui-examples/hosting_agui_agent_cognito.ipynb",
+      "source_sha256": "3b949861c91ac9d2c179517599642c77581fb99d6aa85c22f58b54d437994358",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "01-AgentCore-runtime/11-ag-ui-examples/hosting_agui_agent_iam.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/01-AgentCore-runtime/11-ag-ui-examples/hosting_agui_agent_iam.ipynb",
+      "source_sha256": "b7705f98af86e9030211fb2f5d86f328be1efe435e715573d49a701e0d104f2b",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/01-transform-lambda-into-mcp-tools/01-gateway-target-lambda-oauth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/01-transform-lambda-into-mcp-tools/01-gateway-target-lambda-oauth.ipynb",
+      "source_sha256": "947737f6f057d533c6e4e9e600f8da086a3c3f67c2a2c7e4bf5a968149053c35",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "LAMBDA_HELPER_REQUIRES_PASSROLE_NOT_GRANTED_TO_THIS_SESSION"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 7,
+      "report_id": "9186c0bc6938",
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "upstream-original",
+          "executed_cells": 7,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the CreateGatewayTarget operation: 2 validation errors detected: Value 'AccessDeniedException-User: arn:aws:sts::813782517426:assumed-role/WSParticipantRole/Participant is not authorized to perform: iam:PassRole on resource: arn:aws:iam::813782517426:role/gateway_lambda_iamrole because no identity-based policy allows the iam:PassRole action' at 'targetConfiguration.mcp.lambda.lambdaArn' failed to satisfy constraint: Member must satisfy regular expression pattern: arn:(aws[a-zA-Z-]*)?:lambda:[a-z0-9-]+:(\\d{12}):function:([a-zA-Z0-9-_.]+)(:(\\$LATEST|[a-zA-Z0-9-_]+))?; Value 'AccessDeniedException-User: arn:aws:sts::813782517426:assumed-role/WSParticipantRole/Participant is not authorized to perform: iam:PassRole on resource: arn:aws:iam::813782517426:role/gateway_lambda_iamrole because no identity-based policy allows the iam:PassRole action' at 'targetConfiguration.mcp.lambda.lambdaArn' failed to satisfy constraint",
+          "evidence": "evidencias/results-9186c0bc6938.json"
+        }
+      ],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/01-transform-lambda-into-mcp-tools/02-gateway-target-lambda-iam.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/01-transform-lambda-into-mcp-tools/02-gateway-target-lambda-iam.ipynb",
+      "source_sha256": "f6f2426f6b61845f66a6e81c345a9d0329237d7bb71536b446943fdeb83507b0",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [
+        "LAMBDA_HELPER_REQUIRES_PASSROLE_NOT_GRANTED_TO_THIS_SESSION"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/02-transform-apis-into-mcp-tools/01-transform-openapi-into-mcp-tools/01-openapis-into-mcp-api-key.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/02-transform-apis-into-mcp-tools/01-transform-openapi-into-mcp-tools/01-openapis-into-mcp-api-key.ipynb",
+      "source_sha256": "40913a9db053bf612ba49675342967b2509bcf8120cd488ee4e7584a6751f5c0",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/02-transform-apis-into-mcp-tools/01-transform-openapi-into-mcp-tools/02-openapis-into-mcp-oauth-enterprise-apis.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/02-transform-apis-into-mcp-tools/01-transform-openapi-into-mcp-tools/02-openapis-into-mcp-oauth-enterprise-apis.ipynb",
+      "source_sha256": "518d5d72755c9e15016cdfcaffa5fcae2fd1b996f8b39c12f2b6d02cf3b883b6",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/02-transform-apis-into-mcp-tools/02-transform-smithyapis-into-mcp-tools/01-s3-smithy-into-mcp-iam.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/02-transform-apis-into-mcp-tools/02-transform-smithyapis-into-mcp-tools/01-s3-smithy-into-mcp-iam.ipynb",
+      "source_sha256": "148836b8e2179602e602942a3f8aab5d93839c0328090d02e3994d5161523c0b",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/03-search-tools/01-gateway-search.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/03-search-tools/01-gateway-search.ipynb",
+      "source_sha256": "5757af0d7c4c4f365c4e2686c30c7e5d4651a6ee2874f2f7765f3f5c8d113431",
+      "code_cells": 56,
+      "syntax_errors": [],
+      "source_flags": [
+        "LAMBDA_HELPER_REQUIRES_PASSROLE_NOT_GRANTED_TO_THIS_SESSION"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/04-integration/01-runtime-gateway/04-runtime-gateway.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/04-integration/01-runtime-gateway/04-runtime-gateway.ipynb",
+      "source_sha256": "e1f9eeb4e301a979fbb4216b98a0e855f8a5a2aeb564dd3f39ba695fb4a1da77",
+      "code_cells": 25,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/04-integration/03-ide-gateway-tool/01_vscode_agentcore_confluence_serverless.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/04-integration/03-ide-gateway-tool/01_vscode_agentcore_confluence_serverless.ipynb",
+      "source_sha256": "64b5bb512ecfba1da29dbe3e6a7c3f56be6c2eb48949f4330439084d43ee6de2",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "CREATES_IAM_USERS_OR_LONG_LIVED_ACCESS_KEYS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/04-integration/06-secure-ide-gateway-tool/01_gateway_secure_3lo_auth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/04-integration/06-secure-ide-gateway-tool/01_gateway_secure_3lo_auth.ipynb",
+      "source_sha256": "78e3394341d33370c40d81ed17a849d7d199ddc0ef42bb20023331647a7a122e",
+      "code_cells": 28,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/05-mcp-server-as-a-target/01-mcp-server-target.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/05-mcp-server-as-a-target/01-mcp-server-target.ipynb",
+      "source_sha256": "eaa12ff902fa3385a793fc98225b89107509ff2f8f539f56322eb4c64d2c56e4",
+      "code_cells": 32,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/05-mcp-server-as-a-target/02-mcp-target-synchronization.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/05-mcp-server-as-a-target/02-mcp-target-synchronization.ipynb",
+      "source_sha256": "7c31fec60930ec0bc35867b746adde4374bfa327000abcd8c8102d6ca41eddc7",
+      "code_cells": 37,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/05-mcp-server-as-a-target/03-authorization-code-flow/github-mcp-server.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/05-mcp-server-as-a-target/03-authorization-code-flow/github-mcp-server.ipynb",
+      "source_sha256": "beec563e9ea27648d8135ca42001b0be8964304b13328870a1196842482ad0e5",
+      "code_cells": 21,
+      "syntax_errors": [],
+      "source_flags": [
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/05-mcp-server-as-a-target/04-streaming.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/05-mcp-server-as-a-target/04-streaming.ipynb",
+      "source_sha256": "46b04d5a37d81f9a56b0f8c1628fbcd8c799686b81fe544543b1315c59bf4145",
+      "code_cells": 27,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/05-mcp-server-as-a-target/05-session-management.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/05-mcp-server-as-a-target/05-session-management.ipynb",
+      "source_sha256": "7ad991c850c86aae604fc7d50904164b9d0b6e86661399530ce05b01bb2c360a",
+      "code_cells": 28,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/05-mcp-server-as-a-target/06-elicitation.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/05-mcp-server-as-a-target/06-elicitation.ipynb",
+      "source_sha256": "2568699319760845dd3c8310868420e4d4aeea6c1b5e2494d1369aa0dadd62a5",
+      "code_cells": 29,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/06-gateway-observability/01-gateway-observability.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/06-gateway-observability/01-gateway-observability.ipynb",
+      "source_sha256": "f4f82fcd0a4d6d990d2f2bd6312be2b91dda6915edf01e6dbedbfb6462a13822",
+      "code_cells": 54,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "LAMBDA_HELPER_REQUIRES_PASSROLE_NOT_GRANTED_TO_THIS_SESSION"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/07-bearer-token-injection/01-bearer-token-injection.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/07-bearer-token-injection/01-bearer-token-injection.ipynb",
+      "source_sha256": "64b222e568c974480a94bf8903aa0c227a8dfc78221e407ae815f986ff5eb838",
+      "code_cells": 13,
+      "syntax_errors": [
+        {
+          "index": 3,
+          "type": "SyntaxError",
+          "message": "invalid syntax (<unknown>, line 1)"
+        },
+        {
+          "index": 25,
+          "type": "SyntaxError",
+          "message": "leading zeros in decimal integer literals are not permitted; use an 0o prefix for octal integers (<unknown>, line 1)"
+        }
+      ],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/08-custom-header-propagation/gateway-interceptor-header-propagation.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/08-custom-header-propagation/gateway-interceptor-header-propagation.ipynb",
+      "source_sha256": "56c83c1774239933b0e35d057fcec4b80972aba06802a685aaaa2882eaaf60fe",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/09-fine-grained-access-control/01-fine-grained-access-control-using-custom-scopes.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/09-fine-grained-access-control/01-fine-grained-access-control-using-custom-scopes.ipynb",
+      "source_sha256": "59a80303989d0d9ea1e90fc764a0b65deeb74a06bb654061c2562208c05ef7a6",
+      "code_cells": 24,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/09-fine-grained-access-control/02-fine-grained-access-control-using-data-store/02-fine-grained-access-control-using-data-store.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/09-fine-grained-access-control/02-fine-grained-access-control-using-data-store/02-fine-grained-access-control-using-data-store.ipynb",
+      "source_sha256": "98e2d8837ede50bbdbfba9a753e8d2be029a224677f567caff5f29dbb98e7b24",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/10-sensitive-data-masking/01-interceptor-lambda-mask-sensitive-data.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/10-sensitive-data-masking/01-interceptor-lambda-mask-sensitive-data.ipynb",
+      "source_sha256": "5597ee181d6362d42cf252ecf84f5cb9f00bbf2eeab7efdfa0be4213701f3594",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/11-api-gateway-as-a-target/01-api-gateway-target.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/11-api-gateway-as-a-target/01-api-gateway-target.ipynb",
+      "source_sha256": "68aba20b1065d0d94e01c42c47b464957e62b24b9d929aa0645fd6c2cded6f79",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-01-prerequisites-infra.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-01-prerequisites-infra.ipynb",
+      "source_sha256": "30abce6f5cdc8667ba1df7a9b7010f3e6700553c3e03c82bacb667b8ba4dd9dc",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-02-diagnostics-agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-02-diagnostics-agent.ipynb",
+      "source_sha256": "713e2578a62626f4d242fd50f031b3d4a2974b011ec9c0fa38e52ebbf95e7880",
+      "code_cells": 21,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-03a-remediation-agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-03a-remediation-agent.ipynb",
+      "source_sha256": "3624fac6ccea28aeaced9274a66eb5901d5d28b2cc5abd8fde34bfb07a8200f6",
+      "code_cells": 39,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-03b-remediation-agent-fgac.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-03b-remediation-agent-fgac.ipynb",
+      "source_sha256": "fd83e5fe164f4ce364973200ddb1929ca84d6b14fffc003fe949ba5078da8f2a",
+      "code_cells": 31,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-04-prevention-agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-04-prevention-agent.ipynb",
+      "source_sha256": "28b429d9ff524dc600b61ed6d0ec82c567aa483bb436a2488d4e2d2815018610",
+      "code_cells": 29,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-05-multi-agent-orchestration.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/12-agents-as-tools-using-mcp/Lab-05-multi-agent-orchestration.ipynb",
+      "source_sha256": "9f9f39945594f6c4c059fa41895edfb5aa0742817d128092b64deae8b3c1ce01",
+      "code_cells": 23,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/13-outbound-auth-code-grant/01-outbound-auth-code-grant-linkedin.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/13-outbound-auth-code-grant/01-outbound-auth-code-grant-linkedin.ipynb",
+      "source_sha256": "56965757aef0d12d78fda6495d3022e3074ebc4c5c284dcb16023405a8e974d3",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/14-token-exchange-at-request-interceptor/token-exchange-at-request-interceptor.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/14-token-exchange-at-request-interceptor/token-exchange-at-request-interceptor.ipynb",
+      "source_sha256": "e85195949427696d6fffa86c901e08dbe8a7ec63488b3731d422ecb0ec8026cb",
+      "code_cells": 25,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/15-prevent-sql-injection/01-prevent-sql-injection-with-interceptor.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/15-prevent-sql-injection/01-prevent-sql-injection-with-interceptor.ipynb",
+      "source_sha256": "29c52ee445ce6d8f8de2f1a587e53cfd99a5cea2a3ef357c62db0ea36a48c371",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/00-prerequisites/00-vpc-gateway-setup.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/00-prerequisites/00-vpc-gateway-setup.ipynb",
+      "source_sha256": "3d9452217c46273396b2ed4db445fc056bf609cc66eceb003d590423ac692f98",
+      "code_cells": 18,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/01-managed-vpc-resource/01-getting-started.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/01-managed-vpc-resource/01-getting-started.ipynb",
+      "source_sha256": "2666248f8c03264739d2afd8cd388734336c45baabe00e51b9e49189b0f18edb",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/01-managed-vpc-resource/02-peering.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/01-managed-vpc-resource/02-peering.ipynb",
+      "source_sha256": "4ae3dcba3120dc28d49ce415f187b7e318bcfa988eda3b60f940c39f4830ad1c",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/02-self-managed-lattice/01-getting-started.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/02-self-managed-lattice/01-getting-started.ipynb",
+      "source_sha256": "fb4546d7ec75ae18639a9bd8aa4f2159c0dfc652fbea24820e7cf7cb6bc43dd2",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/02-self-managed-lattice/02-cross-account.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/02-self-managed-lattice/02-cross-account.ipynb",
+      "source_sha256": "d00a8ccdb4ff6449cca17dc688715b390e9d5ade6ce35990860ef86094855074",
+      "code_cells": 21,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/03-advanced-concepts/01-private-domain.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/03-advanced-concepts/01-private-domain.ipynb",
+      "source_sha256": "e3c5f56e86d095e7e56bc7d4d91175418fa4a9efaa0f1cbd3624843968baec77",
+      "code_cells": 18,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/03-advanced-concepts/02-private-certificate-authority.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/03-advanced-concepts/02-private-certificate-authority.ipynb",
+      "source_sha256": "4194dbfd631f4818503681d1b7dd42208e48322c88760b699a277fcd46d400a6",
+      "code_cells": 31,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/03-advanced-concepts/03-self-signed-certificate.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/03-advanced-concepts/03-self-signed-certificate.ipynb",
+      "source_sha256": "0c8a20d059bd327bad221c1fdd0c4562a82b22a292c236265ed8e9f36da523f3",
+      "code_cells": 28,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/03-advanced-concepts/04-static-gateway-ip.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/03-advanced-concepts/04-static-gateway-ip.ipynb",
+      "source_sha256": "7ccaadfae827900fbfed7a91da663b59c3892d30fff506f66906e2442a9d1c35",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/04-ecs-deployment/fargate-mcp-gateway-managed.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/04-ecs-deployment/fargate-mcp-gateway-managed.ipynb",
+      "source_sha256": "7e884b403a39bb1bf67507e37ef2474045c1212e7ec9601a395c30066c4c04f1",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/05-eks-deployment/api-server-gateway-managed.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/05-eks-deployment/api-server-gateway-managed.ipynb",
+      "source_sha256": "fd3af81838a6133ad8832ac052ca64a5d130f9c5341ed0389b8d791c303b6c67",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/16-vpc-egress/05-eks-deployment/mcp-server-gateway-managed.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/16-vpc-egress/05-eks-deployment/mcp-server-gateway-managed.ipynb",
+      "source_sha256": "f7c07989f7acbeba242c92d2fe9776739c9873fc101113f78763656c95c5b10a",
+      "code_cells": 24,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/17-inbound-auth-code-flow-okta/okta-auth-code-flow-gateway.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/17-inbound-auth-code-flow-okta/okta-auth-code-flow-gateway.ipynb",
+      "source_sha256": "881f7ee7f44819d5a53fed0f614348543e697b83afd53c99cd4c242264cd03ff",
+      "code_cells": 4,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "02-AgentCore-gateway/18-Outbound_Auth_OBO_Microsoft/obo_token_exchange_microsoft.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/02-AgentCore-gateway/18-Outbound_Auth_OBO_Microsoft/obo_token_exchange_microsoft.ipynb",
+      "source_sha256": "f3e753f887972a31b8f0d561894befec13cda89657fa0cdf8c8a6117ee69d432",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/03-Inbound Auth example/inbound_auth_runtime_with_strands_and_bedrock_models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/03-Inbound%20Auth%20example/inbound_auth_runtime_with_strands_and_bedrock_models.ipynb",
+      "source_sha256": "3aeebfb0f87346589b1366ea6a3b661a04169d21b5beff64c933e772d0741965",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/04-Outbound Auth example/runtime_with_strands_and_openai_models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/04-Outbound%20Auth%20example/runtime_with_strands_and_openai_models.ipynb",
+      "source_sha256": "9d8cd0da991c243d45400c66fb3e49096c90ed835e99c208ee2d378d68d3c30a",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/05-Outbound_Auth_3lo/runtime_with_strands_and_egress_3lo.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/05-Outbound_Auth_3lo/runtime_with_strands_and_egress_3lo.ipynb",
+      "source_sha256": "3815bcc50a0cea1bdae6ea449ca0d3b563f545055b0a4d1e459173a40ffc3863",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/06-Outbound_Auth_Github/runtime_with_strands_and_egress_github_3lo.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/06-Outbound_Auth_Github/runtime_with_strands_and_egress_github_3lo.ipynb",
+      "source_sha256": "0d291c912710cbb2aa0812cdee7643761d8f512bcef1fb0b90f6c96b30654282",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/08-IDP-examples/EntraID/1 Entra ID Inbound Auth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/08-IDP-examples/EntraID/1%20Entra%20ID%20Inbound%20Auth.ipynb",
+      "source_sha256": "5dcf2fc06ef4c14393ee8b7e5b41ee3526e9a15fb2137426f9de906093090ec6",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/08-IDP-examples/EntraID/2 Entra ID with AgentCore Gateway.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/08-IDP-examples/EntraID/2%20Entra%20ID%20with%20AgentCore%20Gateway.ipynb",
+      "source_sha256": "68f41e0be0b6a1f483942b623f0634ba683628643274fb19cbb9ea7a6a7a6934",
+      "code_cells": 32,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/08-IDP-examples/EntraID/3 Entra ID with AgentCore Gateway Auth Code Flow.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/08-IDP-examples/EntraID/3%20Entra%20ID%20with%20AgentCore%20Gateway%20Auth%20Code%20Flow.ipynb",
+      "source_sha256": "d160db8cd4306dadc46716116a41584f67e61b7e800913be302328b4439fa508",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/08-IDP-examples/Okta/Step_by_Step_Okta_Integration_for_Gateway_Auth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/08-IDP-examples/Okta/Step_by_Step_Okta_Integration_for_Gateway_Auth.ipynb",
+      "source_sha256": "6546270177552e397ac60c3d6e18beff8a87f25253d14e97c0ef831d7ecad4ea",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0",
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/08-IDP-examples/Okta/Step_by_Step_Okta_for_Inbound_Auth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/08-IDP-examples/Okta/Step_by_Step_Okta_for_Inbound_Auth.ipynb",
+      "source_sha256": "2316c71084fe3b7d2cf12e55b6ce6850d61d473ce3bc5774311dc3cd5d3746d0",
+      "code_cells": 21,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/09-Outbound_Auth_Self_Hosted/self_hosted_agent_oauth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/09-Outbound_Auth_Self_Hosted/self_hosted_agent_oauth.ipynb",
+      "source_sha256": "765a3b92e6fdadae2c67a173303ca15a69fbc2bfc50a775e479b2707a32a5b1c",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "03-AgentCore-identity/13-entra-obo-mcp-runtime/runtime_with_entra_id_obo_and_mcp.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/03-AgentCore-identity/13-entra-obo-mcp-runtime/runtime_with_entra_id_obo_and_mcp.ipynb",
+      "source_sha256": "bd2febf330c9e7cbfa53cae0188b3704b5cd25af849eb1c3551d8b69e20cd4a0",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_IDENTITY_OR_API_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-langgraph-agent/math-agent-with-checkpointing.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-langgraph-agent/math-agent-with-checkpointing.ipynb",
+      "source_sha256": "15e7cabf899e24863ecdf69e9fb0914556ead2d689fb2ce811e627c475320d1d",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-langgraph-agent/personal-fitness-coach.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-langgraph-agent/personal-fitness-coach.ipynb",
+      "source_sha256": "e0d0176af6fe50abed37fb1ab68eb4082d9828db7df0a28fcb71648b623f8e89",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-langgraph-agent/support-agent-human-in-the-loop.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-langgraph-agent/support-agent-human-in-the-loop.ipynb",
+      "source_sha256": "ecb2a8325b1cc281d30d23b2a48f1188278802920eecf5d287cc5d16dd9327dc",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/academic-research-assistant-short-term-memory-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/academic-research-assistant-short-term-memory-tutorial.ipynb",
+      "source_sha256": "194199d90021d5e683b4c94b9189101693c811ad515cf1ea147e81b7aed7af6f",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 6,
+      "report_id": "1b81599be4d6",
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "upstream-original",
+          "executed_cells": 5,
+          "failure_summary": "ResourceNotFoundException: An error occurred (ResourceNotFoundException) when calling the ConverseStream operation: This model version has reached the end of its life. Please refer to the AWS documentation for more details.",
+          "evidence": "evidencias/results-1b81599be4d6.json"
+        },
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 6,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: The number of toolResult blocks at messages.2.content exceeds the number of toolUse blocks of previous turn.",
+          "evidence": "evidencias/results-model-update-1b81599be4d6.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/investment-portfolio-advisor-short-term-memory-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/investment-portfolio-advisor-short-term-memory-tutorial.ipynb",
+      "source_sha256": "acc79cff114b27eeaf3385329ac9a5a30370631bdd12de40f3d268f214cf3153",
+      "code_cells": 20,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 6,
+      "report_id": null,
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 6,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: The number of toolResult blocks at messages.2.content exceeds the number of toolUse blocks of previous turn.",
+          "evidence": "evidencias/results-model-update-e235ced511a2.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/legal-document-analyzer-short-term-memory-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/legal-document-analyzer-short-term-memory-tutorial.ipynb",
+      "source_sha256": "6205b060bd470e7859e7f702a0b795664ac6c57c859caa0a913f382b0a395828",
+      "code_cells": 20,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 6,
+      "report_id": null,
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 6,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: The number of toolResult blocks at messages.2.content exceeds the number of toolUse blocks of previous turn.",
+          "evidence": "evidencias/results-model-update-c6ccfe6c67d1.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/medical-knowledge-assistant-short-term-memory-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/medical-knowledge-assistant-short-term-memory-tutorial.ipynb",
+      "source_sha256": "77450925527f64eabb1b07338512039507fe2e81468e10a5e5f84eb4d107cfdd",
+      "code_cells": 20,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 6,
+      "report_id": null,
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 6,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: The number of toolResult blocks at messages.2.content exceeds the number of toolUse blocks of previous turn.",
+          "evidence": "evidencias/results-model-update-30b41faac0eb.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-strands-agent/personal-agent-memory-manager.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-strands-agent/personal-agent-memory-manager.ipynb",
+      "source_sha256": "2d2cfc67c373d8cca03867db6579f13abae64fae4d94c73ec1cb7452d7013b12",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-strands-agent/personal-agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/01-single-agent/with-strands-agent/personal-agent.ipynb",
+      "source_sha256": "ae74300720c6cae19685f6628e7f2af80feacee272455e182bb1976b80198873",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/02-multi-agent/with-strands-agent/travel-planning-agent-memory-manager.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/02-multi-agent/with-strands-agent/travel-planning-agent-memory-manager.ipynb",
+      "source_sha256": "f0de5fc0c498fab4c954a0af678d90c861f0a1120781c205913ac4093de67f98",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/01-short-term-memory/02-multi-agent/with-strands-agent/travel-planning-agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/01-short-term-memory/02-multi-agent/with-strands-agent/travel-planning-agent.ipynb",
+      "source_sha256": "8ef315f8f2db20f6f37d733df373fe3fd52c3688dff3895da72084defd84d400",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-langgraph-agent-hooks/custom-user-preferences/nutrition-assistant-with-user-preference-saving.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-langgraph-agent-hooks/custom-user-preferences/nutrition-assistant-with-user-preference-saving.ipynb",
+      "source_sha256": "5af3eea2e6199bcf0b2ae14945b573591c14f65db9cc52fa77ee8d8721a1557e",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-langgraph-agent-hooks/episodic-memory/nutrition-assistant-with-episodic-memory.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-langgraph-agent-hooks/episodic-memory/nutrition-assistant-with-episodic-memory.ipynb",
+      "source_sha256": "fa6e360da1b817a18bd25f7479518869d5438e2415ab2be39218cc0c9032c129",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS",
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 1,
+      "report_id": null,
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 1,
+          "failure_summary": "ModuleNotFoundError: No module named 'langchain'",
+          "evidence": "evidencias/results-model-update-291453fa6145.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/academic-research-assistant-long-term-memory-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/academic-research-assistant-long-term-memory-tutorial.ipynb",
+      "source_sha256": "f9807e3c2cf5f80d5475c93540f2a51cb6c3f585d293675c79d743da46d00817",
+      "code_cells": 23,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 8,
+      "report_id": null,
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 8,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: The number of toolResult blocks at messages.2.content exceeds the number of toolUse blocks of previous turn.",
+          "evidence": "evidencias/results-model-update-4c6c4e7f4bb8.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/investment-portfolio-advisor-long-term-memory-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/investment-portfolio-advisor-long-term-memory-tutorial.ipynb",
+      "source_sha256": "65dfa72cf445f06ce32a5d30e5952440d9ca00831750432a3682159897acdf41",
+      "code_cells": 24,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 8,
+      "report_id": null,
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 8,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: The number of toolResult blocks at messages.2.content exceeds the number of toolUse blocks of previous turn.",
+          "evidence": "evidencias/results-model-update-b382e4efbddb.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/legal-document-analyzer-long-term-memory-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/legal-document-analyzer-long-term-memory-tutorial.ipynb",
+      "source_sha256": "caf2aaa855178383ea4cb4432f8550c97f52a4a8942080c87442533834669c83",
+      "code_cells": 25,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 9,
+      "report_id": null,
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 9,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: Expected toolResult blocks at messages.0.content for the following Ids: tooluse_SgDAoU5AR82CV1BBrGIUqi",
+          "evidence": "evidencias/results-model-update-caed0eb3e617.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/medical-knowledge-assistant-long-term-memory-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-llamaindex-agent-memory-tool/medical-knowledge-assistant-long-term-memory-tutorial.ipynb",
+      "source_sha256": "94c474e088f15ea0c4bedb5ada0948ed3e5505f45a9e153c5609201864ba94e5",
+      "code_cells": 25,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 9,
+      "report_id": null,
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "model-lifecycle-update",
+          "executed_cells": 9,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: The number of toolResult blocks at messages.2.content exceeds the number of toolUse blocks of previous turn.",
+          "evidence": "evidencias/results-model-update-c0cf61a80e1b.json"
+        }
+      ],
+      "model_update_prepared": true
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/culinary-assistant-self-managed-strategy/agentcore_self_managed_memory_demo.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/culinary-assistant-self-managed-strategy/agentcore_self_managed_memory_demo.ipynb",
+      "source_sha256": "ae4bb5403b35fa052cb14dad37aab400d2ff918bb159e7142a4ab76a7ed854ca",
+      "code_cells": 24,
+      "syntax_errors": [],
+      "source_flags": [
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/culinary-assistant-self-managed-strategy-with-citations/agentcore_self_managed_memory_demo.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/culinary-assistant-self-managed-strategy-with-citations/agentcore_self_managed_memory_demo.ipynb",
+      "source_sha256": "6c10dbdade7c229213cb46866fb2b917e2c9bb742f6b49b924cad18469e85447",
+      "code_cells": 25,
+      "syntax_errors": [],
+      "source_flags": [
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/customer-support/customer-support-inbuilt-strategy.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/customer-support/customer-support-inbuilt-strategy.ipynb",
+      "source_sha256": "0c5ae30eb2acb23e6a40377e1be9aba1e1f429c7cde4a7707965dc545cbb0332",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/customer-support/customer-support-override-strategy.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/customer-support/customer-support-override-strategy.ipynb",
+      "source_sha256": "8eaaf3a31d044f3b78ab87d582f28c18a8b78d6903302ee413681d6f7eff360d",
+      "code_cells": 20,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/meeting-notes-assistant-using-episodic/meeting-notes-assistant.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/meeting-notes-assistant-using-episodic/meeting-notes-assistant.ipynb",
+      "source_sha256": "7b66d57dce90b395d56531c4939469f3272f22f69622a04de29007caf0189a82",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/simple-math-assistant/math-assistant.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-hooks/simple-math-assistant/math-assistant.ipynb",
+      "source_sha256": "c61a842ee7560ebce67d80bce625923e1c0975f37c36e8655dc94022e3dd35f0",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-memory-tool/culinary-assistant.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-memory-tool/culinary-assistant.ipynb",
+      "source_sha256": "e37dba2eb75e026ec5eb8a3bfd3ec19c10c110957d4febcc086ea6751c34dfc9",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-memory-tool/debugging-agent/debugging_assistant_episodic_memory.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/01-single-agent/using-strands-agent-memory-tool/debugging-agent/debugging_assistant_episodic_memory.ipynb",
+      "source_sha256": "5518f2a1a43ee028a879dd17f10468d61dbe8df577a8179d6a6353081581340c",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/02-multi-agent/with-strands-agent/healthcare-assistant-using-episodic/healthcare-data-assistant.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/02-multi-agent/with-strands-agent/healthcare-assistant-using-episodic/healthcare-data-assistant.ipynb",
+      "source_sha256": "a64a8b95a87e32d7e94141f3fc28f515cc7a6ea2e23233d1ee2c04a35dfb3792",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/02-long-term-memory/02-multi-agent/with-strands-agent/travel-booking-agent/travel-booking-assistant.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/02-long-term-memory/02-multi-agent/with-strands-agent/travel-booking-agent/travel-booking-assistant.ipynb",
+      "source_sha256": "e13d93133d3de82628f9f1ee6e76351345cadb07da446d5eb03a4cb26ae9be0a",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [
+        "MEMORY_CLEANUP_DISABLED_OR_NOT_PRESENT_IN_CELLS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/03-advanced-patterns/01-guardrails-integration/guardrails-memory.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/03-advanced-patterns/01-guardrails-integration/guardrails-memory.ipynb",
+      "source_sha256": "c02104435640c39773aaff440b642ab79a816e7850a9711fc752d2aa86575095",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/03-advanced-patterns/02-memory-runtime-integration/runtime_memory_integration.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/03-advanced-patterns/02-memory-runtime-integration/runtime_memory_integration.ipynb",
+      "source_sha256": "64d6027d70c30a82b9a9497768b949f38bd4de60c3e7926300272142ce52c5cf",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/03-advanced-patterns/03-memory-identity-runtime-integration/runtime_memory_identity_integration.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/03-advanced-patterns/03-memory-identity-runtime-integration/runtime_memory_identity_integration.ipynb",
+      "source_sha256": "d8b45b88e6caf298a43e5be942d07f1423c2cc9367fcb12fcecd111383f3d5a1",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/03-advanced-patterns/05-memory-streaming/memory_record_streaming.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/03-advanced-patterns/05-memory-streaming/memory_record_streaming.ipynb",
+      "source_sha256": "2c95e39d9f67cc143e854af45c243f8b85ceab6abd69172a824c7c10a8312d03",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "FAILED",
+      "executed_cells": 2,
+      "report_id": "1bf433a74608",
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "upstream-original",
+          "executed_cells": 2,
+          "failure_summary": "AccessDeniedException: An error occurred (AccessDeniedException) when calling the CreateStream operation: User: arn:aws:sts::813782517426:assumed-role/WSParticipantRole/Participant is not authorized to perform: kinesis:CreateStream on resource: arn:aws:kinesis:us-west-2:813782517426:stream/memory-record-stream-34a3dc08 because no identity-based policy allows the kinesis:CreateStream action",
+          "evidence": "evidencias/results-1bf433a74608.json"
+        }
+      ],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/03-advanced-patterns/06-streaming-for-cross-region-replication/06-memory-cross-region-replication.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/03-advanced-patterns/06-streaming-for-cross-region-replication/06-memory-cross-region-replication.ipynb",
+      "source_sha256": "2ef3e7351d12671947cc984e0200d2d4199009460f3c40d09625609378abc4e9",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/03-advanced-patterns/07-memory-for-personalisation-and-analytics/01-memory_for_personalised_recommendations.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/03-advanced-patterns/07-memory-for-personalisation-and-analytics/01-memory_for_personalised_recommendations.ipynb",
+      "source_sha256": "7e1a717a3ede37805a4e3e02e60fc5ccd73680e6be31f64e23de7d82588d24a9",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/03-advanced-patterns/07-memory-for-personalisation-and-analytics/02-memory_cross_customer_analytics.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/03-advanced-patterns/07-memory-for-personalisation-and-analytics/02-memory_cross_customer_analytics.ipynb",
+      "source_sha256": "4903e7a3e63ee7ab127afe8dbff6beffa7e019b2bf8bf103d0505cc942ab3c83",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/04-memory-branching/multi-agent-parallel-execution-with-memory-branching.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/04-memory-branching/multi-agent-parallel-execution-with-memory-branching.ipynb",
+      "source_sha256": "6ac3c4f90e5a50f33cc3a3325ac10f386df965746655c82b3ba5a69b7049f9bd",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/04-memory-branching/travel-planning-agent-with-memory-branching.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/04-memory-branching/travel-planning-agent-with-memory-branching.ipynb",
+      "source_sha256": "040426ca54e4b950a1588c0ef5b87e90e94746ebb5c80d139501f08a780b09a7",
+      "code_cells": 20,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/05-memory-security-patterns/01-memory-iam-policies/runtime_memory_identity_integration.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/05-memory-security-patterns/01-memory-iam-policies/runtime_memory_identity_integration.ipynb",
+      "source_sha256": "ca44f4233437527a8ef2178b7291b7cef1f2112b973c5518233beb8f9be0502c",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "04-AgentCore-memory/05-memory-security-patterns/02-memory-iam-cognito-identities/runtime_memory_federated_identity_integration.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/04-AgentCore-memory/05-memory-security-patterns/02-memory-iam-cognito-identities/runtime_memory_federated_identity_integration.ipynb",
+      "source_sha256": "754677ee98b3f46af6dca113318b4229588c5ea694c12d5d5fd2ad53863d668d",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/01-file-operations-using-code-interpreter/file-operations-using-code-interpreter.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/01-Agent-Core-code-interpreter/01-file-operations-using-code-interpreter/file-operations-using-code-interpreter.ipynb",
+      "source_sha256": "71a53b5f089c2557903db17a84f255f160e0814b2c3501a994021b84d5758334",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "PASSED_PUBLISHED_ADAPTATION",
+      "executed_cells": 8,
+      "report_id": "db34cc8a2c15",
+      "runs": [
+        {
+          "status": "CELLS_EXECUTED_REVIEW_REQUIRED",
+          "variant": "upstream-original",
+          "executed_cells": 8,
+          "failure_summary": null,
+          "evidence": "evidencias/results-db34cc8a2c15.json"
+        }
+      ],
+      "model_update_prepared": false,
+      "appendix": "A01_code_interpreter_arquivos.ipynb"
+    },
+    {
+      "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/02-code-execution-with-agent-using-code-interpreter/langchain-agent-code-execution-code-interpreter.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/01-Agent-Core-code-interpreter/02-code-execution-with-agent-using-code-interpreter/langchain-agent-code-execution-code-interpreter.ipynb",
+      "source_sha256": "59fb455e3824ce7bd28549c0fcf6f44fe2d7c718e297830c6de8e293501df87c",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [
+        "AGENTEXECUTOR_REMOVED_FROM_INSTALLED_LANGCHAIN_1"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 1,
+      "report_id": "f6cad7f41ca5",
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "upstream-original",
+          "executed_cells": 1,
+          "failure_summary": "ImportError: cannot import name 'AgentExecutor' from 'langchain.agents' (/private/tmp/agentcore-appendix-tests-20261105/.venv/lib/python3.12/site-packages/langchain/agents/__init__.py)",
+          "evidence": "evidencias/results-f6cad7f41ca5.json"
+        }
+      ],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/02-code-execution-with-agent-using-code-interpreter/strands-agent-code-execution-code-interpreter.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/01-Agent-Core-code-interpreter/02-code-execution-with-agent-using-code-interpreter/strands-agent-code-execution-code-interpreter.ipynb",
+      "source_sha256": "16b9f533a45e078f756c4e135ea0348d426eef9d3a2a9aba03c45c8f72058ac8",
+      "code_cells": 7,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "PASSED_PUBLISHED_ADAPTATION",
+      "executed_cells": 7,
+      "report_id": "4f9caba05004",
+      "runs": [
+        {
+          "status": "CELLS_EXECUTED_REVIEW_REQUIRED",
+          "variant": "upstream-original",
+          "executed_cells": 7,
+          "failure_summary": null,
+          "evidence": "evidencias/results-4f9caba05004.json"
+        }
+      ],
+      "model_update_prepared": false,
+      "appendix": "A02_code_interpreter_agente.ipynb"
+    },
+    {
+      "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/03-advanced-data-analysis-with-agent-using-code-interpreter/langchain-agent-advanced-data-analysis-code-interpreter.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/01-Agent-Core-code-interpreter/03-advanced-data-analysis-with-agent-using-code-interpreter/langchain-agent-advanced-data-analysis-code-interpreter.ipynb",
+      "source_sha256": "b5a8d29b9991b5e382c9edd73f072a204eb4c0d202f3276bd2d8e5e9f1421147",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [
+        "AGENTEXECUTOR_REMOVED_FROM_INSTALLED_LANGCHAIN_1"
+      ],
+      "execution_status": "FAILED",
+      "executed_cells": 1,
+      "report_id": "9beabf634068",
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "upstream-original",
+          "executed_cells": 1,
+          "failure_summary": "ImportError: cannot import name 'AgentExecutor' from 'langchain.agents' (/private/tmp/agentcore-appendix-tests-20261105/.venv/lib/python3.12/site-packages/langchain/agents/__init__.py)",
+          "evidence": "evidencias/results-9beabf634068.json"
+        }
+      ],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/03-advanced-data-analysis-with-agent-using-code-interpreter/strands-agent-advanced-data-analysis-code-interpreter.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/01-Agent-Core-code-interpreter/03-advanced-data-analysis-with-agent-using-code-interpreter/strands-agent-advanced-data-analysis-code-interpreter.ipynb",
+      "source_sha256": "da58a32d389749da5501a93a0454d1930270b3b2be5fe27211f5a2bded65e7fa",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "PASSED_PUBLISHED_ADAPTATION",
+      "executed_cells": 13,
+      "report_id": "df68d8eaa861",
+      "runs": [
+        {
+          "status": "CELLS_EXECUTED_REVIEW_REQUIRED",
+          "variant": "upstream-original",
+          "executed_cells": 13,
+          "failure_summary": null,
+          "evidence": "evidencias/results-df68d8eaa861.json"
+        }
+      ],
+      "model_update_prepared": false,
+      "appendix": "A03_code_interpreter_analise.ipynb"
+    },
+    {
+      "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/04-run-commands-using-code-interpreter/run-commands-using-code-interpreter.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/01-Agent-Core-code-interpreter/04-run-commands-using-code-interpreter/run-commands-using-code-interpreter.ipynb",
+      "source_sha256": "6896d15bf02b143bf689b97517af87f1a0ad1eb2121623c2aa5b465e19fc70c5",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [
+        "REQUIRES_RESOURCE_CONFIGURATION_NOT_SUPPLIED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/01-browser-with-NovaAct/01_getting_started-agentcore-browser-tool-with-nova-act.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/01-browser-with-NovaAct/01_getting_started-agentcore-browser-tool-with-nova-act.ipynb",
+      "source_sha256": "fc164810957c7a921dc56a94797bf74dbaa5c3f6ed8603d4e4b609506967033f",
+      "code_cells": 5,
+      "syntax_errors": [],
+      "source_flags": [
+        "NOVA_ACT_API_KEY_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/01-browser-with-NovaAct/02_agentcore-browser-tool-live-view-with-nova-act.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/01-browser-with-NovaAct/02_agentcore-browser-tool-live-view-with-nova-act.ipynb",
+      "source_sha256": "bdf6cccf9b63f3ab8b869bd76be758be3b3e403ca6fa4ae34f27c617c912f83a",
+      "code_cells": 6,
+      "syntax_errors": [],
+      "source_flags": [
+        "NOVA_ACT_API_KEY_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/02-browser-with-browserUse/agentcore-browser-tool-live-view-with-browser-use.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/02-browser-with-browserUse/agentcore-browser-tool-live-view-with-browser-use.ipynb",
+      "source_sha256": "6b4b165a2edcc19113eaf9574dca90778d82924c4b37a09897ee972a16571096",
+      "code_cells": 6,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXPLICIT_KERNEL_RESTART_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/02-browser-with-browserUse/getting_started-agentcore-browser-tool-with-browser-use.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/02-browser-with-browserUse/getting_started-agentcore-browser-tool-with-browser-use.ipynb",
+      "source_sha256": "16e572f4d723b2ff14f7d7c7e5226b99f9cdf349f2ecb6a74f8f6bb905b4279f",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXPLICIT_KERNEL_RESTART_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/03-browser-observability/01_browser_observability.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/03-browser-observability/01_browser_observability.ipynb",
+      "source_sha256": "945a89393256f0c959349b92499bc85d9895c5b2c5bbf513b87c50901f4de04c",
+      "code_cells": 7,
+      "syntax_errors": [],
+      "source_flags": [
+        "NOVA_ACT_API_KEY_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/04-browser-with-Strands/01_getting_started-agentcore-browser-tool-with-strands.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/04-browser-with-Strands/01_getting_started-agentcore-browser-tool-with-strands.ipynb",
+      "source_sha256": "a1611d286fa08551c119cbefff8afc68204705d971d6239dc3fdaa22aa235ff4",
+      "code_cells": 7,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/05-browser-live-view/01-embed-dcv-live-view-tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/05-browser-live-view/01-embed-dcv-live-view-tutorial.ipynb",
+      "source_sha256": "4b627fcab4780c03ae4c43ffcd1ad663187202b61ae78d64acccd8a8e7f9a322",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/06-Web-Bot-Auth-Signing/01_agentcore-browser-tool-with-web-bot-auth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/06-Web-Bot-Auth-Signing/01_agentcore-browser-tool-with-web-bot-auth.ipynb",
+      "source_sha256": "cfe19a97af218ce6722649aca796ef0eb04c0a1986a235226f518e044875d512",
+      "code_cells": 7,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/07-connecting-public-browser-from-private-vpc/01-connecting-public-browser-from-private-vpc-runtime.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/07-connecting-public-browser-from-private-vpc/01-connecting-public-browser-from-private-vpc-runtime.ipynb",
+      "source_sha256": "1e2687c7e72594ac6b8528e77a0b7dd8fa83cb5be2d5edf0ac3d3acd5d401c4e",
+      "code_cells": 3,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/08-Interacting-with-vpc-based-browser-from-vpc/01-Interacting-with-vpc-based-browser-from-vpc.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/08-Interacting-with-vpc-based-browser-from-vpc/01-Interacting-with-vpc-based-browser-from-vpc.ipynb",
+      "source_sha256": "4b52e6431cafce61e035c0ec6585b47f2b0c4ea78112513d767bae634948f8ef",
+      "code_cells": 3,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/09-browser-with-domain-filtering/verify_domain_filtering.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/09-browser-with-domain-filtering/verify_domain_filtering.ipynb",
+      "source_sha256": "5e4b0a639f4a4a1aa4512c460ff7dc5aae9a080b51dd4f5400bb67ad69255942",
+      "code_cells": 5,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/10-browser-with-profile/browser-profile.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/10-browser-with-profile/browser-profile.ipynb",
+      "source_sha256": "5f98df1fce897bac05ae80e3d50f9ed1ae2711bfa223c8b686285b0cb58cb69d",
+      "code_cells": 22,
+      "syntax_errors": [],
+      "source_flags": [
+        "REQUIRES_RESOURCE_CONFIGURATION_NOT_SUPPLIED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/11-browser-with-proxy/verify_proxy.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/11-browser-with-proxy/verify_proxy.ipynb",
+      "source_sha256": "4d98dd542eab67ceb2407ec9dad47190afb7204be7fbb6d2f3880ef392794fe7",
+      "code_cells": 5,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/12-browser-extensions/browser-extensions.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/12-browser-extensions/browser-extensions.ipynb",
+      "source_sha256": "2bc8cfe8d9393ae58f475e9c994ae23a95982d8f92694a3762d2a139711d1770",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/13-browser-chrome-policies/browser-chrome-policies.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/13-browser-chrome-policies/browser-chrome-policies.ipynb",
+      "source_sha256": "f04fd2fea4e047ff61a56a076c81ae569c7d8f465aa41da608b3da136792b8ba",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/14-browser-os-actions/browser-os-actions-boto3.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/14-browser-os-actions/browser-os-actions-boto3.ipynb",
+      "source_sha256": "13f7e4bf45c9d776faeb9b7c4b39084edf5dbf211ba425634e6eda2783c076d6",
+      "code_cells": 18,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "PASSED_PUBLISHED_ADAPTATION",
+      "executed_cells": 18,
+      "report_id": "b7c0375a35f3",
+      "runs": [
+        {
+          "status": "CELLS_EXECUTED_REVIEW_REQUIRED",
+          "variant": "upstream-original",
+          "executed_cells": 18,
+          "failure_summary": null,
+          "evidence": "evidencias/results-b7c0375a35f3.json"
+        }
+      ],
+      "model_update_prepared": false,
+      "appendix": "A04_browser_acoes.ipynb"
+    },
+    {
+      "path": "05-AgentCore-tools/02-Agent-Core-browser-tool/14-browser-os-actions/browser-os-actions.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/05-AgentCore-tools/02-Agent-Core-browser-tool/14-browser-os-actions/browser-os-actions.ipynb",
+      "source_sha256": "d766c306334de53bbbfd93201fd5d87dd45c2a4ebe9da941250e1c36a12167ce",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/00-enable-transaction-search-template/enable_transaction_search.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/00-enable-transaction-search-template/enable_transaction_search.ipynb",
+      "source_sha256": "e46bd04727bf66caf070fbc7015a467917b650003ab5216ef2a1904a84d2faf8",
+      "code_cells": 3,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/01-Agentcore-runtime-hosted/CrewAI/runtime-with-crewai-and-bedrock-models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/01-Agentcore-runtime-hosted/CrewAI/runtime-with-crewai-and-bedrock-models.ipynb",
+      "source_sha256": "abf28baf389e84bbcb17c76250b1167459468b7e388b8f0d0f7ab86ee4f7100d",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/01-Agentcore-runtime-hosted/LlamaIndex/runtime_with_llamaindex_and_bedrock_models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/01-Agentcore-runtime-hosted/LlamaIndex/runtime_with_llamaindex_and_bedrock_models.ipynb",
+      "source_sha256": "44ad3cfaa4903cdb12cf2daef42e3f3e774e89fc8fbcf22d3f1d9d5f8658f55d",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": true
+    },
+    {
+      "path": "06-AgentCore-observability/01-Agentcore-runtime-hosted/Multi-Runtime-multi-agent-strands-langgraph/multi_agent_observability.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/01-Agentcore-runtime-hosted/Multi-Runtime-multi-agent-strands-langgraph/multi_agent_observability.ipynb",
+      "source_sha256": "c4e99f01ff92382777aeff6f4b4be0abe6d173d978a2bd83f8b6fd51fbfa7a85",
+      "code_cells": 21,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/01-Agentcore-runtime-hosted/Strands Agents/runtime_with_strands_and_bedrock_models.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/01-Agentcore-runtime-hosted/Strands%20Agents/runtime_with_strands_and_bedrock_models.ipynb",
+      "source_sha256": "9f83f07d8e7dd6f034e12886fc48eab18f280ee71583c08ab024931072e509a9",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/02-Agent-not-hosted-on-runtime/CrewAI/CrewAI_Observability.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/02-Agent-not-hosted-on-runtime/CrewAI/CrewAI_Observability.ipynb",
+      "source_sha256": "8f69bab89d364d3e6728edf52996f773129cb02d568aa8b2fd1e36f90f3bfba0",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/02-Agent-not-hosted-on-runtime/Langgraph/Langgraph_Observability.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/02-Agent-not-hosted-on-runtime/Langgraph/Langgraph_Observability.ipynb",
+      "source_sha256": "c8f2800f849ef18b8fa1a19b7f6c138040a088b107f796dbbe4488a1783b1d7b",
+      "code_cells": 6,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/02-Agent-not-hosted-on-runtime/LlamaIndex/LlamaIndex_Observability.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/02-Agent-not-hosted-on-runtime/LlamaIndex/LlamaIndex_Observability.ipynb",
+      "source_sha256": "559f439de59a181f3671349441e6dc012c241f31cd51d6cc901acb6c70d2a2e7",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/02-Agent-not-hosted-on-runtime/Strands/Strands_Observability.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/02-Agent-not-hosted-on-runtime/Strands/Strands_Observability.ipynb",
+      "source_sha256": "7861e939947127061d686a14a23f896c9588fcf77838fd41566c16a3f8a44091",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/03-advanced-concepts/01-custom-span-creation/Custom_Span_Creation.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/03-advanced-concepts/01-custom-span-creation/Custom_Span_Creation.ipynb",
+      "source_sha256": "63ee071ce3bc638ffba1bd3fc39de45e3ea737b0251254925bd72e3856a6d397",
+      "code_cells": 4,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/03-advanced-concepts/02-data-protection/data_protection.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/03-advanced-concepts/02-data-protection/data_protection.ipynb",
+      "source_sha256": "679fe5689f437036674bd918811f6e139febbd6351c3f1b452fae1632136f1f1",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Arize/runtime_with_strands_and_arize.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Arize/runtime_with_strands_and_arize.ipynb",
+      "source_sha256": "12f5beec89c5f4ab841cb99bdc4f0546f5ff59a75643c8e7ccb44c00cb301559",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS",
+        "EXTERNAL_OBSERVABILITY_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": true
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Braintrust/runtime_with_strands_and_braintrust.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Braintrust/runtime_with_strands_and_braintrust.ipynb",
+      "source_sha256": "8627829c1f653b0de704136739d63edf5d814a0714c984e575ceb5ae954dbf33",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_OBSERVABILITY_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Datadog/runtime_with_strands_and_datadog.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Datadog/runtime_with_strands_and_datadog.ipynb",
+      "source_sha256": "48aaa936e369a7d0f1b66e267f3412bb396ee78de209e5d29925fdc4a4a48ab9",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0",
+        "EXTERNAL_OBSERVABILITY_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Honeycomb/runtime_with_strands_and_honeycomb.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Honeycomb/runtime_with_strands_and_honeycomb.ipynb",
+      "source_sha256": "12216cff5be74491be918c9809979cb7898d62c5137c7dece6fa399de6b1e530",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CALCULATOR_REMOVED_FROM_INSTALLED_STRANDS_TOOLS_0_9_0",
+        "EXTERNAL_OBSERVABILITY_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Instana/runtime_with_strands_and_instana.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Instana/runtime_with_strands_and_instana.ipynb",
+      "source_sha256": "8e85bc4b2f8ea68f6f3f5cc0a81f4f5f0036d0b81000a1b8fad07047b655d8ba",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_OBSERVABILITY_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Langfuse/runtime_with_strands_and_langfuse.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/Langfuse/runtime_with_strands_and_langfuse.ipynb",
+      "source_sha256": "221f9b3ae5cfceb8aedd79169e8c6ecb3c5ccc1818b99382239e06830f94e5fa",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "EXTERNAL_OBSERVABILITY_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/04-Agentcore-runtime-partner-observability/OpenLIT/runtime_with_strands_and_openlit.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/04-Agentcore-runtime-partner-observability/OpenLIT/runtime_with_strands_and_openlit.ipynb",
+      "source_sha256": "0cd76829e44bb980bb7fb4abfc233c6f5566caae5259fd4d9d02f687feb2d81d",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE",
+        "CLAUDE_3_7_END_OF_LIFE_CONFIRMED_BY_AWS",
+        "EXTERNAL_OBSERVABILITY_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": true
+    },
+    {
+      "path": "06-AgentCore-observability/05-Lambda-AgentCore-invocation/agentcore_observability_lambda.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/05-Lambda-AgentCore-invocation/agentcore_observability_lambda.ipynb",
+      "source_sha256": "4b75d207027c461345c8ce49de396f9ed95fcbf5a8a27fab9486c57bf7e779de",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "06-AgentCore-observability/06-Agentcore-observability-for-eks-hosted-agent/deploy.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/06-AgentCore-observability/06-Agentcore-observability-for-eks-hosted-agent/deploy.ipynb",
+      "source_sha256": "e759c9a85aed07e2cb859b34c56f5624b826b5147410aae08d974b9fb7e0e457",
+      "code_cells": 22,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/00-prereqs/creating_and_invoking_agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/00-prereqs/creating_and_invoking_agent.ipynb",
+      "source_sha256": "28a57d0473f3f08dfe377507791b99bd9cfcccbd348e1139cafb52f736e01767",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/01-creating-custom-evaluators/01-agentcore-evaluators.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/01-creating-custom-evaluators/01-agentcore-evaluators.ipynb",
+      "source_sha256": "a6073c04801a1680f5cd0b476fcb9c7c34d046915d8050e2c9a339767ae6f4e9",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/02-running-evaluations/01-strands/01-on-demand-eval.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/02-running-evaluations/01-strands/01-on-demand-eval.ipynb",
+      "source_sha256": "4d32cb67d71390832b90263348811ad43669d8464c7b89e5ede8774588f7691e",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/02-running-evaluations/01-strands/02-online-eval.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/02-running-evaluations/01-strands/02-online-eval.ipynb",
+      "source_sha256": "bcfe94ffe27ff7b872966b4887549b892c73cb446b96af5c6628c5837e06437a",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/02-running-evaluations/02-langgraph/01-on-demand-eval.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/02-running-evaluations/02-langgraph/01-on-demand-eval.ipynb",
+      "source_sha256": "96c107a4a3f46f73fe1a671c3263a055fb8975991552f2e349c49e804a8bbd5f",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/02-running-evaluations/02-langgraph/02-online-eval.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/02-running-evaluations/02-langgraph/02-online-eval.ipynb",
+      "source_sha256": "8359d76fdf39d30f132509e14d7ca0461e2890e6e83b4357e620279f25733165",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/03-advanced/01-end-to-end-on-demand-with-boto3/evaluate_by_session_id.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/03-advanced/01-end-to-end-on-demand-with-boto3/evaluate_by_session_id.ipynb",
+      "source_sha256": "7f26f8ea67d8abf1c713cd93faa5838f68869d2e6f2606830ef926a002911f15",
+      "code_cells": 5,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/03-advanced/01-end-to-end-on-demand-with-boto3/evaluate_like_a_pipeline.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/03-advanced/01-end-to-end-on-demand-with-boto3/evaluate_like_a_pipeline.ipynb",
+      "source_sha256": "c4668394c7d11dcc3d81a391b16d8accdd0c01a82e155128ac7d20f4c706169b",
+      "code_cells": 6,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/03-advanced/02-simulating-agent-interactions/Langgraph-AgentCore-Websearch.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/03-advanced/02-simulating-agent-interactions/Langgraph-AgentCore-Websearch.ipynb",
+      "source_sha256": "51fb4d99dda71eab11bcde78b23d12580eedd74eedd9f3052eaa6d8c39e02e49",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/03-advanced/02-simulating-agent-interactions/Strands-AgentCore-ShoppingConcierge.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/03-advanced/02-simulating-agent-interactions/Strands-AgentCore-ShoppingConcierge.ipynb",
+      "source_sha256": "9cbc3c4aa19b0f27e6d0efe89944bdbfc14d7d5c8a43a6fbf787b3008c1332f0",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/03-advanced/02-simulating-agent-interactions/Strands-AgentCore-Websearch.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/03-advanced/02-simulating-agent-interactions/Strands-AgentCore-Websearch.ipynb",
+      "source_sha256": "3fb96349579ce0c7ddceb510b7b43d0558cd1c92c640f9c40c9f9d07c4abc03a",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/03-advanced/03-groundtruth-evals-agentcore-strandseval/01_session_discovery.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/03-advanced/03-groundtruth-evals-agentcore-strandseval/01_session_discovery.ipynb",
+      "source_sha256": "2f958aba46c28d1322585bc9a7a779d44c2fb440e2dc5992158653e514278257",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/03-advanced/03-groundtruth-evals-agentcore-strandseval/02_multi_session_analysis.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/03-advanced/03-groundtruth-evals-agentcore-strandseval/02_multi_session_analysis.ipynb",
+      "source_sha256": "fdf96c04bd3d79fa7650bf3c50690e5bcbe746858518353862059a111dea0716",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/03-advanced/03-groundtruth-evals-agentcore-strandseval/03_ground_truth_evaluation.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/03-advanced/03-groundtruth-evals-agentcore-strandseval/03_ground_truth_evaluation.ipynb",
+      "source_sha256": "d4d3d98527089892793e49d1370a4986987bd8f9411dcdde4c6e8f50b5cec80d",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/04-using-evaluation-results/evaluation_analyzer.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/04-using-evaluation-results/evaluation_analyzer.ipynb",
+      "source_sha256": "786dbf869eb9e31200199e97e0894160405564d7e606e875a31e9a85206d8ab2",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/05-groundtruth-based-evalautions/groundtruth_evaluations.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/05-groundtruth-based-evalautions/groundtruth_evaluations.ipynb",
+      "source_sha256": "c5ce271013b50ecfa37b0fe44778a46b1ce96c527fae0a54e4f113096dd9e14b",
+      "code_cells": 26,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "07-AgentCore-evaluations/06-programmatic_evaluators/programmatic_evaluators.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/07-AgentCore-evaluations/06-programmatic_evaluators/programmatic_evaluators.ipynb",
+      "source_sha256": "384553e83d870a962bd184c409e61ad7c5db3c38a4e61d7bd7ad0902f954e3ac",
+      "code_cells": 32,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "08-AgentCore-policy/01-Getting-Started/AgentCore-Policy-Demo.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/08-AgentCore-policy/01-Getting-Started/AgentCore-Policy-Demo.ipynb",
+      "source_sha256": "80b2380b932b973d8ff9e36bdcaa3a236fb1d5745c0f59c15ac4f46eb8a9256a",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "INTERACTIVE_INPUT_IN_SOURCE",
+        "EXPLICIT_KERNEL_RESTART_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "08-AgentCore-policy/02-Natural-Language-Policy-Authoring/NL-Authoring-Policy.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/08-AgentCore-policy/02-Natural-Language-Policy-Authoring/NL-Authoring-Policy.ipynb",
+      "source_sha256": "dac1f3a80297cd8627a6b59a56ff08c2d13012cd4d3f27584a299aa904b0fe42",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "08-AgentCore-policy/03-Fine-Grained-Access-Control/policy_for_agentcore_tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/08-AgentCore-policy/03-Fine-Grained-Access-Control/policy_for_agentcore_tutorial.ipynb",
+      "source_sha256": "ec097ac4fc9d2af35f302dc1171ec7a8d80ccd733ac6773010308c6dfbce78a1",
+      "code_cells": 33,
+      "syntax_errors": [],
+      "source_flags": [
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/google-adk/lab-01-create-an-agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/google-adk/lab-01-create-an-agent.ipynb",
+      "source_sha256": "fcbb1b3b16ffb25f28109537806bc8a1f11c8d031658d4451226bafdad55aa92",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/google-adk/lab-02-agentcore-memory.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/google-adk/lab-02-agentcore-memory.ipynb",
+      "source_sha256": "1b9bb4e926f1cea720f971106ef6829e594388c30fc20f55695829596fbb2961",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/google-adk/lab-03-agentcore-gateway.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/google-adk/lab-03-agentcore-gateway.ipynb",
+      "source_sha256": "b8fc8f662621a17b2f5e7f2d082fa1caef92b5a5c40e28951f2779b76f628397",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/google-adk/lab-04-agentcore-runtime.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/google-adk/lab-04-agentcore-runtime.ipynb",
+      "source_sha256": "03644b1814f37c90b2ffccf1d4eb1bc66a13efae1a73f47990c1b61c3c9253e1",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/google-adk/lab-05-frontend.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/google-adk/lab-05-frontend.ipynb",
+      "source_sha256": "0276fad5894ccd4ab66c611ac2521f7daca3badea4435144bdaddb604fd8ca83",
+      "code_cells": 2,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/google-adk/lab-06-cleanup.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/google-adk/lab-06-cleanup.ipynb",
+      "source_sha256": "6edfd57521a7ace3e06731c42fd278635c9fa80937c65f08d05d714f896db7e2",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/Optional-lab-agentcore-observability.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/Optional-lab-agentcore-observability.ipynb",
+      "source_sha256": "d4519a0dfce22deee0bdc31faf84641a1cbd09f74f143343fdb55416a6664cab",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/Optional-lab-identity.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/Optional-lab-identity.ipynb",
+      "source_sha256": "c7c14e529c9cbc19b3ad6ec9f1c0a34e5cdb237114bb47c5c78a21dc0f5edc34",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/lab-01-create-an-agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/lab-01-create-an-agent.ipynb",
+      "source_sha256": "169521367d52e8dcc9c661578134cf38a9acf9c20396fbb696dfe4f517596f9e",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/lab-02-agentcore-memory.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/lab-02-agentcore-memory.ipynb",
+      "source_sha256": "4063b3c4cc146069c79e19f1f1e2926980bfb7558391a6c1a6af63c1bfe3c8e1",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/lab-03-agentcore-gateway.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/lab-03-agentcore-gateway.ipynb",
+      "source_sha256": "00e893d3e73236cdd4315fe460d75893188019345ca81126e8cc080c251d5171",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/lab-04-agentcore-runtime.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/lab-04-agentcore-runtime.ipynb",
+      "source_sha256": "ca5a21f6be0dc6602d0a36c9713943eaa11fa02cbdcd0331c68a37e7289e3465",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/lab-05-agentcore-evals.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/lab-05-agentcore-evals.ipynb",
+      "source_sha256": "dc2ccd1c2f6b38e5c35f40e57cef98243a92d3d26398d86ca07f99f6a78e5b26",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/lab-06-frontend.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/lab-06-frontend.ipynb",
+      "source_sha256": "80c3f1ec4651e04056f326ce4cfc017a5b42b6ba572da9d559693b9d2e624935",
+      "code_cells": 2,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "09-AgentCore-E2E/strands-agents/lab-07-cleanup.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/09-AgentCore-E2E/strands-agents/lab-07-cleanup.ipynb",
+      "source_sha256": "220a89ed40ead89889290a11d6edff32cabf955a6a36eb4b34d09c4d3b1c3df3",
+      "code_cells": 8,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/00-getting-started/end-to-end/01-registry-end-to-end/getting-started-registry-end-to-end.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/00-getting-started/end-to-end/01-registry-end-to-end/getting-started-registry-end-to-end.ipynb",
+      "source_sha256": "cc5694132e6caa6075b7383e3e3de8708ff88d7c9f58ce3e778272d73fedd77f",
+      "code_cells": 21,
+      "syntax_errors": [],
+      "source_flags": [
+        "CREATES_IAM_USERS_OR_LONG_LIVED_ACCESS_KEYS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/00-getting-started/end-to-end/02-registry-end-to-end-oauth/registry-end-to-end-oauth.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/00-getting-started/end-to-end/02-registry-end-to-end-oauth/registry-end-to-end-oauth.ipynb",
+      "source_sha256": "cefa6e68cda9a263d5a7cc68cfc3f45b80e9d77f50acdd521d6b4f118f4a1622",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "CREATES_IAM_USERS_OR_LONG_LIVED_ACCESS_KEYS"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/00-getting-started/step-by-step/01-create-user-personas-workflow.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/00-getting-started/step-by-step/01-create-user-personas-workflow.ipynb",
+      "source_sha256": "84eeb1d11843634f52d604badb6191b1c7415e2da2e32c23e13855e838db0884",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "PERSONA_NAMES_ALREADY_EXIST_IN_THIS_ACCOUNT"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/00-getting-started/step-by-step/02-creating-registry-workflow.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/00-getting-started/step-by-step/02-creating-registry-workflow.ipynb",
+      "source_sha256": "3fc2838f2b8cc27088178c60b00479d3c43a69fa3acb2917a8a9e1273e4f4c6e",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "PERSONA_NAMES_ALREADY_EXIST_IN_THIS_ACCOUNT"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/00-getting-started/step-by-step/03-publishing-records-workflow.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/00-getting-started/step-by-step/03-publishing-records-workflow.ipynb",
+      "source_sha256": "4971ff557211979c5b04884e6171919065c5fe153adc0e1f3ba3bb81c70ecdfc",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "PERSONA_NAMES_ALREADY_EXIST_IN_THIS_ACCOUNT"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/00-getting-started/step-by-step/04-admin-approval-workflow.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/00-getting-started/step-by-step/04-admin-approval-workflow.ipynb",
+      "source_sha256": "06e72001bd0d76110f7fb9491be87ef33571c6017b077eb561bb478da2d00447",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [
+        "PERSONA_NAMES_ALREADY_EXIST_IN_THIS_ACCOUNT"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/00-getting-started/step-by-step/05-search-registry-workflow.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/00-getting-started/step-by-step/05-search-registry-workflow.ipynb",
+      "source_sha256": "86672fd4c178f699e4596f14ebbcf79f9a4fa7721704f201b73fcabccb69a718",
+      "code_cells": 21,
+      "syntax_errors": [],
+      "source_flags": [
+        "PERSONA_NAMES_ALREADY_EXIST_IN_THIS_ACCOUNT"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/01-advanced/admin-approval-workflow/admin-approval-workflow-notebook.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/01-advanced/admin-approval-workflow/admin-approval-workflow-notebook.ipynb",
+      "source_sha256": "36f6b5f51e9d32395bfdf08172930bd0c001dc325f3239b32c858153e6cf9b0d",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/01-advanced/consumer-discovery-semantic-search/consumer-discovery-semantic-search.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/01-advanced/consumer-discovery-semantic-search/consumer-discovery-semantic-search.ipynb",
+      "source_sha256": "712f4dc333c4da90352d6c36ac0ead63231ca75314ca95263182342daec028b1",
+      "code_cells": 27,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/01-advanced/discovery-and-invocation-at-runtime/discovery-and-invocation-at-runtime.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/01-advanced/discovery-and-invocation-at-runtime/discovery-and-invocation-at-runtime.ipynb",
+      "source_sha256": "904a2e01c07a3314fb9241e3931f7e92046ee204e348b81d30063f165e48af4e",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/01-advanced/kiro-registry-dcr-auth0/DCR_registry_search_mcp_in_kiro.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/01-advanced/kiro-registry-dcr-auth0/DCR_registry_search_mcp_in_kiro.ipynb",
+      "source_sha256": "90a2f5b8be81f4f7ce5f3b7bcf0ae82444e33957eff58821104ce1b4c8b65f23",
+      "code_cells": 5,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/01-advanced/publish-agentcore-tools-in-registry/publish-agentcore-a2a-mcp-in-registry.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/01-advanced/publish-agentcore-tools-in-registry/publish-agentcore-a2a-mcp-in-registry.ipynb",
+      "source_sha256": "0ef9f9a073fed70e7b8b5e4cb506f2899094d6e014dd4f227eca750ac56d444d",
+      "code_cells": 23,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/01-advanced/registry-push-sync-lambda/deploy_lambda_push_sync.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/01-advanced/registry-push-sync-lambda/deploy_lambda_push_sync.ipynb",
+      "source_sha256": "86b281f8ecf26e7d3279c5a89991d00b164ab9aad604462f58ae60520e1fa4b6",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/01-advanced/registry-skills-dynamic-discovery/registry-skills-dynamic-discovery.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/01-advanced/registry-skills-dynamic-discovery/registry-skills-dynamic-discovery.ipynb",
+      "source_sha256": "f97833dabc50bc8380e02193af499b2d1d29f73beb46370ee90fd3cd49781f8c",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "10-Agent-Registry/01-advanced/registry-synchronize-mcpserver/registry_synchronize_mcpserver.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/10-Agent-Registry/01-advanced/registry-synchronize-mcpserver/registry_synchronize_mcpserver.ipynb",
+      "source_sha256": "b10f7dead746c52a1b1fe492f1235a35ec9a9dea10560ec432c652667558c4c3",
+      "code_cells": 23,
+      "syntax_errors": [],
+      "source_flags": [
+        "RUNTIME_CONTAINER_BUILD_REQUIRES_REVIEW_OF_CODEBUILD_PASSROLE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/00-getting-started/01_getting_started_bedrock.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/00-getting-started/01_getting_started_bedrock.ipynb",
+      "source_sha256": "ba789c551f5a301af500fc9627aaf61ce7159fe683b5fbe0a2a7376a6187c0d7",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "FAILED",
+      "executed_cells": 5,
+      "report_id": "4b50420d8a08",
+      "runs": [
+        {
+          "status": "FAILED",
+          "variant": "upstream-original",
+          "executed_cells": 5,
+          "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the InvokeHarness operation: Harness is not in an invokable state: CREATING",
+          "evidence": "evidencias/results-4b50420d8a08.json"
+        }
+      ],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/01-advanced-examples/01-custom-containers/01_custom_container_node.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/01-advanced-examples/01-custom-containers/01_custom_container_node.ipynb",
+      "source_sha256": "30c04755be20adde244c8cd9f7b4b1193f97eed14103395c88f0d7458bfc39e8",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/01-advanced-examples/01-custom-containers/03_custom_container_go.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/01-advanced-examples/01-custom-containers/03_custom_container_go.ipynb",
+      "source_sha256": "a63a2c0f57cd6265bc0167daaac7550338abd6efbdd9138444170c3deee00a06",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/01-advanced-examples/03-execution-limits/03_execution_limits.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/01-advanced-examples/03-execution-limits/03_execution_limits.ipynb",
+      "source_sha256": "f5846a0111516fcb372a551cea58cc9e57bd29e89ff69e101680eb58f25e69ed",
+      "code_cells": 16,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/01-advanced-examples/04-mcp-integration/04_mcp_integration.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/01-advanced-examples/04-mcp-integration/04_mcp_integration.ipynb",
+      "source_sha256": "17473fe058594e43a43734d2d558c1aad94470b426482ede10fae3fd00aaabf7",
+      "code_cells": 13,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/01-advanced-examples/05-agent-skills/05_agent_skills.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/01-advanced-examples/05-agent-skills/05_agent_skills.ipynb",
+      "source_sha256": "be12a224d133b613caab6dfebe441ab2a612cb8e3787cfb0d2e770dcdae0078d",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/01-advanced-examples/07-oauth/harness_oauth_gateway.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/01-advanced-examples/07-oauth/harness_oauth_gateway.ipynb",
+      "source_sha256": "0da5359383c0a3d8937bc8b77223d70dda5e7c84a90b064fa5f2be62ed5361a4",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/02-use-cases/01-travel-agent/01_travel_guide_agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/02-use-cases/01-travel-agent/01_travel_guide_agent.ipynb",
+      "source_sha256": "95aed0c0c19ed9706ea2b10b7b1557b284539ee4972bdd77d016183306b2fde8",
+      "code_cells": 26,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "11-AgentCore-harness/02-use-cases/02-webapp-visual-testing/02_webapp_visual_testing_agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/11-AgentCore-harness/02-use-cases/02-webapp-visual-testing/02_webapp_visual_testing_agent.ipynb",
+      "source_sha256": "035fad73581111827b7708c42b1e4063594afe7cc06a21942c6d5e62ef045ad5",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "12-AgentCore-optimization/optimization_tutorial.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/12-AgentCore-optimization/optimization_tutorial.ipynb",
+      "source_sha256": "01da99a3789a17b431c082e3f27cdd63b4c3a20db2ce3ca055fb322183e995d9",
+      "code_cells": 32,
+      "syntax_errors": [],
+      "source_flags": [],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/00-setup-agentcore-payments/00b_multi_provider_setup.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/00-setup-agentcore-payments/00b_multi_provider_setup.ipynb",
+      "source_sha256": "51cce5424de7f648a5a31ecf00ff7278b0ac63713799c3a59f2cda6ae8e96a7c",
+      "code_cells": 10,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/00-setup-agentcore-payments/providers/coinbase_cdp_account_setup.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/00-setup-agentcore-payments/providers/coinbase_cdp_account_setup.ipynb",
+      "source_sha256": "9dbc62ebb7e27230dfcd1bfda3aa1da8f1b3c43fb2692f4e245ba0f4ce479aac",
+      "code_cells": 3,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/00-setup-agentcore-payments/providers/stripe_privy_account_setup.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/00-setup-agentcore-payments/providers/stripe_privy_account_setup.ipynb",
+      "source_sha256": "6267fe03697c7a1272ed2fce3cf9396839df18e93adde5f7bed1c0d28395267d",
+      "code_cells": 4,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/00-setup-agentcore-payments/setup_agentcore_payments.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/00-setup-agentcore-payments/setup_agentcore_payments.ipynb",
+      "source_sha256": "772065df47c20f127d2793ca18c9df5d59383d854e90e75ff0bcc7aadde15092",
+      "code_cells": 19,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/01-agents-payments-and-limits/langgraph_payment_agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/01-agents-payments-and-limits/langgraph_payment_agent.ipynb",
+      "source_sha256": "613da3435c9a89e18c40959c57181f58cda0f9b6abf1f45178571c9fa7a98663",
+      "code_cells": 12,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/01-agents-payments-and-limits/langgraph_payment_agent_middleware.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/01-agents-payments-and-limits/langgraph_payment_agent_middleware.ipynb",
+      "source_sha256": "3377d0de03da5b2ed98d245e32dbc185e80fbf206e44b28deea40ed66afeb0bd",
+      "code_cells": 11,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/01-agents-payments-and-limits/strands_payment_agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/01-agents-payments-and-limits/strands_payment_agent.ipynb",
+      "source_sha256": "773df1b09e32587c393ff526e939cb30e8264216839d76ab62554a0154ca4ef0",
+      "code_cells": 18,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/02-deploy-to-agentcore-runtime/deploy_payment_agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/02-deploy-to-agentcore-runtime/deploy_payment_agent.ipynb",
+      "source_sha256": "e37aaa19d602332d7828dfca68e1d586873b4a4de3ab90c08a69a69c8d0efdfc",
+      "code_cells": 22,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/03-user-onboarding-wallet-funding/user_onboarding.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/03-user-onboarding-wallet-funding/user_onboarding.ipynb",
+      "source_sha256": "64255eec63e9b6658ab091be0f8c88fd80a516ab5b741bcbc5d7c61fbfa3471b",
+      "code_cells": 7,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/04-agent-with-coinbase-bazaar-via-gateway/bazaar_gateway_agent.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/04-agent-with-coinbase-bazaar-via-gateway/bazaar_gateway_agent.ipynb",
+      "source_sha256": "10c49654cca8d67f9ce379046209bb5a0598d548fa9e1a49fdfaa4f3184b4468",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/05-agent-with-browser-tool-pay-for-content/browser_paywall_payments.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/05-agent-with-browser-tool-pay-for-content/browser_paywall_payments.ipynb",
+      "source_sha256": "f40f8036e5a178757416f70ec680b9ae8d70cc0f6faad882136e046a10aae131",
+      "code_cells": 9,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/06-research-agent-with-payment-memory/research_agent_with_memory.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/06-research-agent-with-payment-memory/research_agent_with_memory.ipynb",
+      "source_sha256": "c37da87d5f9632a03af3efb5c383a9c6d7829d1d7e16a3fec967f4bf6e61cd63",
+      "code_cells": 14,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/00-getting-started/07-multi-agent-payment-orchestrator/multi_agent_payments.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/00-getting-started/07-multi-agent-payment-orchestrator/multi_agent_payments.ipynb",
+      "source_sha256": "bbd16518a4f227d97a65efb514fc920938eaa84ee320936da6d609c40f0507f6",
+      "code_cells": 15,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/02-use-cases/pay-for-api-agent/pay-for-api.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/02-use-cases/pay-for-api-agent/pay-for-api.ipynb",
+      "source_sha256": "2761e37084fbd748bc476f7e71d04a0f2ca4270583dd04f532fdf040607fc7f5",
+      "code_cells": 37,
+      "syntax_errors": [],
+      "source_flags": [
+        "CLOUDFORMATION_IN_SOURCE",
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/02-use-cases/pay-for-content-browser-use/pay_for_content_browser.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/02-use-cases/pay-for-content-browser-use/pay_for_content_browser.ipynb",
+      "source_sha256": "c2d1988498fe3d99870b0633c1523b34d4c30088edf63b13e1ec6889eea5bffa",
+      "code_cells": 17,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED",
+        "INTERACTIVE_INPUT_IN_SOURCE"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    },
+    {
+      "path": "13-AgentCore-payments/02-use-cases/pay-for-data/pay-for-data.ipynb",
+      "upstream_url": "https://github.com/awslabs/agentcore-samples/blob/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops/13-AgentCore-payments/02-use-cases/pay-for-data/pay-for-data.ipynb",
+      "source_sha256": "d51f781674cd621d3710fe896c7209437dc44a04720cb47b8cc1b8f6ab750bb7",
+      "code_cells": 21,
+      "syntax_errors": [],
+      "source_flags": [
+        "EXTERNAL_PAYMENT_PROVIDER_AND_FUNDING_CONFIGURATION_REQUIRED"
+      ],
+      "execution_status": "NOT_EXECUTED",
+      "executed_cells": 0,
+      "report_id": null,
+      "runs": [],
+      "model_update_prepared": false
+    }
+  ],
+  "coverage": {
+    "notebooks_in_inventory": 241,
+    "original_code_cells_in_inventory": 3746,
+    "notebooks_attempted": 20,
+    "notebooks_not_executed": 221,
+    "published_notebooks": 4,
+    "published_code_cells_executed": 53,
+    "static_analysis_is_not_execution": true
+  }
+}

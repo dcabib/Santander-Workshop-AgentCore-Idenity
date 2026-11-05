@@ -1,0 +1,213 @@
+{
+  "path": "02-AgentCore-gateway/01-transform-lambda-into-mcp-tools/01-gateway-target-lambda-oauth.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "947737f6f057d533c6e4e9e600f8da086a3c3f67c2a2c7e4bf5a968149053c35",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:13:59Z",
+  "finished_at": "2026-11-05T19:16:24Z",
+  "cells": [
+    {
+      "index": 3,
+      "status": "EXECUTED",
+      "duration_seconds": 24.88
+    },
+    {
+      "index": 4,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 5,
+      "status": "EXECUTED",
+      "duration_seconds": 0.3
+    },
+    {
+      "index": 6,
+      "status": "EXECUTED",
+      "duration_seconds": 101.57
+    },
+    {
+      "index": 7,
+      "status": "EXECUTED",
+      "duration_seconds": 11.38
+    },
+    {
+      "index": 9,
+      "status": "EXECUTED",
+      "duration_seconds": 4.47
+    },
+    {
+      "index": 11,
+      "status": "EXECUTED",
+      "duration_seconds": 0.78
+    },
+    {
+      "index": 13,
+      "status": "FAILED",
+      "error_type": "CellExecutionError",
+      "duration_seconds": 0.39
+    }
+  ],
+  "status": "FAILED",
+  "aws_calls": [
+    {
+      "service": "iam",
+      "operation": "CreateRole",
+      "status": 200,
+      "request_id": "d77bc3db-b6cc-426d-bb5f-bd49b8cac5de"
+    },
+    {
+      "service": "iam",
+      "operation": "AttachRolePolicy",
+      "status": 200,
+      "request_id": "0bf2b340-ee94-4564-acd1-3e96cd4ef366"
+    },
+    {
+      "service": "lambda",
+      "operation": "CreateFunction",
+      "error_type": "ClientError",
+      "error_code": "AccessDeniedException"
+    },
+    {
+      "service": "sts",
+      "operation": "GetCallerIdentity",
+      "status": 200,
+      "request_id": "54f7f41e-46a5-4dbd-aa57-e9d3175b3245"
+    },
+    {
+      "service": "iam",
+      "operation": "CreateRole",
+      "status": 200,
+      "request_id": "742c62d6-776c-44fe-a6f6-d0fad02378ea"
+    },
+    {
+      "service": "iam",
+      "operation": "PutRolePolicy",
+      "status": 200,
+      "request_id": "9760557d-a3a4-447b-9d4f-87a11d7db93a"
+    },
+    {
+      "service": "cognito-idp",
+      "operation": "ListUserPools",
+      "status": 200,
+      "request_id": "c19c704b-ee9f-4b3e-aca6-72bb9d890c6f"
+    },
+    {
+      "service": "cognito-idp",
+      "operation": "CreateUserPool",
+      "status": 200,
+      "request_id": "6cd5901f-96fb-4a15-92e9-b0afe7e7186e"
+    },
+    {
+      "service": "cognito-idp",
+      "operation": "CreateUserPoolDomain",
+      "status": 200,
+      "request_id": "3c7b30e6-ab56-4837-bb0c-d3521250cae9"
+    },
+    {
+      "service": "cognito-idp",
+      "operation": "DescribeResourceServer",
+      "error_type": "ResourceNotFoundException",
+      "error_code": "ResourceNotFoundException"
+    },
+    {
+      "service": "cognito-idp",
+      "operation": "CreateResourceServer",
+      "status": 200,
+      "request_id": "71801e00-2c16-43e0-b712-1e1704ef7cfd"
+    },
+    {
+      "service": "cognito-idp",
+      "operation": "ListUserPoolClients",
+      "status": 200,
+      "request_id": "beb51a4e-ee6d-4dee-8934-17b4133303fa"
+    },
+    {
+      "service": "cognito-idp",
+      "operation": "CreateUserPoolClient",
+      "status": 200,
+      "request_id": "db046793-0db3-46ba-bc95-d3d32b3d2843"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "CreateGateway",
+      "status": 202,
+      "request_id": "713e2776-2bda-4648-9e91-1fb9644a5d1b"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "CreateGatewayTarget",
+      "error_type": "ValidationException",
+      "error_code": "ValidationException"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "ListGatewayTargets",
+      "status": 200,
+      "request_id": "58535df3-9126-4e7d-839f-22b232045e8a"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "DeleteGateway",
+      "error_type": "ValidationException",
+      "error_code": "ValidationException"
+    }
+  ],
+  "cleanup_attempts": [
+    {
+      "index": 24,
+      "status": "FAILED",
+      "error_type": "CellExecutionError"
+    }
+  ],
+  "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the CreateGatewayTarget operation: 2 validation errors detected: Value 'AccessDeniedException-User: arn:aws:sts::813782517426:assumed-role/WSParticipantRole/Participant is not authorized to perform: iam:PassRole on resource: arn:aws:iam::813782517426:role/gateway_lambda_iamrole because no identity-based policy allows the iam:PassRole action' at 'targetConfiguration.mcp.lambda.lambdaArn' failed to satisfy constraint: Member must satisfy regular expression pattern: arn:(aws[a-zA-Z-]*)?:lambda:[a-z0-9-]+:(\\d{12}):function:([a-zA-Z0-9-_.]+)(:(\\$LATEST|[a-zA-Z0-9-_]+))?; Value 'AccessDeniedException-User: arn:aws:sts::813782517426:assumed-role/WSParticipantRole/Participant is not authorized to perform: iam:PassRole on resource: arn:aws:iam::813782517426:role/gateway_lambda_iamrole because no identity-based policy allows the iam:PassRole action' at 'targetConfiguration.mcp.lambda.lambdaArn' failed to satisfy constraint",
+  "packages": {
+    "strands-agents-tools": "0.9.0",
+    "pandas": "3.1.1",
+    "langchain-core": "1.7.6",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "langchain": "1.4.9",
+    "bedrock-agentcore": "1.25.3",
+    "botocore": "1.43.124",
+    "langchain-protocol": "0.0.21",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "bedrock-agentcore-starter-toolkit": "0.3.14",
+    "strands-agents": "1.64.0",
+    "langchain-aws": "1.9.1"
+  },
+  "cleanup_retry": {
+    "original_report_id": "9186c0bc6938",
+    "original_cell": 24,
+    "cell_source_unchanged": true,
+    "status": "CLEANUP_CELL_EXECUTED",
+    "aws_calls": [
+      {
+        "service": "sts",
+        "operation": "GetCallerIdentity",
+        "status": 200,
+        "request_id": "68f20c2b-4bec-493f-8c6a-d7cea6b176a0"
+      },
+      {
+        "service": "bedrock-agentcore-control",
+        "operation": "GetGateway",
+        "status": 200,
+        "request_id": "caf6b6a0-cefa-4da2-a55e-cec457f624ad"
+      },
+      {
+        "service": "bedrock-agentcore-control",
+        "operation": "ListGatewayTargets",
+        "status": 200,
+        "request_id": "23496707-f1d1-4c80-8a05-4cb2d91c306e"
+      },
+      {
+        "service": "bedrock-agentcore-control",
+        "operation": "DeleteGateway",
+        "status": 202,
+        "request_id": "869ef747-752c-4df5-a767-4d2af4678204"
+      }
+    ]
+  }
+}

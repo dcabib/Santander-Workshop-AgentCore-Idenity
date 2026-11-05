@@ -47,7 +47,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--evidence", default="evidence/notebooks-aws.json")
     parser.add_argument("--executed", default="evidence/executed")
-    parser.add_argument("--labs", nargs="+", choices=[*[f"{n:02d}" for n in range(17)], *LAB_ALIASES])
+    parser.add_argument("--labs", nargs="+", choices=[*[f"{n:02d}" for n in range(17)], *LAB_ALIASES, "99"])
     args = parser.parse_args()
     result = audit(json.loads(Path(args.evidence).read_text()), ROOT / "notebooks",
                    Path(args.executed), args.labs)

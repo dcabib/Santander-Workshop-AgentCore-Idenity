@@ -1,1 +1,1 @@
-"""Laboratório local e clientes de integração AgentCore para Santander."""
+"""Contratos e registro de estado dos notebooks Santander executados na AWS."""

@@ -1,0 +1,95 @@
+{
+  "path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/02-code-execution-with-agent-using-code-interpreter/strands-agent-code-execution-code-interpreter.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "16b9f533a45e078f756c4e135ea0348d426eef9d3a2a9aba03c45c8f72058ac8",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:09:24Z",
+  "finished_at": "2026-11-05T19:09:43Z",
+  "cells": [
+    {
+      "index": 4,
+      "status": "EXECUTED",
+      "duration_seconds": 8.86
+    },
+    {
+      "index": 5,
+      "status": "EXECUTED",
+      "duration_seconds": 0.43
+    },
+    {
+      "index": 7,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 9,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 11,
+      "status": "EXECUTED",
+      "duration_seconds": 0.12
+    },
+    {
+      "index": 13,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 15,
+      "status": "EXECUTED",
+      "duration_seconds": 7.98
+    }
+  ],
+  "status": "CELLS_EXECUTED_REVIEW_REQUIRED",
+  "aws_calls": [
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "30fad0f7-0315-4cc5-b9da-58095e7c64de"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StartCodeInterpreterSession",
+      "status": 200,
+      "request_id": "49373ca8-5b58-46fb-8c11-4eb2b90528b0"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "InvokeCodeInterpreter",
+      "status": 200,
+      "request_id": "3c94006b-242b-44b3-bc62-033f21de88eb"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "StopCodeInterpreterSession",
+      "status": 200,
+      "request_id": "abb01a38-fab7-4c81-ac17-15598f53afed"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "aa114728-d6ce-4a58-82f0-c9236f7fab95"
+    }
+  ],
+  "failure_summary": null,
+  "packages": {
+    "strands-agents-tools": "0.9.0",
+    "langchain-core": "1.7.6",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "bedrock-agentcore-starter-toolkit": "0.1.14",
+    "langchain": "1.4.9",
+    "bedrock-agentcore": "1.25.3",
+    "botocore": "1.43.124",
+    "langchain-protocol": "0.0.21",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "strands-agents": "1.64.0",
+    "langchain-aws": "1.9.1"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "notebooks": [
+    {
+      "file": "A01_code_interpreter_arquivos.ipynb",
+      "upstream_path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/01-file-operations-using-code-interpreter/file-operations-using-code-interpreter.ipynb",
+      "upstream_sha256": "71a53b5f089c2557903db17a84f255f160e0814b2c3501a994021b84d5758334"
+    },
+    {
+      "file": "A02_code_interpreter_agente.ipynb",
+      "upstream_path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/02-code-execution-with-agent-using-code-interpreter/strands-agent-code-execution-code-interpreter.ipynb",
+      "upstream_sha256": "16b9f533a45e078f756c4e135ea0348d426eef9d3a2a9aba03c45c8f72058ac8"
+    },
+    {
+      "file": "A03_code_interpreter_analise.ipynb",
+      "upstream_path": "05-AgentCore-tools/01-Agent-Core-code-interpreter/03-advanced-data-analysis-with-agent-using-code-interpreter/strands-agent-advanced-data-analysis-code-interpreter.ipynb",
+      "upstream_sha256": "da58a32d389749da5501a93a0454d1930270b3b2be5fe27211f5a2bded65e7fa"
+    },
+    {
+      "file": "A04_browser_acoes.ipynb",
+      "upstream_path": "05-AgentCore-tools/02-Agent-Core-browser-tool/14-browser-os-actions/browser-os-actions-boto3.ipynb",
+      "upstream_sha256": "13f7e4bf45c9d776faeb9b7c4b39084edf5dbf211ba425634e6eda2783c076d6"
+    }
+  ],
+  "support_files": {
+    "browser_helpers.py": "53890bd50b46b9f63af05bf0bba326c581a9c1d3d07f27f02b1e13e693da265d",
+    "requirements-kernel.txt": "6422451f7c44300568ff7d5f289390f31a1343f2b950cbbdd9cb81f1b51ebc73",
+    "assets/aws-icon-sources.json": "db986bdbbb8f1460c8d20e1fe9f3345a2ac57f02b10a505f06c02d15b3d7d824",
+    "assets/browser.png": "35a2adc0b39a8fb36e43170135019657b6fabcfb750831d7c4cd4f68b06b3acd",
+    "assets/browser.svg": "e1628d50d4081ae3f27f006887a294a627374d9f6be6154693a3270fcacfe4f8",
+    "assets/code-agent.png": "490c52c30807b022b2fcb881b4ed4db580b5bc9187f46467cf344c4b9be6afca",
+    "assets/code-agent.svg": "56dc5cc684f90f1e82a0ebbedb387d2b75c2d1a8bdfb9e1581815d199e4a0058",
+    "assets/code-files.png": "d9c9eda4a957b777506cc315b5d42239469a0dbca13805ad227cd01ba16eb500",
+    "assets/code-files.svg": "b757f2cca4035422b3c1519aeb3203482220a21cd62df32ecee681568d8f9f1b",
+    "assets/data.csv": "b4de945560a21d42eb5812b32ebde0e39e561e48eeea13a8787686dcdff3a03d",
+    "assets/stats.py": "a26e3598ea8081b4b13e603b11cb3a409fc3cd569b7299e90fef0743495e7a52"
+  },
+  "adaptations": [
+    "Explicações e diagramas em português",
+    "Validações de resultado que falham com assert",
+    "Dependências de execução fixadas",
+    "Preflight STS sem credenciais no arquivo",
+    "Browser com nomes exclusivos e verificação da limpeza",
+    "CSV compartilhado sem alterar os dados",
+    "Modelo Haiku 4.5 explícito no cálculo; modelos antigos atualizados em patch separado"
+  ]
+}

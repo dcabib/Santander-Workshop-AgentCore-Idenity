@@ -1,0 +1,8 @@
+ipykernel==7.4.0
+nbclient==0.11.0
+nbformat==5.11.1
+boto3==1.43.124
+bedrock-agentcore==1.25.3
+strands-agents==1.64.0
+pandas==3.1.1
+requests==2.32.5

@@ -1,0 +1,264 @@
+{
+  "path": "04-AgentCore-memory/01-short-term-memory/01-single-agent/with-llamaindex-agent/medical-knowledge-assistant-short-term-memory-tutorial.ipynb",
+  "upstream_commit": "0d46da96306fa692c9887d0461252bf5aeeee6c3",
+  "source_sha256": "a6ffbb589dbd2436bd00eb04ba94cafa0d246b8bfaaca9d9ba3595f1f4fec12e",
+  "variant": "model-lifecycle-update",
+  "account": "813782517426",
+  "region": "us-west-2",
+  "started_at": "2026-11-05T19:36:00Z",
+  "finished_at": "2026-11-05T19:38:43Z",
+  "cells": [
+    {
+      "index": 2,
+      "status": "EXECUTED",
+      "duration_seconds": 1.06
+    },
+    {
+      "index": 3,
+      "status": "EXECUTED",
+      "duration_seconds": 1.02
+    },
+    {
+      "index": 5,
+      "status": "EXECUTED",
+      "duration_seconds": 146.63
+    },
+    {
+      "index": 7,
+      "status": "EXECUTED",
+      "duration_seconds": 0.01
+    },
+    {
+      "index": 9,
+      "status": "EXECUTED",
+      "duration_seconds": 0.28
+    },
+    {
+      "index": 12,
+      "status": "EXECUTED",
+      "duration_seconds": 9.89
+    },
+    {
+      "index": 14,
+      "status": "FAILED",
+      "error_type": "CellExecutionError",
+      "duration_seconds": 1.85
+    }
+  ],
+  "status": "FAILED",
+  "aws_calls": [
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "CreateMemory",
+      "status": 202,
+      "request_id": "92934d84-46de-459b-9bb9-d7e47a2e7820"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "78bf7bc7-b4ea-4584-bdcc-1b4d6cd533d1"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "ab54f5da-87dd-4ca8-af58-9e2dcd729159"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "207b3db6-cbb6-4f5f-9ab3-f950da645030"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "b642085f-4de8-4b06-8d3c-e15a60940cf2"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "e4bb1de6-c4ec-4bfb-89f6-4571df5ad805"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "e01820c8-e5c6-45e6-a12d-c50411379670"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "edf1f078-bf8f-4833-8028-2708dd6df291"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "398527d9-a362-40a9-bddd-6fe523e290d0"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "bfc67978-a185-4346-a48b-a24f583b54e5"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "e378fee6-bd81-4a68-bf54-32cf2780261a"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "b20d12d2-0156-4073-ac58-09eec913f877"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "32a3c3f2-4dde-4685-9fb9-7c5ca6827ca9"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "8b99d68a-d69c-402f-b813-b2633d584c6b"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "1ba45923-e951-46d7-b6eb-bff01d7ecbce"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "2a4823d8-b109-46d9-a62b-36d1c70baaca"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "GetMemory",
+      "status": 200,
+      "request_id": "c58b9a01-2868-45d0-aeb9-af6461b64cdb"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "CreateEvent",
+      "status": 201,
+      "request_id": "130f77d8-65c4-43f6-a1e6-836b43e7e980"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "ListEvents",
+      "status": 200,
+      "request_id": "a4fbd3a6-ece0-4d9f-a47f-bd6147df5efd"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "RetrieveMemoryRecords",
+      "status": 200,
+      "request_id": "f916e073-365b-45ee-b342-142a8965260c"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "1e18fa1e-8475-4e59-b4f3-079bdc8cd235"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "ListEvents",
+      "status": 200,
+      "request_id": "76e62f33-a3c7-41f2-b0e2-eb27b391eef1"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "RetrieveMemoryRecords",
+      "status": 200,
+      "request_id": "946e6ecf-5df9-402e-8f0c-d49df012419c"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "status": 200,
+      "request_id": "7161345b-e217-4e37-b8a4-e2868389c3b3"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "CreateEvent",
+      "status": 201,
+      "request_id": "402679f5-c9fc-48be-bf0f-530e2bd40537"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "ListEvents",
+      "status": 200,
+      "request_id": "470d9a3c-e97f-4b61-ab03-d8719269fc8c"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "RetrieveMemoryRecords",
+      "status": 200,
+      "request_id": "12085159-80a4-401f-8014-e6e4e01a7ed1"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "CreateEvent",
+      "status": 201,
+      "request_id": "260679f6-0022-47a3-8d14-6606cd9805d7"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "ListEvents",
+      "status": 200,
+      "request_id": "3a9379e3-0249-41e1-ae4d-ee3175c638e5"
+    },
+    {
+      "service": "bedrock-agentcore",
+      "operation": "RetrieveMemoryRecords",
+      "status": 200,
+      "request_id": "8c66f209-5e26-4642-8819-10164ce18240"
+    },
+    {
+      "service": "bedrock-runtime",
+      "operation": "ConverseStream",
+      "error_type": "ValidationException",
+      "error_code": "ValidationException"
+    },
+    {
+      "service": "bedrock-agentcore-control",
+      "operation": "DeleteMemory",
+      "status": 202,
+      "request_id": "0c91a6c8-f798-450d-af71-392eabcc5b56"
+    }
+  ],
+  "cleanup_attempts": [
+    {
+      "index": 39,
+      "status": "EXECUTED"
+    }
+  ],
+  "failure_summary": "ValidationException: An error occurred (ValidationException) when calling the ConverseStream operation: The number of toolResult blocks at messages.2.content exceeds the number of toolUse blocks of previous turn.",
+  "packages": {
+    "llama-index-llms-bedrock-converse": "0.15.5",
+    "llama-index-workflows": "2.26.1",
+    "llama-index-instrumentation": "0.6.0",
+    "ipykernel": "7.4.0",
+    "requests": "2.34.2",
+    "bedrock-agentcore-starter-toolkit": "0.1.14",
+    "botocore": "1.43.124",
+    "nbclient": "0.11.0",
+    "boto3": "1.43.124",
+    "bedrock-agentcore": "0.1.5",
+    "llama-index-core": "0.14.25",
+    "llama-index-memory-bedrock-agentcore": "0.2.0"
+  }
+}

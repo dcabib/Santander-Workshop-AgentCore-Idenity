@@ -343,7 +343,7 @@ def build_sdk_notebook(name, title, cells):
             "provisioning": "NOTEBOOK_SDK",
             "lab": name[:2],
             "required_count": 1,
-            "migration_status": "IN_PROGRESS",
+            "migration_status": "SDK_IMPLEMENTED",
         },
     })
     notebook.cells = [
