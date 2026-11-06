@@ -53,8 +53,9 @@ A04 exige criar/remover Browser, sessões, role e policy IAM próprias, além de
 `iam:PassRole` para `bedrock-agentcore.amazonaws.com`.
 As políticas efetivas do Workshop Studio variam entre eventos.
 
-A01 e A03 encerram suas sessões na última célula. A02 usa sessões com contexto
-`with`. A04 gera nomes exclusivos e remove sua sessão, Browser, role e policy.
+A01 e A03 encerram suas sessões na última célula. A02 compartilha uma sessão
+entre as chamadas da conversa e a encerra em `finally`. A04 gera nomes exclusivos
+e remove sua sessão, Browser, role e policy.
 Se houver uma falha, execute as células de limpeza dos recursos que chegaram
 a ser criados. A limpeza 99 da jornada principal não conhece estes recursos.
 Se a conta expirar, comece uma execução nova na próxima conta; não reutilize IDs.

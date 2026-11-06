@@ -790,8 +790,8 @@ def enrich_notebook(notebook, name):
         "Esta aula continua **pendente de conversão e teste no ambiente atual**. "
         "Os resultados acima são critérios esperados do código legado, não uma nova evidência de execução."
         if name[:2] in LEGACY else
-        "O [aceite AWS de 05/11/2026](../docs/aceite-notebooks-sdk.md) registra a execução "
-        "bem-sucedida desta aula, incluindo o ciclo de limpeza e reconstrução. "
+        "A [verificação AWS de 06/11/2026](../docs/aceite-notebooks-sdk.md) registra a execução "
+        "bem-sucedida desta aula e a limpeza 99. "
         "Esse histórico é uma referência; os outputs e Request IDs gerados agora são a evidência "
         "da sua conta e da sua execução."
     )

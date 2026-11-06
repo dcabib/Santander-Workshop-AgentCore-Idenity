@@ -1,5 +1,7 @@
 """Contratos da publicação após retirar o deploy legado."""
+import re
 from pathlib import Path
+from urllib.parse import unquote
 
 import nbformat
 import pytest
@@ -37,3 +39,23 @@ def test_static_validator_rejects_old_predeploy_mode():
     notebook = nbformat.v4.new_notebook(metadata={"workshop": {"execution": "AWS"}})
     with pytest.raises(ValueError, match="SDK_NOTEBOOK_REQUIRED"):
         validate_notebook(notebook)
+
+
+def test_distributed_documentation_and_notebooks_have_resolvable_local_links():
+    paths = [ROOT / "README.md", *sorted((ROOT / "docs").rglob("*.md")),
+             *sorted((ROOT / "notebooks").rglob("*.ipynb")),
+             *sorted((ROOT / "notebooks/20-Extras").glob("*.md"))]
+    broken = []
+    for path in paths:
+        if path.suffix == ".ipynb":
+            text = "\n".join(cell.source for cell in nbformat.read(path, as_version=4).cells
+                             if cell.cell_type == "markdown")
+        else:
+            text = path.read_text()
+        for link in re.findall(r"!?\[[^\]]*\]\(([^)]+)\)", text):
+            target = link.split("#", 1)[0]
+            if not target or re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", target):
+                continue
+            if not (path.parent / unquote(target)).exists():
+                broken.append((str(path.relative_to(ROOT)), link))
+    assert not broken, broken

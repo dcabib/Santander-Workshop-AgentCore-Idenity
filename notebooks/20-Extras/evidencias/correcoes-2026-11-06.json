@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-06",
+  "account": "413816870411",
+  "region": "us-west-2",
+  "validation": "AWS_EXECUTION",
+  "notebooks": [
+    {
+      "notebook": "A02_code_interpreter_agente.ipynb",
+      "source_sha256": "eb8b4d1d8b0426e1b55d16910a72ade23340ecaf1c61a7d8ad2ee8babec7fa0c",
+      "status": "PASS",
+      "validation": "AWS_EXECUTION",
+      "elapsed_seconds": 6.17,
+      "code_cells": 9,
+      "semantic_validation": "PASS",
+      "session_cleanup": "COMPLETED"
+    },
+    {
+      "notebook": "A03_code_interpreter_analise.ipynb",
+      "source_sha256": "314ac365f083254b132a718cf2b504c42fe32e1ad4f0f906495e64ae44f81335",
+      "status": "PASS",
+      "validation": "AWS_EXECUTION",
+      "elapsed_seconds": 12.42,
+      "code_cells": 15,
+      "semantic_validation": "PASS",
+      "session_cleanup": "COMPLETED"
+    }
+  ],
+  "asset_sha256": {
+    "notebooks/20-Extras/assets/eda.py": "e63beafbd0d43fe4672c47a2441a6a48f838ef0be5d1f74c05df616900c226cf",
+    "notebooks/20-Extras/assets/data.csv": "b4de945560a21d42eb5812b32ebde0e39e561e48eeea13a8787686dcdff3a03d"
+  },
+  "scope": "A02 shared session and prime; A03 two-tailed category-frequency EDA and Kimberly/Crocodile count. Other notebook code unchanged."
+}

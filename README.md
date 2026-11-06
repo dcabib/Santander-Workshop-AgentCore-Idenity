@@ -1,6 +1,6 @@
 # Santander — Workshop Amazon Bedrock AgentCore
 
-Os [apêndices oficiais AgentCore](notebooks/apendices/README.md) têm kernel próprio, exemplos selecionados por execução real na AWS e relatórios de cobertura.
+Os [apêndices oficiais AgentCore](notebooks/20-Extras/README.md) têm kernel próprio, exemplos selecionados por execução real na AWS e relatórios de cobertura.
 
 Construa e teste os serviços AWS **durante as células dos notebooks**.
 A jornada executável usa uma conta AWS: **00–09 → 15–16 → 99 (limpeza)**.
@@ -61,11 +61,12 @@ As etapas mostram código, chamadas, validação e análise do resultado.
 * [Validação e evidências](docs/validacao.md)
 * [Limpeza e retomada](docs/cleanup.md)
 * [Conteúdo didático e edição dos notebooks](docs/roteiro-didatico.md)
-* [Aceite AWS registrado em 05/11/2026](docs/aceite-notebooks-sdk.md)
+* [Execução e revisão dos resultados em 06/11/2026](docs/aceite-notebooks-sdk.md)
 
-O aceite registra execução de 00–09 e 15–16, limpeza 99 e reconstrução do zero.
-É evidência daquela versão e conta; uma revisão de documentação não equivale
-a nova execução AWS. Cada turma deve guardar seus próprios resultados.
+O registro de 06/11 inclui execução de 00–09 e 15–16 e limpeza 99, além da
+revisão semântica dos extras. É evidência daquela versão e conta; alterações
+posteriores de documentação não equivalem a nova execução AWS.
+Cada turma deve guardar seus próprios resultados.
 
 ```bash
 uv run python scripts/verify_notebooks.py --validate-only
@@ -97,4 +98,4 @@ Os notebooks são publicados sem outputs; as saídas da turma ficam no editor
 ou nos artefatos de evidência. Não publique tokens, senhas nem credenciais.
 A revisão dos diretórios está descrita em [estrutura do repositório](docs/estrutura.md).
 
-Referência: [workshops oficiais AgentCore](https://github.com/awslabs/agentcore-samples/tree/main/06-workshops).
+Referência: [workshops oficiais AgentCore na revisão preservada](https://github.com/awslabs/agentcore-samples/tree/0d46da96306fa692c9887d0461252bf5aeeee6c3/06-workshops).

@@ -1,5 +1,22 @@
 # Validação na AWS — 05/11/2026
 
+## Correções e nova execução em 06/11/2026
+
+A auditoria posterior identificou que A02 abria uma sessão por chamada, apesar
+da promessa de persistência, e que o resumo EDA de A03 omitia quatro categorias
+da cauda inferior. Ambos foram corrigidos e executados novamente na AWS.
+A02 verificou continuidade de uma variável entre chamadas e calculou **83**.
+A03 comparou o resumo do agente e da ferramenta com o CSV: **13 categorias
+atípicas** nas duas caudas IQR e resposta Kimberly/Crocodile **120**.
+As sessões foram encerradas.
+
+Veja o [relatório de correções](../../RELATORIO_NOTEBOOKS_2026-11-06.md)
+e o [registro da versão corrigida](evidencias/correcoes-2026-11-06.json).
+As evidências abaixo são históricas e seus hashes correspondem às versões
+anteriores às correções. A01 e A04 tiveram apenas ajustes editoriais.
+
+## Levantamento histórico de 05/11/2026
+
 Foram inventariados **241 notebooks / 3746 células de código**. A execução foi iniciada em **20 notebooks distintos**; **221 não foram executados**. Uma falha interrompe as células dependentes; as células originais de limpeza são tentadas à parte.
 
 Os **4 apêndices publicados passaram em 53 células**, em nova execução da versão adaptada, com kernel separado, `us-west-2` e sessão AWS autorizada da conta de teste. As credenciais não foram gravadas nos arquivos.

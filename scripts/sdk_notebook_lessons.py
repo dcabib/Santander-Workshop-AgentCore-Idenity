@@ -115,7 +115,7 @@ def preflight():
         guardar evidências sem segredos e limpar antes do encerramento.
 
         **Jornada validada:** 00–09 e 15–16 constroem e testam os serviços por SDK
-        em uma conta; a aula 99 encerra esse ciclo. As aulas 10–14 ainda são
+        em uma conta; a aula 99 encerra esse ciclo. As aulas 13–14 e 90–92 ainda são
         legadas, exigem quatro contas e estão pendentes de conversão e novo aceite.
         Não execute “Run All” na coleção inteira em uma conta única.
         """),
@@ -161,8 +161,8 @@ def preflight():
         operações; não é necessário usar uma role com um nome específico.
 
         A jornada de conta única corresponde às aulas 00–09 e 15–16. O bloco
-        10–14 contém os cenários de múltiplas contas: consulte o requisito de cada
-        cenário antes de executá-lo. Uma conta não simula uma fronteira entre contas.
+        13–14 e 90–92 contém referências avançadas de múltiplas contas, sem código
+        executável. Uma conta não simula uma fronteira entre contas.
 
         Região, disponibilidade do AgentCore, acesso ao modelo e quotas também
         fazem parte dos pré-requisitos. Credenciais válidas e SDK disponível não
